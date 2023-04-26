@@ -1,8 +1,10 @@
-export function SavedList({ className = "", savedItems = [...Array(100)] }) {
+export function SavedList({ className = "", savedItems = [] }) {
   return (
     <ul className={`${className}`}>
-      {savedItems.map((item) => (
-        <li className="p-4 border-b">test item</li>
+      {savedItems.map((item, idx) => (
+        <li className="p-4 border-b" key={idx}>
+          test item
+        </li>
       ))}
     </ul>
   );

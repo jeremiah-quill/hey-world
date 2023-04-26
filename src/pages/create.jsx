@@ -1,62 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { html } from "@codemirror/lang-html";
 import { css } from "@codemirror/lang-css";
 import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
 
 import { Editor } from "@/components/Editor";
-import { SavedList } from "@/components/SavedList";
+import { Sidebar } from "@/components/Sidebar";
+import { Preview } from "@/components/Preview";
+import { defaultHtml, defaultCss } from "@/constants";
 
 export default function CreatePage() {
-  const onChange = React.useCallback((value, viewUpdate) => {
-    console.log("value:", value);
-  }, []);
+  const [htmlCode, setHtmlCode] = React.useState(defaultHtml);
+  const [cssCode, setCssCode] = React.useState(defaultCss);
+  const [previewContent, setPreviewContent] = useState({ html: defaultHtml, css: defaultCss });
+  const [savedCreations, setSavedCreations] = useState([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const onHtmlChange = (value) => {
+    setHtmlCode(value);
+    setPreviewContent({ html: value, css: cssCode });
+  };
+
+  const onCssChange = (value) => {
+    setCssCode(value);
+    setPreviewContent({ html: htmlCode, css: value });
+  };
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <div className="w-full h-screen grid grid-cols-5 gap-2">
-      {/* 1/5 of the screen */}
-      <div className="col-span-1 h-full flex flex-col max-h-screen bg-slate-300 bg-opacity-20">
-        {/* Sidebar */}
-        <div className="flex-1 overflow-y-auto">
-          {/* List of items */}
-          <SavedList className="h-full overflow-y-auto" />
+    <div className="w-full h-screen flex gap-2 p-2">
+      {/* <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} /> */}
+      <div className="flex-1 grid grid-rows-2 gap-2">
+        <div className="row-span-1 border-2">
+          <Editor value={htmlCode} theme={githubDark} extensions={[html()]} onChange={onHtmlChange} />
         </div>
-        <div className="p-4 bg-slate-500 ">
-          {/* Small nav */}
-          <ul className="grid gap-4">
-            <li>Account</li>
-            <li>Settings</li>
-            <li>etc.</li>
-          </ul>
+        <div className="row-span-1 border-2">
+          <Editor value={cssCode} theme={githubDark} extensions={[css()]} onChange={onCssChange} />
         </div>
       </div>
-
-      {/* 2/5 of the screen */}
-      <div className="col-span-2 grid grid-rows-2 gap-2">
-        {/* HTML window */}
-        <div className="row-span-1 bg-slate-200">
-          <Editor value={"<h1>hey world</h1>"} theme={githubDark} extensions={[html()]} onChange={onChange} />
+      <div className="flex-1 h-full grid grid-rows-2 gap-2">
+        <div className="row-span-1 border-2 h-full bg-[#292524]">
+          <Preview previewContent={previewContent} />
         </div>
-        {/* CSS window */}
-        <div className="row-span-1 bg-slate-200">
-          <Editor
-            value={`h1 { 
-  color: dodgerblue; 
-  font-size: 5rem;
-}`}
-            theme={githubLight}
-            extensions={[css()]}
-            onChange={onChange}
-          />
+        <div className="row-span-1 border-2 grid place-items-center">
+          <h2 className="text-[#10a37f] text-3xl font-extrabold">AI Chat coming soon!</h2>
         </div>
-      </div>
-
-      {/* 2/5 of the screen */}
-      <div className="col-span-2 h-full grid grid-rows-2 gap-2">
-        {/* preview window */}
-        <div className="row-span-1 bg-slate-200">preview</div>
-        {/* ai chat window */}
-        <div className="row-span-1 bg-slate-200">ai chat</div>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import CodeMirror from "@uiw/react-codemirror";
+import { EditorView } from "codemirror";
 
 export function Editor({ value, theme, extensions, onChange }) {
   return (
@@ -8,7 +9,7 @@ export function Editor({ value, theme, extensions, onChange }) {
       height="100%"
       width="100%"
       theme={theme}
-      extensions={extensions}
+      extensions={[...extensions, EditorView.lineWrapping]}
       onChange={onChange}
     />
   );
