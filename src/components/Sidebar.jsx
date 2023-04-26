@@ -1,4 +1,5 @@
 import { RxCaretRight } from "react-icons/rx";
+import { SavedList } from "./SavedList";
 
 export function Sidebar({ isMenuOpen, toggleMenu, savedCreations }) {
   return (
