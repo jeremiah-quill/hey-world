@@ -3,7 +3,7 @@ import { SavedList } from "./SavedList";
 
 export function Sidebar({ isMenuOpen, toggleMenu, savedCreations }) {
   return (
-    <div className="h-full flex flex-col max-h-screen border-2" style={{ width: isMenuOpen ? "20%" : "50px" }}>
+    <div className="h-full flex flex-col max-h-screen border rounded-lg" style={{ width: isMenuOpen ? "20%" : "50px" }}>
       {isMenuOpen && (
         <div className="flex-1 overflow-y-auto">
           {savedCreations.length > 0 ? (
