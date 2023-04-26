@@ -79,6 +79,7 @@ import React, { useState, useRef, useEffect } from "react";
 export function Chat() {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -98,6 +99,7 @@ export function Chat() {
   };
 
   const handleSendMessage = async () => {
+    setIsLoading(true);
     if (inputValue.trim() === "") return;
 
     setInputValue("");
@@ -115,12 +117,13 @@ export function Chat() {
 
     const data = await response.json();
     setMessages([...newMessages, { role: "assistant", content: data.choices[0].message.content }]);
+    setIsLoading(false);
   };
 
   return (
     <div className="flex flex-col h-full bg-slate-100 p-4">
       {/* <h1 className="text-2xl font-bold mb-4">Chatbot</h1> */}
-      <div className="flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
+      <div className="relative flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
         <ul className="mt-auto grid gap-2">
           {messages.map((msg, index) => (
             <li
@@ -134,18 +137,30 @@ export function Chat() {
           <div ref={messagesEndRef} />
         </ul>
       </div>
-      <div className="w-full flex mt-4">
-        <input
-          type="text"
-          className="flex-1 p-2 rounded-l-lg border border-slate-300 outline-none"
-          placeholder="Type your message..."
-          value={inputValue}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-        />
-        <button className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg" onClick={handleSendMessage}>
-          Send
-        </button>
+      <div className="w-full flex mt-4 justify-center">
+        {isLoading ? (
+          <div
+            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+            role="status">
+            <span class="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">
+              Loading...
+            </span>
+          </div>
+        ) : (
+          <>
+            <input
+              type="text"
+              className="flex-1 p-2 rounded-l-lg border border-slate-300 outline-none"
+              placeholder="Type your message..."
+              value={inputValue}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+            />
+            <button className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg" onClick={handleSendMessage}>
+              Send
+            </button>
+          </>
+        )}
       </div>
     </div>
   );

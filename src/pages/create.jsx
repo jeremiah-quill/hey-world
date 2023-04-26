@@ -35,18 +35,18 @@ export default function CreatePage() {
     <div className="w-full h-screen flex gap-2 p-2">
       {/* <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} /> */}
       <div className="flex-1 grid grid-rows-2 gap-2">
-        <div className="row-span-1 border-2">
+        <div className="row-span-1 rounded-lg overflow-hidden border border-transparent">
           <Editor value={htmlCode} theme={githubDark} extensions={[html()]} onChange={onHtmlChange} />
         </div>
-        <div className="row-span-1 border-2">
+        <div className="row-span-1 rounded-lg overflow-hidden border border-transparent">
           <Editor value={cssCode} theme={githubDark} extensions={[css()]} onChange={onCssChange} />
         </div>
       </div>
       <div className="flex-1 h-full grid grid-rows-2 gap-2">
-        <div className="row-span-1 border-2 h-full bg-[#292524]">
+        <div className="row-span-1 h-full bg-[#292524] border border-transparent rounded-lg overflow-hidden">
           <Preview previewContent={previewContent} />
         </div>
-        <div className="row-span-1 border-2">
+        <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden">
           <Chat />
         </div>
       </div>
