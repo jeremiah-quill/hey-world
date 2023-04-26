@@ -8,6 +8,7 @@ import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { Preview } from "@/components/Preview";
 import { defaultHtml, defaultCss } from "@/constants";
+import { Chat } from "@/components/Chat";
 
 export default function CreatePage() {
   const [htmlCode, setHtmlCode] = React.useState(defaultHtml);
@@ -45,8 +46,8 @@ export default function CreatePage() {
         <div className="row-span-1 border-2 h-full bg-[#292524]">
           <Preview previewContent={previewContent} />
         </div>
-        <div className="row-span-1 border-2 grid place-items-center">
-          <h2 className="text-[#10a37f] text-3xl font-extrabold">AI Chat coming soon!</h2>
+        <div className="row-span-1 border-2">
+          <Chat />
         </div>
       </div>
     </div>
