@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 
 export function Chat({ openaiKey }) {
   const [inputValue, setInputValue] = useState("");
@@ -55,7 +56,9 @@ export function Chat({ openaiKey }) {
               className={`flex items-center p-2 rounded-lg gap-2 ${
                 msg.role === "user" ? "bg-slate-200 ml-auto max-w-[75%]" : "bg-slate-800 text-white mr-auto max-w-[75%]"
               }`}>
-              <div>{msg.content}</div>
+              <div className={` ${msg.role !== "user" && "bot"}`}>
+                <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
+              </div>
             </li>
           ))}
           <div ref={messagesEndRef} />

@@ -6,6 +6,24 @@ body {
   overscroll-behavior: none;
 }
 
+/* TODO: fix these hacks for styling markdown/codeblocks */
+.bot,
+.bot p,
+.bot h1,
+.bot h2,
+.bot h3,
+.bot h4,
+.bot h5,
+.bot h6,
+.bot a,
+.bot code {
+  color: #fff !important;
+}
+.bot code {
+  white-space: break-spaces;
+}
+
+/* TODO: fix these layout hacks */
 .preview .sp-layout,
 .preview .sp-layout .sp-stack {
   height: 100%;
