@@ -86,6 +86,7 @@ export default function Home({ serverKey }) {
                       key={idx}
                       onClick={() => {
                         setCurrentTemplate(key);
+                        setIsTemplatePickerOpen(false);
                       }}>
                       {key}
                     </li>
