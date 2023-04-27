@@ -11,6 +11,7 @@
   "dependencies": {
     "@codemirror/lang-css": "^6.2.0",
     "@codemirror/lang-html": "^6.4.3",
+    "@codesandbox/sandpack-react": "^2.6.1",
     "@uiw/codemirror-theme-github": "^4.19.16",
     "@uiw/react-codemirror": "^4.19.16",
     "codemirror": "^6.0.1",

@@ -5,3 +5,99 @@
 body {
   overscroll-behavior: none;
 }
+
+.preview .sp-layout,
+.preview .sp-layout .sp-stack,
+.editor .sp-stack {
+  height: 100%;
+}
+
+.preview .sp-layout {
+  border: 0px;
+}
+
+/* Sandpack base styles */
+
+/* ===== SandpackProvider ============================= */
+/* Overall wrapper */
+div.sp-wrapper {
+}
+
+/* ===== SandpackCodeEditor =========================== */
+/* Tab bar */
+div.sp-tabs {
+}
+
+/* Scrollable tab container */
+div.sp-tabs-scrollable-container {
+}
+
+/* Individual tab */
+button.sp-tab-button {
+}
+
+/* Active tab */
+button.sp-tab-button[data-active="true"] {
+}
+
+/* Wrapper for components */
+div.sp-stack {
+}
+
+/* Code editor wrapper */
+div.sp-code-editor {
+}
+
+/* Background for code editor */
+div.cm-editor {
+}
+
+/* Code editor content */
+div.sp-code-editor div.cm-content {
+}
+
+/* Line of code */
+div.sp-code-editor div.cm-line {
+}
+
+/* Active line of code */
+div.sp-code-editor div.cm-line.cm-activeLine {
+}
+
+/* Gutter background */
+div.sp-code-editor div.cm-gutters {
+}
+
+/* Line numbers */
+div.sp-code-editor div.cm-gutter.cm-lineNumbers {
+}
+
+/* ===== SandpackPreview ============================== */
+/* Preview container */
+div.sp-preview-container {
+}
+
+/* Preview iframe */
+iframe.sp-preview-iframe {
+}
+
+/* Wrapper for buttons in preview container */
+div.sp-preview-actions {
+}
+
+/* Wrapper for loading icon in preview container */
+div.sp-loading {
+}
+
+/* Open in Sandbox button, appears while loading */
+button.sp-icon-standalone {
+}
+
+/* Error box */
+div.sp-error {
+}
+
+/* Error text */
+div.sp-error-message {
+  white-space: pre-wrap;
+}
