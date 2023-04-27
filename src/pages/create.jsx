@@ -65,11 +65,13 @@ export default function CreatePage({ serverKey }) {
         <div className="row-span-1 h-full bg-[#292524] rounded-lg overflow-hidden">
           <Preview previewContent={previewContent} />
         </div>
-        <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden">
+        <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden relative">
           {openaiKey || serverKey ? (
             <Chat openaiKey={openaiKey || serverKey} />
           ) : (
-            <GptKeyForm setOpenaiKey={setOpenaiKey} />
+            <div className="grid place-items-center absolute inset-0">
+              <GptKeyForm setOpenaiKey={setOpenaiKey} />
+            </div>
           )}{" "}
         </div>
       </div>
@@ -98,7 +100,7 @@ function GptKeyForm({ setOpenaiKey }) {
   };
 
   return (
-    <>
+    <div className="flex">
       <input
         type="text"
         className="flex-1 p-2 rounded-l-lg border border-slate-300 outline-none"
@@ -110,6 +112,6 @@ function GptKeyForm({ setOpenaiKey }) {
       <button className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg" onClick={handleSubmitKey}>
         Submit
       </button>
-    </>
+    </div>
   );
 }
