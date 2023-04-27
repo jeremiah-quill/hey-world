@@ -22,7 +22,7 @@ export default function Home({ serverKey }) {
   const [openaiKey, setOpenaiKey] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
-  const [currentTemplate, setCurrentTemplate] = useState("HTML"); // TODO: review this, but I think I like it
+  const [currentTemplate, setCurrentTemplate] = useState("React"); // TODO: review this, but I think I like it
   const [savedCreations, setSavedCreations] = useState([]); // TODO: implement saved creations
 
   // if a key was loaded from env, use it and clear key from local storage (as a precaution)
