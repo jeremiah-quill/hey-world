@@ -1,6 +1,8 @@
 export const defaultJsx = `import React from 'react';
 
 export default function App() {
+  console.log("hey world.")
+
   return (
   <div>
     <h1 className="cool-title">hey world.</h1>
@@ -98,7 +100,7 @@ body {
   } 
 }`;
 
-export const defaultJs = `console.log("hello world")`;
+export const defaultJs = `console.log("hey world.")`;
 
 export const editorConfigObject = {
   React: {
