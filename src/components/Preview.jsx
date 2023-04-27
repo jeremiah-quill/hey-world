@@ -1,20 +1,20 @@
-export function Preview({ previewContent = { html: "", css: "" } }) {
-  const iframeTemplate = `
-    <html>
-      <head>
-        <style>
-          html, body {
-            height: 100%;
-            margin: 0px;
-          }
-          ${previewContent.css}
-        </style>
-      </head>
-      <body>
-        ${previewContent.html}
-      </body>
-    </html>
-  `;
+import React from "react";
+import {
+  SandpackLayout, // fix this hack: SandpackPreview won't leave loading state without being wrapped in SandpackLayout
+  SandpackPreview,
+  useSandpack,
+} from "@codesandbox/sandpack-react";
 
-  return <iframe title="preview" srcDoc={iframeTemplate} className="w-full h-full" sandbox="allow-scripts"></iframe>;
+export function Preview() {
+  const { error } = useSandpack();
+
+  if (error) {
+    console.log("error", error);
+  }
+
+  return (
+    <SandpackLayout>
+      <SandpackPreview />
+    </SandpackLayout>
+  );
 }

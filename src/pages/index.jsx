@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { Chat } from "@/components/Chat";
-import {
-  SandpackProvider,
-  SandpackLayout, // fix this hack: SandpackPreview won't leave loading state without being wrapped in SandpackLayout
-  SandpackCodeEditor,
-  SandpackPreview,
-} from "@codesandbox/sandpack-react";
+import { SandpackProvider, SandpackCodeEditor } from "@codesandbox/sandpack-react";
 import { RxCaretDown } from "react-icons/rx";
 
 import { Sidebar } from "@/components/Sidebar"; // TODO: add this when
 import { editorConfigObject } from "@/constants";
+import { Preview } from "@/components/Preview";
+import { Editor } from "@/components/Editor";
 
 // get the OpenAI API key from the environment variables or return null
 export async function getServerSideProps() {
@@ -94,14 +91,12 @@ export default function Home({ serverKey }) {
                 </ul>
               )}
             </div>
-            <SandpackCodeEditor showLineNumbers showInlineErrors />
+            <Editor />
           </div>
         </div>
         <div className="flex-1 h-full grid grid-rows-2 gap-2">
           <div className="row-span-1 h-full bg-[#292524] rounded-lg overflow-hidden preview border">
-            <SandpackLayout>
-              <SandpackPreview />
-            </SandpackLayout>
+            <Preview />
           </div>
           <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden relative">
             {openaiKey || serverKey ? (

@@ -1,16 +1,5 @@
-import CodeMirror from "@uiw/react-codemirror";
-import { EditorView } from "codemirror";
+import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
 
-export function Editor({ value, theme, extensions, onChange }) {
-  return (
-    <CodeMirror
-      value={value}
-      className="h-full"
-      height="100%"
-      width="100%"
-      theme={theme}
-      extensions={[...extensions, EditorView.lineWrapping]}
-      onChange={onChange}
-    />
-  );
+export function Editor() {
+  return <SandpackCodeEditor showLineNumbers showInlineErrors />;
 }
