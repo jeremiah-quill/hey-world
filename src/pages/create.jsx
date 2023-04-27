@@ -11,9 +11,6 @@ import { defaultHtml, defaultCss } from "@/constants";
 import { Chat } from "@/components/Chat";
 
 export async function getServerSideProps() {
-  console.log("inside getServerSideProps");
-  console.log(process.env.OPENAI_API_KEY);
-
   return {
     props: {
       serverKey: process.env.OPENAI_API_KEY || null,
@@ -30,13 +27,10 @@ export default function CreatePage({ serverKey }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    console.log("at least this is happening");
     if (serverKey) {
-      console.log("i should have a key here", serverKey);
       localStorage.removeItem("openai-key");
       return;
     }
-    console.log("does this happen?");
     const userKey = localStorage.getItem("openai-key");
     if (!userKey) return;
     setOpenaiKey(userKey);
