@@ -21,7 +21,6 @@ body {
   display: flex;
   flex-direction: column;
   font-family: system-ui;
-  background: #292524;
   align-items: center;
   justify-content: center;
 }
@@ -49,7 +48,6 @@ body {
 .subtext h2 {
   display: flex;
   gap: .5rem;
-  background-color: white;
   padding: 1rem;
 }
 

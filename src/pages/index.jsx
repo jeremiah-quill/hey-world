@@ -48,7 +48,7 @@ export default function Home({ serverKey }) {
         "/styles.css": { code: defaultCss, active: true },
       }}>
       <div className="w-full h-screen flex gap-2 p-2">
-        <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} />
+        {/* <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} /> */}
         <div className="flex-1 grid grid-rows-2 gap-2">
           <div className="row-span-2 rounded-lg overflow-hidden border editor">
             <SandpackCodeEditor />
