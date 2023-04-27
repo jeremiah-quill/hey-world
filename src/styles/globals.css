@@ -7,8 +7,7 @@ body {
 }
 
 .preview .sp-layout,
-.preview .sp-layout .sp-stack,
-.editor .sp-stack {
+.preview .sp-layout .sp-stack {
   height: 100%;
 }
 

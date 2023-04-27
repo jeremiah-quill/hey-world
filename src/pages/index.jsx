@@ -51,7 +51,7 @@ export default function Home({ serverKey }) {
         {/* <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} /> */}
         <div className="flex-1 grid grid-rows-2 gap-2">
           <div className="row-span-2 rounded-lg overflow-hidden border editor">
-            <SandpackCodeEditor />
+            <SandpackCodeEditor showLineNumbers showInlineErrors />
           </div>
         </div>
         <div className="flex-1 h-full grid grid-rows-2 gap-2">

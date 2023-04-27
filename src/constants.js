@@ -1,4 +1,5 @@
 export const defaultHtml = `<html>
+<body>
 <head>
   <link rel="stylesheet" href="/styles.css"/>
 </head>
@@ -9,6 +10,7 @@ export const defaultHtml = `<html>
     <h2><span class="hand-2">👇</span> chat</h2>
   </div>
 </div>
+</body>
 </html>
 `;
 export const defaultCss = `html, body {
@@ -25,10 +27,6 @@ body {
   justify-content: center;
 }
 
-.subtitle {
-  color: gray;
-}
-
 .cool-title { 
   background-color: #4CAF50; 
   color: white; 
@@ -37,6 +35,7 @@ body {
   margin: 0px;
   font-weight: 900;
   font-size: 100px;
+  border-radius: .5rem;
  }
 
 .subtext {
