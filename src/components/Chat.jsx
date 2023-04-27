@@ -48,7 +48,7 @@ export function Chat({ openaiKey }) {
     <div className="flex flex-col h-full bg-slate-100 p-4">
       {/* <h1 className="text-2xl font-bold mb-4">Chatbot</h1> */}
       <div className="relative flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
-        <ul className="mt-auto grid gap-2">
+        <ul className="mt-auto grid gap-2 text-base">
           {messages.map((msg, index) => (
             <li
               key={index}
