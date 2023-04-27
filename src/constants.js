@@ -1,16 +1,32 @@
+export const defaultJsx = `import React from 'react';
+
+export default function App() {
+  return (
+  <div>
+    <h1 className="cool-title">hey world.</h1>
+    <div className="subtext">
+      <h2><span className="hand-1">👈</span> tinker</h2>
+      <h2><span className="hand-2">👇</span> chat</h2>
+    </div>
+  </div> 
+  )
+}
+`;
+
 export const defaultHtml = `<html>
-<body>
-<head>
-  <link rel="stylesheet" href="/styles.css"/>
-</head>
-<div>
-  <h1 class="cool-title">hey world.</h1>
-  <div class="subtext">
-    <h2><span class="hand-1">👈</span> tinker</h2>
-    <h2><span class="hand-2">👇</span> chat</h2>
-  </div>
-</div>
-</body>
+  <head>
+    <link rel="stylesheet" href="/styles.css"/>
+  </head>
+  <body>
+    <div>
+      <h1 class="cool-title">hey world.</h1>
+      <div class="subtext">
+        <h2><span class="hand-1">👈</span> tinker</h2>
+        <h2><span class="hand-2">👇</span> chat</h2>
+      </div>
+    </div>
+    <script src="/app.js"></script>
+  </body>
 </html>
 `;
 export const defaultCss = `html, body {
@@ -81,3 +97,23 @@ body {
     transform: translateY(0); 
   } 
 }`;
+
+export const defaultJs = `console.log("hello world")`;
+
+export const editorConfigObject = {
+  React: {
+    templateName: "react",
+    files: {
+      "/App.js": { code: defaultJsx, active: true },
+      "/styles.css": { code: defaultCss, active: false },
+    },
+  },
+  HTML: {
+    templateName: "static",
+    files: {
+      "/index.html": { code: defaultHtml, active: true },
+      "/styles.css": { code: defaultCss, active: false },
+      "/app.js": { code: defaultJs, active: false },
+    },
+  },
+};

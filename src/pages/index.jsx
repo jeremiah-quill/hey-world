@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-import { Sidebar } from "@/components/Sidebar";
-import { defaultHtml, defaultCss } from "@/constants";
 import { Chat } from "@/components/Chat";
 import {
   SandpackProvider,
@@ -9,6 +7,10 @@ import {
   SandpackCodeEditor,
   SandpackPreview,
 } from "@codesandbox/sandpack-react";
+import { RxCaretDown } from "react-icons/rx";
+
+import { Sidebar } from "@/components/Sidebar"; // TODO: add this when
+import { editorConfigObject } from "@/constants";
 
 // get the OpenAI API key from the environment variables or return null
 export async function getServerSideProps() {
@@ -21,8 +23,10 @@ export async function getServerSideProps() {
 
 export default function Home({ serverKey }) {
   const [openaiKey, setOpenaiKey] = useState(null);
-  const [savedCreations, setSavedCreations] = useState([]);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
+  const [currentTemplate, setCurrentTemplate] = useState("HTML"); // TODO: review this, but I think I like it
+  const [savedCreations, setSavedCreations] = useState([]); // TODO: implement saved creations
 
   // if a key was loaded from env, use it and clear key from local storage (as a precaution)
   // otherwise, check if a key was saved in local storage and use that
@@ -36,21 +40,59 @@ export default function Home({ serverKey }) {
     if (!userKey) return;
   }, []);
 
+  // UI/state handlers
+  const toggleTemplatePicker = () => {
+    setIsTemplatePickerOpen(!isTemplatePickerOpen);
+  };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  // close template picker when clicking outside of it
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleDocumentClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsTemplatePickerOpen(false);
+      }
+    };
+    document.addEventListener("click", handleDocumentClick);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, []);
 
   return (
     <SandpackProvider
-      template="static"
-      files={{
-        "/index.html": { code: defaultHtml, active: true },
-        "/styles.css": { code: defaultCss, active: true },
-      }}>
+      template={editorConfigObject[currentTemplate].templateName}
+      files={editorConfigObject[currentTemplate].files}>
       <div className="w-full h-screen flex gap-2 p-2">
         {/* <Sidebar isMenuOpen={isMenuOpen} toggleMenu={toggleMenu} savedCreations={savedCreations} /> */}
         <div className="flex-1 grid grid-rows-2 gap-2">
-          <div className="row-span-2 rounded-lg overflow-hidden border editor">
+          <div className="row-span-2 rounded-lg overflow-hidden border editor relative">
+            <div className="absolute z-[1000] right-[10px] top-[6px] " ref={dropdownRef}>
+              <button onClick={toggleTemplatePicker} className="flex gap-2 items-center text-base">
+                <div>{currentTemplate}</div>
+                {
+                  <RxCaretDown
+                    className={`text-2xl transition-all ${isTemplatePickerOpen ? "rotate-180" : "rotate-0"}`}
+                  />
+                }
+              </button>
+              {isTemplatePickerOpen && (
+                <ul className="text-base border bg-white rounded">
+                  {Object.keys(editorConfigObject).map((key, idx) => (
+                    <li
+                      className="p-2 cursor-pointer hover:bg-slate-200"
+                      key={idx}
+                      onClick={() => {
+                        setCurrentTemplate(key);
+                      }}>
+                      {key}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
             <SandpackCodeEditor showLineNumbers showInlineErrors />
           </div>
         </div>
