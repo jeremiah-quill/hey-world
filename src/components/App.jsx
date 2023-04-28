@@ -25,7 +25,6 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     }
     const userKey = localStorage.getItem("openai-key");
     setOpenaiKey(userKey);
-    if (!userKey) return;
   }, [serverKey]);
 
   // UI/state handlers
@@ -91,8 +90,8 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
           <Preview />
         </div>
         <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden relative">
-          {openaiKey || serverKey ? (
-            <Chat openaiKey={openaiKey || serverKey} />
+          {openaiKey ? (
+            <Chat openaiKey={openaiKey} />
           ) : (
             <div className="grid place-items-center absolute inset-0">
               <GptKeyForm setOpenaiKey={setOpenaiKey} />
@@ -120,7 +119,6 @@ function GptKeyForm({ setOpenaiKey }) {
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
       handleSubmitKey();
-      setOpenaiKey(true);
     }
   };
 

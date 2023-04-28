@@ -5,6 +5,7 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export function Chat({ openaiKey }) {
   const [inputValue, setInputValue] = useState("");
+  const [key, setKey] = useState(openaiKey);
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
@@ -43,7 +44,7 @@ export function Chat({ openaiKey }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ conversation: newMessages, key: openaiKey }),
+      body: JSON.stringify({ conversation: newMessages, key: key }),
     });
 
     const data = await response.json();
@@ -53,6 +54,7 @@ export function Chat({ openaiKey }) {
 
   const handleSubmitKey = () => {
     localStorage.setItem("openai-key", keyInputValue);
+    setKey(keyInputValue);
     setIsKeyViewOpen(false);
   };
 
@@ -102,7 +104,7 @@ export function Chat({ openaiKey }) {
                   placeholder="Enter your key..."
                   value={keyInputValue}
                   onChange={(e) => setKeyInputValue(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, handleSaveKey)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSubmitKey)}
                 />
               </div>
             ) : (
