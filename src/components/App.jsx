@@ -126,26 +126,27 @@ function GptKeyForm({ setOpenaiKey }) {
 
   return (
     <div className="flex flex-col gap-3 w-full max-w-xl h-full p-4">
-      <div className="grid gap-3 mt-8 text-base">
-        <h2 className="text-2xl font-bold text-center">
-          Connect to a GPT-3.5 chatbot for web design and development assistance
-        </h2>
-        <p>
+      <div className="grid gap-6 mt-8 text-base">
+        <h2 className="font-bold text-center">Connect to a chatbot for web design and development assistance</h2>
+        <p className="text-sm">
           This chatbot is designed to assist you with web design and web development tasks. To access the chatbot, you
           have two options:
         </p>
-        <ol className="list-decimal">
-          <li>
-            Add a private OpenAI API key: You can enter your OpenAI API key directly into the input field below. By
-            doing so, your API key will be securely stored in your browser's local storage. Note that your API key will
-            only be used to communicate with the OpenAI API and won't be sent to our servers.
+        <ol className="list-decimal prose prose-sm list-inside">
+          <li className="text-sm">
+            <strong>Add a private OpenAI API key:</strong> You can enter your OpenAI API key directly into the input
+            field below. By doing so, your API key will be securely stored in your browser's local storage. Note that
+            your API key will only be used to communicate with the OpenAI API and won't be sent to our servers.
           </li>
-          <li>
-            Clone the source code: Alternatively, you can clone the source code for this tool and add your API key as an
-            environment variable.
+          <li className="text-sm">
+            <strong>Clone the source code:</strong> Alternatively, you can clone the{" "}
+            <a className="underline" target="_blank" rel="noopener" href="https://github.com/jeremiah-quill/hey-world">
+              source code
+            </a>{" "}
+            for this tool and add your API key as an environment variable.
           </li>
         </ol>
-        <p>
+        <p className="text-sm">
           If you don't have an OpenAI API key, you can obtain one by visiting{" "}
           <a className="underline" target="_blank" rel="noopener" href="https://platform.openai.com/account/api-keys">
             OpenAI API Keys.
