@@ -1,11 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
+import { FaKey } from "react-icons/fa";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export function Chat({ openaiKey }) {
   const [inputValue, setInputValue] = useState("");
   const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
+  const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
+  const [isKeySecret, setIsKeySecret] = useState(true);
+
   const messagesEndRef = useRef(null);
+
+  const toggleKeyView = () => {
+    setIsKeyViewOpen(!isKeyViewOpen);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -13,13 +23,9 @@ export function Chat({ openaiKey }) {
 
   useEffect(scrollToBottom, [messages]);
 
-  const handleChange = (e) => {
-    setInputValue(e.target.value);
-  };
-
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e, onKeyDown = () => {}) => {
     if (e.key === "Enter") {
-      handleSendMessage();
+      onKeyDown();
     }
   };
 
@@ -43,6 +49,11 @@ export function Chat({ openaiKey }) {
     const data = await response.json();
     setMessages([...newMessages, { role: "assistant", content: data.choices[0].message.content }]);
     setIsLoading(false);
+  };
+
+  const handleSubmitKey = () => {
+    localStorage.setItem("openai-key", keyInputValue);
+    setIsKeyViewOpen(false);
   };
 
   return (
@@ -75,16 +86,39 @@ export function Chat({ openaiKey }) {
           </div>
         ) : (
           <>
-            <input
-              type="text"
-              className="flex-1 p-2 rounded-l-lg border border-slate-300 outline-none"
-              placeholder="Type your message..."
-              value={inputValue}
-              onChange={handleChange}
-              onKeyDown={handleKeyDown}
-            />
-            <button className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg" onClick={handleSendMessage}>
-              Send
+            <button onClick={() => toggleKeyView()} className="p-2 bg-[#10a37f] text-white font-bold rounded-l-lg">
+              <FaKey />
+            </button>
+            {isKeyViewOpen ? (
+              <div className="flex w-full">
+                <button
+                  className="p-2 border border-slate-300 outline-none bg-white"
+                  onClick={() => setIsKeySecret(!isKeySecret)}>
+                  {isKeySecret ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
+                </button>
+                <input
+                  type={isKeySecret ? "password" : "text"}
+                  className="flex-1 p-2 border border-x-0 border-slate-300 outline-none"
+                  placeholder="Enter your key..."
+                  value={keyInputValue}
+                  onChange={(e) => setKeyInputValue(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSaveKey)}
+                />
+              </div>
+            ) : (
+              <input
+                type="text"
+                className="flex-1 p-2 border border-slate-300 outline-none"
+                placeholder="Type your message..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => handleKeyDown(e, handleSendMessage)}
+              />
+            )}
+            <button
+              className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg"
+              onClick={isKeyViewOpen ? handleSendMessage : handleSubmitKey}>
+              {isKeyViewOpen ? "Save" : "Send"}
             </button>
           </>
         )}
