@@ -139,11 +139,11 @@ function GptKeyForm({ setOpenaiKey }) {
             your API key will only be used to communicate with the OpenAI API and won't be sent to our servers.
           </li>
           <li className="text-sm">
-            <strong>Clone the source code:</strong> Alternatively, you can clone the{" "}
+            <strong>Clone the source code:</strong> Alternatively, you can clone this project's{" "}
             <a className="underline" target="_blank" rel="noopener" href="https://github.com/jeremiah-quill/hey-world">
               source code
             </a>{" "}
-            for this tool and add your API key as an environment variable.
+            and add your API key as an environment variable when deploying or running locally.
           </li>
         </ol>
         <p className="text-sm">
