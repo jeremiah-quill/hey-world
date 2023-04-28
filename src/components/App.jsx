@@ -125,9 +125,9 @@ function GptKeyForm({ setOpenaiKey }) {
   };
 
   return (
-    <div className="flex flex-col gap-3 w-full max-w-xl h-full p-4">
-      <div className="grid gap-6 mt-8 text-base">
-        <h2 className="font-bold text-center">Connect to a chatbot for web design and development assistance</h2>
+    <div className="flex flex-col gap-3 w-full h-full p-4">
+      <div className="grid gap-6 mt-8 text-base max-w-xl mx-auto">
+        <h2 className="font-bold text-center">Activate a personal AI chatbot for design and development assistance</h2>
         <p className="text-sm">
           This chatbot is designed to assist you with web design and web development tasks. To access the chatbot, you
           have two options:

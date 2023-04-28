@@ -6,7 +6,7 @@ export default function App() {
   return (
     <div className="App">
       <div className="header">
-        <h1>hey world.</h1>
+        <h1>✌️ hey world.</h1>
       </div>
       <main>
         <div className="hands-container">
@@ -48,7 +48,7 @@ function Hands() {
   return (
     <div className="hands"  style={{position: "absolute", bottom: "10px", left: "10px"}}>
       <div className="hand-line"><div className="hand-1">👈</div><h2>tinker</h2></div>
-      <div className="hand-line"><div className="hand-2">👇</div> <h2>consult ai</h2></div>
+      <div className="hand-line"><div className="hand-2">👇</div> <h2>ask</h2></div>
     </div>
   )
 }
@@ -61,13 +61,13 @@ export const defaultHtml = `<html>
   <body>
     <div class="App">
       <div class="header">
-        <h1>hey world.</h1>
+        <h1>✌️ hey world.</h1>
       </div>
       <main>
         <div class="hands-container">
           <div class="hands">
             <div class="hand-line"><div class="hand-1">👈</div><h2>tinker</h2></div>
-            <div class="hand-line"><div class="hand-2">👇</div> <h2>consult ai</h2></div>
+            <div class="hand-line"><div class="hand-2">👇</div> <h2>ask</h2></div>
           </div>
         </div>  
       <div class="intro">
