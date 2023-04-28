@@ -36,10 +36,10 @@ function Github() {
 function Features() {
   return (
     <div className="features">
-      <p>✅ Lightweight browser editor + preview</p>
-      <p>✅ Multiple templates + environments</p>
-      <p>✅ AI chatbot</p>
-      <p>🛠️ More to come</p>
+      <p>✅ lightweight browser editor + preview</p>
+      <p>✅ multiple templates + environments</p>
+      <p>✅ ai chatbot</p>
+      <p>🛠️ ...more to come</p>
     </div>
   )
 }
@@ -72,10 +72,10 @@ export const defaultHtml = `<html>
         </div>  
       <div class="intro">
         <div class="features">
-          <p>✅ Lightweight browser editor + preview</p>
-          <p>✅ Multiple templates + environments</p>
-          <p>✅ AI chatbot</p>
-          <p>🛠️ More to come</p>
+          <p>✅ lightweight browser editor + preview</p>
+          <p>✅ multiple templates + environments</p>
+          <p>✅ ai chatbot</p>
+          <p>🛠️ ...more to come</p>
         </div>
       </div>
       </main>
