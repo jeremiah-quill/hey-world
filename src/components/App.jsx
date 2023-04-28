@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { RxCaretDown } from "react-icons/rx";
-import { DiReact } from "react-icons/di";
 
 import { editorConfigObject } from "@/constants";
 import { Chat } from "@/components/Chat";
@@ -77,7 +76,6 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
                       setCurrentTemplate(key);
                       setIsTemplatePickerOpen(false);
                     }}>
-                    {/* <DiReact className="text-2xl" /> */}
                     {editorConfigObject[key].icon}
                     {key}
                   </li>
@@ -153,12 +151,6 @@ function GptKeyForm({ setOpenaiKey }) {
             OpenAI API Keys.
           </a>
         </p>
-        {/* <p>
-          Disclaimer: Please be aware that by adding your API key here, you are consenting to store it in your browser's
-          local storage. This means that the API key will remain on your device and won't be transmitted to our servers.
-          However, we recommend that you clear your browser's local storage when you're done using the chatbot to ensure
-          the security of your API key.
-        </p> */}
       </div>
 
       <div className="mt-auto flex text-base">

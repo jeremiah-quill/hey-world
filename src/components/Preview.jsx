@@ -7,7 +7,7 @@ import {
 export function Preview() {
   return (
     <SandpackLayout>
-      <SandpackPreview options={{ showConsole: true, showConsoleButton: true }} />
+      <SandpackPreview showOpenInCodeSandbox={false} />
     </SandpackLayout>
   );
 }
