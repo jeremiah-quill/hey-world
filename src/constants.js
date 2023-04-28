@@ -16,7 +16,7 @@ export default function App() {
           <Features />
         </div>
       </main>
-      <div style={{position: "absolute", bottom: "10px", right: "10px"}}>
+      <div className="github-container">
         <Github />
       </div>
     </div>
