@@ -46,7 +46,7 @@ function Features() {
 
 function Hands() {
   return (
-    <div className="hands"  style={{position: "absolute", bottom: "10px", left: "10px"}}>
+    <div className="hands" >
       <div className="hand-line"><div className="hand-1">👈</div><h2>tinker</h2></div>
       <div className="hand-line"><div className="hand-2">👇</div> <h2>ask</h2></div>
     </div>
