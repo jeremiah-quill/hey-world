@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { RxCaretDown } from "react-icons/rx";
+import { DiReact } from "react-icons/di";
 
 import { editorConfigObject } from "@/constants";
 import { Chat } from "@/components/Chat";
@@ -56,7 +57,10 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         <div className="row-span-2 rounded-lg overflow-hidden border editor relative">
           <div className="absolute z-[1000] right-[10px] top-[6px] " ref={dropdownRef}>
             <button onClick={toggleTemplatePicker} className="flex gap-2 items-center text-base">
-              <div>{currentTemplate}</div>
+              <div className="flex gap-1 items-center">
+                {editorConfigObject[currentTemplate].icon}
+                {currentTemplate}
+              </div>
               {
                 <RxCaretDown
                   className={`text-2xl transition-all ${isTemplatePickerOpen ? "rotate-180" : "rotate-0"}`}
@@ -64,15 +68,17 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
               }
             </button>
             {isTemplatePickerOpen && (
-              <ul className="text-base border bg-white rounded">
+              <ul className="text-base border bg-white rounded absolute">
                 {Object.keys(editorConfigObject).map((key, idx) => (
                   <li
-                    className="p-2 cursor-pointer hover:bg-slate-200"
+                    className="p-2 cursor-pointer hover:bg-slate-200 flex gap-1 items-center"
                     key={idx}
                     onClick={() => {
                       setCurrentTemplate(key);
                       setIsTemplatePickerOpen(false);
                     }}>
+                    {/* <DiReact className="text-2xl" /> */}
+                    {editorConfigObject[key].icon}
                     {key}
                   </li>
                 ))}
