@@ -26,7 +26,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     const userKey = localStorage.getItem("openai-key");
     setOpenaiKey(userKey);
     if (!userKey) return;
-  }, []);
+  }, [serverKey]);
 
   // UI/state handlers
   const toggleTemplatePicker = () => {
