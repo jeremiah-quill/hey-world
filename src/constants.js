@@ -8,96 +8,96 @@ export default function App() {
       <div className="header">
         <h1>hey world.</h1>
       </div>
-      <Github />
       <main>
-        <div className="left">
+        <div className="hands-container">
           <Hands />
-        </div>
-        <div className="right">
+        </div>  
+        <div className="intro">
           <Features />
         </div>
       </main>
+      <div style={{position: "absolute", bottom: "10px", right: "10px"}}>
+        <Github />
+      </div>
     </div>
   )
 }
 
 function Github() {
   return (
-      <div className="github-section">
-        <p className="github-copy">This project is 100% open source. Feel free to fork and contribute, or star the repo!</p>
-        <div className="github-icon">
-          <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
-            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-          </a>
-        </div>
-      </div>
+    <div className="github-icon">
+      <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
+        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+      </a>
+    </div>
   )
 }
 
 function Features() {
   return (
     <div className="features">
-      <p>✅ In browser editor + preview</p>
+      <p>✅ No frills browser editor + preview</p>
       <p>✅ Multiple templates + environments</p>
       <p>✅ AI chatbot</p>
-      <p>🛠️ More to come!</p>
+      <p>🛠️ More to come</p>
     </div>
   )
 }
 
 function Hands() {
   return (
-    <div className="hands">
-      <h2><span className="hand-1">👈</span> tinker</h2>
-      <h2><span className="hand-2">👇</span> consult ai</h2>
+    <div className="hands"  style={{position: "absolute", bottom: "10px", left: "10px"}}>
+      <div className="hand-line"><div className="hand-1">👈</div><h2>tinker</h2></div>
+      <div className="hand-line"><div className="hand-2">👇</div> <h2>consult ai</h2></div>
     </div>
   )
 }
 `;
 
-export const defaultHtml = `
-<html>
+export const defaultHtml = `<html>
   <head>
     <link rel="stylesheet" href="/styles.css"/>
   </head>
   <body>
     <div class="App">
-    <div class="header">
-      <h1>hey world.</h1>
-    </div>
-    <div class="github-section">
-      <p class="github-copy">This project is 100% open source. Feel free to fork and contribute, or star the repo!</p>
-      <div class="github-icon">
-        <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
-          <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-        </a>
+      <div class="header">
+        <h1>hey world.</h1>
       </div>
-    </div>
-    <main>
-      <div class="left">
-        <div class="hands">
-          <h2><span class="hand-1">👈</span> tinker</h2>
-          <h2><span class="hand-2">👇</span> consult ai</h2>
-        </div>
-      </div>
-      <div class="right">
+      <main>
+        <div class="hands-container">
+          <div class="hands">
+            <div class="hand-line"><div class="hand-1">👈</div><h2>tinker</h2></div>
+            <div class="hand-line"><div class="hand-2">👇</div> <h2>consult ai</h2></div>
+          </div>
+        </div>  
+      <div class="intro">
         <div class="features">
-          <p>✅ In browser editor + preview</p>
+          <p>✅ No frills browser editor + preview</p>
           <p>✅ Multiple templates + environments</p>
           <p>✅ AI chatbot</p>
-          <p>🛠️ More to come!</p>
+          <p>🛠️ More to come</p>
         </div>
       </div>
-    </main>
+      </main>
+      <div class="github-container">
+        <div class="github-icon">
+          <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
+            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
+          </a>
+        </div>
+      </div>
     </div>
-    <script src="/app.js"></script>
   </body>
 </html>
 `;
-export const defaultCss = `* {
+export const defaultCss = `/* globals */
+* {
   box-sizing: border-box;
 }
-
+#root {
+  position: absolute;
+  inset: 0;
+}
 html, body {
   height: 100%;
   margin: 0px;
@@ -112,34 +112,23 @@ body {
   align-items: center;
   justify-content: center;
 }
-#root {
-  position: absolute;
-  inset: 0;
-}
 .App {
   height : 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
 }
 main {
   display: flex;
   width: 100%;
   padding: 0rem 1rem;
-}
-.left, .right {
   flex: 1;
-  border-radius: 4px;
-  padding: 1rem
 }
-.left {
-  display: grid;
-  place-items: center;
-}
-.right {
-  display: grid;
-  place-items: center;
+.hands-container {
+  position: absolute;
+  width: 100%;
+  bottom: 10px;
+  left: 10px;
 }
 
 /* title */
@@ -155,47 +144,56 @@ main {
   padding: 1rem;
 }
 
-/* github */
-.github-icon {
-  display: flex;
-  justify-content: center;
-  margin-top: .5rem;
+/* intro */
+.intro {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  border-radius: 4px;
+  padding: 1rem
 }
+
+/* github */
 .github-icon img {
   width: 40px;
 }
-.github-copy {
-  margin: 0 auto;
-  font-size: 1rem;
-  color: gray;
-  text-align: center;
-}
-
-/* hands */
-.hands {
-  font-size: 1.5rem;
-}
-.hands h2 {
-  display: flex;
-  gap: .5rem;
-  margin: 0px;
-}
-.hand-1 { 
-  animation: horizontal 1s ease-in-out infinite; 
-  display: block;
-}
-.hand-2 { 
-  animation: vertical 1s ease-in-out infinite; 
-  display: block;
+.github-container {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
 
 /* features */
 .features {
   display: grid;
+  gap: .5rem;
+  font-size: 1.5rem;
 }
 .features p {
+  font-weight: bold;
   margin: 0px;
   text-align: left;
+}
+
+/* hands */
+.hand-line {
+  display: flex; 
+  gap: .5rem;
+  align-items: center;
+}
+.hands h2 {
+  display: flex;
+  gap: .5rem;
+  margin: 0px;
+  font-weight: bold;
+}
+.hand-1 { 
+  animation: horizontal 1s ease-in-out infinite; 
+  font-size: 2rem;
+}
+.hand-2 { 
+  animation: vertical 1s ease-in-out infinite; 
+  font-size: 2rem;
 }
 
 /* animations */
