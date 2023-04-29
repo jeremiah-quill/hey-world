@@ -126,21 +126,21 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         onProjectClick={loadProject}
         onRemoveClick={removeProject}
       />
-      <div className="flex-1 grid gap-2">
-        {/* left column */}
-        <div className="row-span-2 rounded-lg overflow-hidden border editor relative">
-          <CurrentProjectBar
-            projectTitleInputValue={projectTitleInputValue}
-            setProjectTitleInputValue={setProjectTitleInputValue}
-            saveProject={saveProject}
-            currentProject={memoizedCurrentProject || null}
-            isTemplatePickerOpen={isTemplatePickerOpen}
-            toggleTemplatePicker={toggleTemplatePicker}
-            currentTemplate={currentTemplate}
-            setIsTemplatePickerOpen={setIsTemplatePickerOpen}
-            editorConfigObject={editorConfigObject}
-            setCurrentTemplate={setCurrentTemplate}
-          />
+      {/* left column */}
+      <div className="flex-1 grid gap-2 row-span-1">
+        <CurrentProjectBar
+          projectTitleInputValue={projectTitleInputValue}
+          setProjectTitleInputValue={setProjectTitleInputValue}
+          saveProject={saveProject}
+          currentProject={memoizedCurrentProject || null}
+          isTemplatePickerOpen={isTemplatePickerOpen}
+          toggleTemplatePicker={toggleTemplatePicker}
+          currentTemplate={currentTemplate}
+          setIsTemplatePickerOpen={setIsTemplatePickerOpen}
+          editorConfigObject={editorConfigObject}
+          setCurrentTemplate={setCurrentTemplate}
+        />
+        <div className="rounded-lg overflow-hidden border editor relative">
           <Editor />
         </div>
       </div>
@@ -198,7 +198,7 @@ const CurrentProjectBar = ({
 
   // TODO: bug in this input. sometimes it doesn't update when switching between projects
   return (
-    <div className="flex gap-2 p-2 border-b">
+    <div className="flex gap-2 p-2">
       <form onSubmit={handleSubmit}>
         <input
           required={true}
