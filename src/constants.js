@@ -1,7 +1,7 @@
 export const defaultJsx = `import React, { useState } from "react";
 
 export default function App() {
-  console.log("hey world.");
+  console.log("hey world from react");
 
   return (
     <div className="App">
@@ -315,7 +315,6 @@ main {
 export const defaultJs = `console.log("hey world from vanilla js.");
 
 function setFormatShortcut() {
-  console.log("in set format shortcut");
   const isBrowser = typeof window !== "undefined";
   const isMac = isBrowser
     ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
