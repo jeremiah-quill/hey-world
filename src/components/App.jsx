@@ -207,7 +207,7 @@ const CurrentProjectBar = ({
           onChange={(e) => setProjectTitleInputValue(e.target.value)}
           placeholder="hey world. landing page"
         />
-        <input type="submit" text={currentProject ? "Save" : "Add"} />
+        <input className="ml-2 hover:opacity-50" type="submit" value={currentProject ? "Save" : "Add"} />
       </form>
       <div className="relative ml-auto z-[1000]" ref={dropdownRef}>
         <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
