@@ -16,11 +16,10 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   const [openaiKey, setOpenaiKey] = useState(null); // TODO: can I just pass in serverKey here?
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
 
-  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
 
   const [currentProjectId, setCurrentProjectId] = useState(null);
-
   const [savedCreations, setSavedCreations] = useState([]);
 
   // UI/state handlers
@@ -98,7 +97,6 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     if (projects?.length === 0) return;
 
     setSavedCreations(projects);
-    // setProjectTitleInputValue(projects[0].name);
   }, []);
 
   // if a key was loaded from env, use it and clear key from local storage (as a precaution)
@@ -127,7 +125,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         onRemoveClick={removeProject}
       />
       {/* left column */}
-      <div className="flex-1 grid gap-2 row-span-1">
+      <div className="flex-1 flex flex-col gap-2">
         <CurrentProjectBar
           projectTitleInputValue={projectTitleInputValue}
           setProjectTitleInputValue={setProjectTitleInputValue}
@@ -140,18 +138,18 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
           editorConfigObject={editorConfigObject}
           setCurrentTemplate={setCurrentTemplate}
         />
-        <div className="rounded-lg overflow-hidden border editor relative">
+        <div className="rounded-lg overflow-hidden border editor relative flex-1">
           <Editor />
         </div>
       </div>
       {/* right column */}
-      <div className="flex-1 h-full grid grid-rows-2 gap-2">
+      <div className="flex-1 h-full flex flex-col gap-2">
         {/* top right container */}
-        <div className="row-span-1 h-full bg-[#292524] rounded-lg overflow-hidden preview border">
+        <div className="flex-1 h-full bg-[#292524] rounded-lg overflow-hidden preview border">
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="row-span-1 shadow-inner border rounded-lg overflow-hidden relative">
+        <div className="flex-1 shadow-inner border rounded-lg overflow-hidden relative">
           {openaiKey ? (
             <Chat openaiKey={openaiKey} />
           ) : (

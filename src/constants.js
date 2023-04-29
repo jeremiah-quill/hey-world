@@ -16,24 +16,6 @@ export default function App() {
           <Features />
         </div>
       </main>
-      <div className="github-container">
-        <Github />
-      </div>
-    </div>
-  );
-}
-
-function Github() {
-  return (
-    <div className="github-icon">
-      <a
-        target="_blank"
-        href="https://github.com/jeremiah-quill/hey-world"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-      </a>
     </div>
   );
 }
@@ -124,18 +106,6 @@ export const defaultHtml = `<html>
           </ul>
         </div>
       </main>
-      <div class="github-container">
-        <div class="github-icon">
-          <a
-            target="_blank"
-            href="https://github.com/jeremiah-quill/hey-world"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
-          </a>
-        </div>
-      </div>
     </div>
     <script src="./app.js"></script>
   </body>
@@ -299,8 +269,8 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 30px;
-  width: 30px;
+  height: 21px;
+  width: 21px;
   border-radius: 4px;
   background-color: #eee;
   font-size: 1rem;
