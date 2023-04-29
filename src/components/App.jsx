@@ -190,14 +190,25 @@ const CurrentProjectBar = ({
       document.removeEventListener("click", handleDocumentClick);
     };
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    saveProject(currentProject);
+  };
+
+  // TODO: bug in this input. sometimes it doesn't update when switching between projects
   return (
     <div className="flex gap-2 p-2 border-b">
-      <input
-        className="border-b p-1 border-slate-300 outline-none"
-        value={projectTitleInputValue || currentProject?.name || ""}
-        onChange={(e) => setProjectTitleInputValue(e.target.value)}
-      />
-      <button onClick={() => saveProject(currentProject)}>{currentProject ? "Save" : "Add"}</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          required={true}
+          className="border-b p-1 border-slate-300 outline-none"
+          value={projectTitleInputValue || currentProject?.name || ""}
+          onChange={(e) => setProjectTitleInputValue(e.target.value)}
+          placeholder="hey world. landing page"
+        />
+        <input type="submit" text={currentProject ? "Save" : "Add"} />
+      </form>
       <div className="relative ml-auto z-[1000]" ref={dropdownRef}>
         <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
           <div className="flex gap-1 items-center">

@@ -222,7 +222,7 @@ main {
 .features {
   display: grid;
   gap: .5rem;
-  font-size: 1.5rem;
+  font-size: 1rem;
 }
 .features p {
   font-weight: bold;
