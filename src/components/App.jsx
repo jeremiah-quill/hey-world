@@ -125,7 +125,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         onRemoveClick={removeProject}
       />
       {/* left column */}
-      <div className="flex-1 flex flex-col gap-2">
+      <div className="flex-1 flex flex-col gap-2 overflow-hidden">
         <CurrentProjectBar
           projectTitleInputValue={projectTitleInputValue}
           setProjectTitleInputValue={setProjectTitleInputValue}
@@ -143,7 +143,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         </div>
       </div>
       {/* right column */}
-      <div className="flex-1 h-full flex flex-col gap-2">
+      <div className="flex-1 h-full flex flex-col gap-2 ">
         {/* top right container */}
         <div className="flex-1 h-full bg-[#292524] rounded-lg overflow-hidden preview border">
           <Preview />
