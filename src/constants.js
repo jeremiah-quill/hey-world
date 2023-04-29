@@ -46,6 +46,7 @@ function Features() {
         <div>✅ prettier formatting</div>
         <ShortcutBadge />
       </li>
+      <li>✅ save, update, & delete snippets</li>
       <li>✅ multiple templates + environments</li>
       <li>✅ ai chatbot</li>
       <li>🛠️ ...more to come</li>
@@ -116,6 +117,7 @@ export const defaultHtml = `<html>
             <li class="prettier-li">
               ✅ prettier formatting <span id="format-shortcut"></span>
             </li>
+            <li>✅ save, update, & delete snippets</li>
             <li>✅ multiple templates + environments</li>
             <li>✅ ai chatbot</li>
             <li>🛠️ ...more to come</li>
