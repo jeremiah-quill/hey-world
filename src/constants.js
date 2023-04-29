@@ -47,7 +47,7 @@ function Features() {
         <ShortcutBadge />
       </li>
       <li>✅ save, update, & delete snippets</li>
-      <li>✅ multiple templates + environments</li>
+      <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
       <li>🛠️ ...more to come</li>
     </ul>
@@ -118,7 +118,7 @@ export const defaultHtml = `<html>
               ✅ prettier formatting <span id="format-shortcut"></span>
             </li>
             <li>✅ save, update, & delete snippets</li>
-            <li>✅ multiple templates + environments</li>
+            <li>✅ react + html templates</li>
             <li>✅ ai chatbot</li>
             <li>🛠️ ...more to come</li>
           </ul>
