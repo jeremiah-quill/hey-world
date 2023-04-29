@@ -1,13 +1,18 @@
 import { RxCaretRight } from "react-icons/rx";
 import { SavedList } from "./SavedList";
 
-export function Sidebar({ isMenuOpen, toggleMenu, savedCreations }) {
+export function Sidebar({ isMenuOpen, toggleMenu, savedCreations = [], onProjectClick, onRemoveClick }) {
   return (
     <div className="h-full flex flex-col max-h-screen border rounded-lg" style={{ width: isMenuOpen ? "20%" : "50px" }}>
       {isMenuOpen && (
         <div className="flex-1 overflow-y-auto">
-          {savedCreations.length > 0 ? (
-            <SavedList className="h-full overflow-y-auto" savedCreations={savedCreations} />
+          {savedCreations?.length > 0 ? (
+            <SavedList
+              className="h-full overflow-y-auto"
+              savedCreations={savedCreations}
+              onProjectClick={onProjectClick}
+              onRemoveClick={onRemoveClick}
+            />
           ) : (
             <div className="p-4 font-extrabold">No saved creations.</div>
           )}

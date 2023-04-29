@@ -1,4 +1,4 @@
-import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
+import { SandpackCodeEditor, SandpackFileExplorer } from "@codesandbox/sandpack-react";
 import { useSandpack, useActiveCode } from "@codesandbox/sandpack-react";
 import prettier from "prettier";
 import parserBabel from "prettier/parser-babel";
@@ -14,6 +14,7 @@ export function Editor() {
   );
 }
 
+// TODO: this could also return a button that triggers the formatting.  can it do both?
 const ActivatePrettier = ({ codemirrorInstance }) => {
   const { sandpack } = useSandpack();
   const activeCode = useActiveCode();
@@ -60,5 +61,5 @@ const ActivatePrettier = ({ codemirrorInstance }) => {
     };
   }, [formatCode]);
 
-  return null; // we can return a button here too, or move this to a hook and use it elsewhere
+  return null;
 };
