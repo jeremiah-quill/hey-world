@@ -1,8 +1,8 @@
-export const defaultJsx = `import React, {useState} from 'react';
+export const defaultJsx = `import React, { useState } from "react";
 
 export default function App() {
-  console.log("hey world.")
-  
+  console.log("hey world.");
+
   return (
     <div className="App">
       <div className="header">
@@ -11,7 +11,7 @@ export default function App() {
       <main>
         <div className="hands-container">
           <Hands />
-        </div>  
+        </div>
         <div className="intro">
           <Features />
         </div>
@@ -20,43 +20,78 @@ export default function App() {
         <Github />
       </div>
     </div>
-  )
+  );
 }
 
 function Github() {
   return (
     <div className="github-icon">
-      <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
+      <a
+        target="_blank"
+        href="https://github.com/jeremiah-quill/hey-world"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
       </a>
     </div>
-  )
+  );
 }
 
 function Features() {
   return (
-    <div className="features">
-      <p>✅ lightweight browser editor + preview</p>
-      <p>✅ multiple templates + environments</p>
-      <p>✅ ai chatbot</p>
-      <p>🛠️ ...more to come</p>
-    </div>
-  )
+    <ul className="features">
+      <li>✅ lightweight browser editor + preview</li>
+      <li className="prettier-li">
+        <div>✅ prettier formatting</div>
+        <ShortcutBadge />
+      </li>
+      <li>✅ multiple templates + environments</li>
+      <li>✅ ai chatbot</li>
+      <li>🛠️ ...more to come</li>
+    </ul>
+  );
 }
+
+const ShortcutBadge = () => {
+  const isBrowser = typeof window !== "undefined";
+  const isMac = isBrowser
+    ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
+    : false;
+
+  const cmdEmoji = "⌘";
+  const ctrlEmoji = "⌃";
+  const sEmoji = "🇸";
+
+  const shortcut = isMac ? cmdEmoji : ctrlEmoji;
+
+  return (
+    <>
+      (<span className="shortcut-style">{shortcut}</span>
+      <span>+</span>
+      <span className="shortcut-style">s</span>)
+    </>
+  );
+};
 
 function Hands() {
   return (
-    <div className="hands" >
-      <div className="hand-line"><div className="hand-1">👈</div><h2>tinker</h2></div>
-      <div className="hand-line"><div className="hand-2">👇</div> <h2>ask</h2></div>
+    <div className="hands">
+      <div className="hand-line">
+        <div className="hand-1">👈</div>
+        <h2>tinker</h2>
+      </div>
+      <div className="hand-line">
+        <div className="hand-2">👇</div> <h2>ask</h2>
+      </div>
     </div>
-  )
+  );
 }
 `;
 
 export const defaultHtml = `<html>
   <head>
-    <link rel="stylesheet" href="/styles.css"/>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div class="App">
@@ -66,27 +101,41 @@ export const defaultHtml = `<html>
       <main>
         <div class="hands-container">
           <div class="hands">
-            <div class="hand-line"><div class="hand-1">👈</div><h2>tinker</h2></div>
-            <div class="hand-line"><div class="hand-2">👇</div> <h2>ask</h2></div>
+            <div class="hand-line">
+              <div class="hand-1">👈</div>
+              <h2>tinker</h2>
+            </div>
+            <div class="hand-line">
+              <div class="hand-2">👇</div> <h2>ask</h2>
+            </div>
           </div>
-        </div>  
-      <div class="intro">
-        <div class="features">
-          <p>✅ lightweight browser editor + preview</p>
-          <p>✅ multiple templates + environments</p>
-          <p>✅ ai chatbot</p>
-          <p>🛠️ ...more to come</p>
         </div>
-      </div>
+        <div class="intro">
+          <ul class="features">
+            <li>✅ lightweight browser editor + preview</li>
+            <li class="prettier-li">
+              ✅ prettier formatting <span id="format-shortcut"></span>
+            </li>
+            <li>✅ multiple templates + environments</li>
+            <li>✅ ai chatbot</li>
+            <li>🛠️ ...more to come</li>
+          </ul>
+        </div>
       </main>
       <div class="github-container">
         <div class="github-icon">
-          <a target="_blank" href="https://github.com/jeremiah-quill/hey-world" target="_blank" rel="noopener noreferrer">
+          <a
+            target="_blank"
+            href="https://github.com/jeremiah-quill/hey-world"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" />
           </a>
         </div>
       </div>
     </div>
+    <script src="./app.js"></script>
   </body>
 </html>
 `;
@@ -102,6 +151,12 @@ html, body {
   height: 100%;
   margin: 0px;
   padding: 0px;
+}
+li, ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  font-weight: inherit;
 }
 
 /* layout */
@@ -219,9 +274,68 @@ main {
     transform: translateY(0); 
   } 
 }
+
+.features li {
+  font-weight: bold;
+}
+
+.prettier-li {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: bold;
+}
+
+.shortcut-container {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  gap: .5rem;
+}
+
+.shortcut-style {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 4px;
+  background-color: #eee;
+  font-size: 1rem;
+}
+
+#format-shortcut {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-weight: bold;
+}
 `;
 
-export const defaultJs = `console.log("hey world.")
+export const defaultJs = `console.log("hey world from vanilla js.");
+
+function setFormatShortcut() {
+  console.log("in set format shortcut");
+  const isBrowser = typeof window !== "undefined";
+  const isMac = isBrowser
+    ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
+    : false;
+
+  const cmdEmoji = "⌘";
+  const ctrlEmoji = "⌃";
+
+  const shortcut = isMac ? cmdEmoji : ctrlEmoji;
+  const shortcutElement = document.getElementById("format-shortcut");
+
+  shortcutElement.innerHTML =
+    '(<span class="shortcut-style">' +
+    shortcut +
+    "</span>" +
+    "<span>+</span>" +
+    '<span class="shortcut-style">s</span>)';
+}
+
+setFormatShortcut();
 `;
 
 import { FaReact, FaHtml5 } from "react-icons/fa";
