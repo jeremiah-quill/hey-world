@@ -30,6 +30,12 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const resetProject = () => {
+    setCurrentProjectId(null);
+    setProjectTitleInputValue("");
+    sandpack.resetAllFiles();
+  };
+
   const saveProject = (currentProject = null) => {
     if (!currentProject) {
       const id = uuid();
@@ -44,6 +50,8 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       setSavedCreations((prevCreations) => {
         return [...prevCreations, project];
       });
+
+      setCurrentProjectId(id);
 
       // sync with local storage
       const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
@@ -111,7 +119,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
 
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
-  }, [currentProjectId]);
+  }, [currentProjectId, savedCreations]);
 
   return (
     <div className="w-full h-screen flex gap-2 p-2">
@@ -121,6 +129,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         savedCreations={savedCreations}
         onProjectClick={loadProject}
         onRemoveClick={removeProject}
+        currentProjectId={currentProjectId}
       />
       {/* left column */}
       <div className="flex-1 flex flex-col gap-2 overflow-hidden">
@@ -128,13 +137,14 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
           projectTitleInputValue={projectTitleInputValue}
           setProjectTitleInputValue={setProjectTitleInputValue}
           saveProject={saveProject}
-          currentProject={memoizedCurrentProject || null}
+          currentProject={memoizedCurrentProject}
           isTemplatePickerOpen={isTemplatePickerOpen}
           toggleTemplatePicker={toggleTemplatePicker}
           currentTemplate={currentTemplate}
           setIsTemplatePickerOpen={setIsTemplatePickerOpen}
           editorConfigObject={editorConfigObject}
           setCurrentTemplate={setCurrentTemplate}
+          resetProject={resetProject}
         />
         <div className="rounded-lg overflow-hidden border editor relative flex-1">
           <Editor />
@@ -172,6 +182,7 @@ const CurrentProjectBar = ({
   setCurrentTemplate,
   setIsTemplatePickerOpen,
   currentProject,
+  resetProject,
 }) => {
   // close template picker when clicking outside of it
   const dropdownRef = useRef(null);
@@ -192,20 +203,31 @@ const CurrentProjectBar = ({
     saveProject(currentProject);
   };
 
+  useEffect(() => {
+    if (currentProject) {
+      setProjectTitleInputValue(currentProject.name);
+    } else {
+      setProjectTitleInputValue("");
+    }
+  }, [currentProject]);
+
   // TODO: bug in this input. sometimes it doesn't update when switching between projects
   return (
-    <div className="flex gap-2 p-2">
+    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-lg">
       <form onSubmit={handleSubmit}>
         <input
           required={true}
-          className="border-b p-1 border-slate-300 outline-none"
-          value={projectTitleInputValue || currentProject?.name || ""}
+          className="rounded p-1 border-slate-300 outline-none"
+          value={projectTitleInputValue || ""}
           onChange={(e) => setProjectTitleInputValue(e.target.value)}
           placeholder="hey world. landing page"
         />
-        <input className="ml-2 hover:opacity-50" type="submit" value={currentProject ? "Save" : "Add"} />
+        <input className="ml-2 hover:opacity-50 cursor-pointer" type="submit" value={currentProject ? "Save" : "Add"} />
       </form>
-      <div className="relative ml-auto z-[1000]" ref={dropdownRef}>
+      <button className="hover:opacity-50" onClick={resetProject}>
+        Start fresh
+      </button>
+      <div className="relative z-[1000]" ref={dropdownRef}>
         <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
           <div className="flex gap-1 items-center">
             {editorConfigObject[currentTemplate].icon}
