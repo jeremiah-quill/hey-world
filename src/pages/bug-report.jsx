@@ -13,14 +13,6 @@ export default function BugReportPage() {
   const [message, setMessage] = useState(null);
   const [bugs, setBugReports] = useState([
     {
-      title: "Project title disappears in input",
-      description: "Input title disappears on occasion when being interacted with.",
-    },
-    {
-      title: "Project title disappears on save",
-      description: "Saving a project can remove it's name from the sidebar",
-    },
-    {
       title: "Prettier doesn't format CSS files",
       description: "We're on it.",
     },
