@@ -119,3 +119,21 @@ div.sp-error {
 div.sp-error-message {
   white-space: pre-wrap;
 }
+
+/* ANIMATIONS */
+
+@keyframes boop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.animate-boop {
+  animation: boop 0.3s linear;
+}

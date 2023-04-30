@@ -42,7 +42,6 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
 
       // update state
       setSavedCreations((prevCreations) => {
-        console.log("prevCreations", prevCreations);
         return [...prevCreations, project];
       });
 
@@ -92,7 +91,6 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       return [];
     }
     const projects = JSON.parse(localStorage.getItem("projects"));
-    console.log("loaded these from local storage", projects);
 
     if (projects?.length === 0) return;
 

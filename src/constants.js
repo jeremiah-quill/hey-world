@@ -31,7 +31,8 @@ function Features() {
       <li>✅ save, update, & delete snippets</li>
       <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
-      <li>🛠️ ...more to come</li>
+      <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
+      <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
     </ul>
   );
 }
@@ -102,7 +103,8 @@ export const defaultHtml = `<html>
             <li>✅ save, update, & delete snippets</li>
             <li>✅ react + html templates</li>
             <li>✅ ai chatbot</li>
-            <li>🛠️ ...more to come</li>
+            <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
+            <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
           </ul>
         </div>
       </main>
@@ -156,6 +158,7 @@ main {
   width: 100%;
   bottom: 10px;
   left: 10px;
+  z-index: -1;
 }
 
 /* title */
@@ -249,6 +252,13 @@ main {
 
 .features li {
   font-weight: bold;
+}
+
+.features a {
+  color: inherit;
+}
+.features a:hover {
+  opacity: 50%;
 }
 
 .prettier-li {
