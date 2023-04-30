@@ -25,7 +25,7 @@ export function Chat({ openaiKey }) {
   useEffect(scrollToBottom, [messages]);
 
   const handleKeyDown = (e, onKeyDown = () => {}) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.shiftKey) {
       onKeyDown();
     }
   };
@@ -58,9 +58,14 @@ export function Chat({ openaiKey }) {
     setIsKeyViewOpen(false);
   };
 
+  const handleInputHeight = (e) => {
+    if (e.target.scrollHeight > 200) return;
+    e.target.style.height = "auto"; // Reset the height to "auto" before calculating the new height
+    e.target.style.height = `${e.target.scrollHeight}px`; // Set the height to match the scroll height
+  };
+
   return (
     <div className="flex flex-col h-full bg-slate-100 p-4">
-      {/* <h1 className="text-2xl font-bold mb-4">Chatbot</h1> */}
       <div className="relative flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
         <ul className="mt-auto grid gap-2 text-base">
           {messages.map((msg, index) => (
@@ -108,12 +113,16 @@ export function Chat({ openaiKey }) {
                 />
               </div>
             ) : (
-              <input
+              <textarea
+                rows="1"
                 type="text"
-                className="flex-1 p-2 border border-slate-300 outline-none"
+                className="flex-1 p-2 border border-slate-300 outline-none resize-none overflow-auto h-auto"
                 placeholder="Type your message..."
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  handleInputHeight(e);
+                }}
                 onKeyDown={(e) => handleKeyDown(e, handleSendMessage)}
               />
             )}
