@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import { FaKey } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export function Chat({ openaiKey }) {
   const [error, setError] = useState(null);
@@ -13,6 +14,9 @@ export function Chat({ openaiKey }) {
   const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
   const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
   const [isKeySecret, setIsKeySecret] = useState(true);
+  const [useUserKey, setUseUserKey] = useState(false);
+
+  const { data: session } = useSession();
 
   const messagesEndRef = useRef(null);
 
@@ -46,7 +50,7 @@ export function Chat({ openaiKey }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ conversation: newMessages, key: key }),
+      body: JSON.stringify({ conversation: newMessages, key: key, useUserKey: useUserKey }),
     });
 
     const data = await response.json();
@@ -78,6 +82,13 @@ export function Chat({ openaiKey }) {
     setError(null);
   };
 
+  useEffect(() => {
+    const useUserKeyOptionTrue = localStorage.getItem("useUserKeyOptionTrue");
+    if (useUserKeyOptionTrue) {
+      setUseUserKey(true);
+    }
+  }, []);
+
   if (error) {
     return (
       <div className="bg-gray-100 absolute inset-0 grid place-items-center">
@@ -105,8 +116,31 @@ export function Chat({ openaiKey }) {
     );
   }
 
+  const handleUserKeyOptionChange = (e) => {
+    setUseUserKey(e.target.checked);
+    if (e.target.checked) {
+      localStorage.setItem("useUserKeyOptionTrue", true);
+    } else {
+      localStorage.removeItem("useUserKeyOptionTrue");
+    }
+  };
+
   return (
     <div className="flex flex-col h-full bg-slate-100 p-4">
+      {session && (
+        <div className="flex items-center space-x-2 mb-4">
+          <input
+            id="usePersonalApiKey"
+            type="checkbox"
+            value={useUserKey}
+            onChange={handleUserKeyOptionChange}
+            className="form-checkbox text-blue-500 h-4 w-4 rounded focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          />
+          <label htmlFor="usePersonalApiKey" className="text-gray-600">
+            Use personal API key instead of free rate limited key
+          </label>
+        </div>
+      )}
       <div className="relative flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
         <ul className="mt-auto grid gap-2 text-base">
           {messages.map((msg, index) => (
