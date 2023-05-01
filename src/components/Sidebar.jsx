@@ -2,6 +2,7 @@ import { RxCaretRight } from "react-icons/rx";
 import { SavedList } from "./SavedList";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
+import { BiUser } from "react-icons/bi";
 
 export function Sidebar({
   isMenuOpen,
@@ -31,12 +32,17 @@ export function Sidebar({
         </div>
       )}
       <div className="bg-slate-200 mt-auto p-2 grid place-items-center">
+        {/* <button>
+          <BiUser className="bg-black rounded-full text-white p-1 text-2xl" />
+        </button> */}
+
         {/* login/logout */}
         {session ? (
           <button
             className="bg-slate-300 hover:bg-slate-400 text-white font-bold py-2 px-4 rounded"
             onClick={() => signOut()}>
             Sign out
+            <BiUser />
           </button>
         ) : (
           <button
@@ -45,6 +51,7 @@ export function Sidebar({
             Sign in
           </button>
         )}
+
         {/* popout button */}
         <button onClick={() => toggleMenu()} className={isMenuOpen ? "mr-auto" : ""}>
           {<RxCaretRight className={`text-3xl transition-all ${isMenuOpen ? "rotate-180" : "rotate-0"}`} />}

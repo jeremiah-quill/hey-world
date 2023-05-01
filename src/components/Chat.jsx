@@ -102,7 +102,7 @@ export function Chat({ openaiKey }) {
           </div>
         ) : (
           <>
-            <button onClick={() => toggleKeyView()} className="p-2 bg-[#10a37f] text-white font-bold rounded-l-lg">
+            <button onClick={() => toggleKeyView()} className="p-2 bg-[#4CAF50] text-white font-bold rounded-l-lg">
               <FaKey />
             </button>
             {isKeyViewOpen ? (
@@ -136,7 +136,7 @@ export function Chat({ openaiKey }) {
               />
             )}
             <button
-              className="p-2 bg-[#10a37f] text-white font-bold rounded-r-lg"
+              className="p-2 bg-[#4CAF50] text-white font-bold rounded-r-lg"
               onClick={isKeyViewOpen ? handleSendMessage : handleSubmitKey}>
               {isKeyViewOpen ? "Save" : "Send"}
             </button>

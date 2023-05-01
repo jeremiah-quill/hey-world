@@ -8,7 +8,11 @@ module.exports = {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        green: "#4CAF50",
+      },
+    },
   },
   plugins: [require("@tailwindcss/typography")],
 };

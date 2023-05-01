@@ -1,16 +1,12 @@
 import { useState, useRef } from "react";
 import useModal from "@/hooks/useModal";
 import { Modal } from "@/components/Modal";
+import { signIn } from "next-auth/react";
 
 export function AccessChat({ setOpenaiKey }) {
   const { modalIsOpen, modalContent, modalTitle, modalOnSubmit, openModal, closeModal } = useModal();
 
   const formRef = useRef(null);
-
-  const handleSignUpSubmit = () => {
-    // TODO: sign up logic here
-    closeModal();
-  };
 
   const handleApiKeySubmit = () => {
     const key = formRef.current.value;
@@ -39,7 +35,7 @@ export function AccessChat({ setOpenaiKey }) {
           <p className="text-gray-600 mb-2">To access the chatbot, you can:</p>
           <div className="flex justify-between">
             <button
-              onClick={() => openModal({ content: "test sign up ", title: "Sign Up", onSubmit: handleSignUpSubmit })}
+              onClick={signIn}
               className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
               Sign up for free (rate limited)
             </button>
@@ -51,7 +47,7 @@ export function AccessChat({ setOpenaiKey }) {
                   onSubmit: handleApiKeySubmit,
                 })
               }
-              className="bg-green-500 text-white font-semibold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
+              className="bg-green text-white font-semibold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50">
               Add private OpenAI key
             </button>
           </div>

@@ -11,6 +11,7 @@ import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { AccessChat } from "@/components/AccessChat";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
+import { useSession } from "next-auth/react";
 
 export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
@@ -22,6 +23,8 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
 
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [savedCreations, setSavedCreations] = useState([]);
+
+  const { data: session } = useSession();
 
   // UI/state handlers
   const toggleTemplatePicker = () => {
@@ -158,7 +161,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         </div>
         {/* bottom right container */}
         <div className="shadow-inner border rounded-lg overflow-hidden relative flex-1">
-          {openaiKey ? (
+          {openaiKey || session ? (
             <Chat openaiKey={openaiKey} />
           ) : (
             <div className="grid place-items-center absolute inset-0">
