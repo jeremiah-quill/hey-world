@@ -4,6 +4,7 @@ import { FaKey } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 export function Chat({ openaiKey }) {
+  const [error, setError] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [key, setKey] = useState(openaiKey);
   const [messages, setMessages] = useState([]);
@@ -11,10 +12,6 @@ export function Chat({ openaiKey }) {
   const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
   const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
   const [isKeySecret, setIsKeySecret] = useState(true);
-
-  useEffect(() => {
-    console.log("openaiKey", openaiKey);
-  }, []);
 
   const messagesEndRef = useRef(null);
 
@@ -52,6 +49,12 @@ export function Chat({ openaiKey }) {
     });
 
     const data = await response.json();
+
+    if (data.error) {
+      setError(data.error);
+      return;
+    }
+
     setMessages([...newMessages, { role: "assistant", content: data.choices[0].message.content }]);
     setIsLoading(false);
   };
@@ -67,6 +70,8 @@ export function Chat({ openaiKey }) {
     e.target.style.height = "auto"; // Reset the height to "auto" before calculating the new height
     e.target.style.height = `${e.target.scrollHeight}px`; // Set the height to match the scroll height
   };
+
+  if (error) return "Error: " + error;
 
   return (
     <div className="flex flex-col h-full bg-slate-100 p-4">

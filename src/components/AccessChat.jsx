@@ -8,7 +8,7 @@ export function AccessChat({ setOpenaiKey }) {
   const formRef = useRef(null);
 
   const handleSignUpSubmit = () => {
-    console.log("sign up logic here");
+    // TODO: sign up logic here
     closeModal();
   };
 

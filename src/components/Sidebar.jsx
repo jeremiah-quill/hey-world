@@ -1,5 +1,7 @@
 import { RxCaretRight } from "react-icons/rx";
 import { SavedList } from "./SavedList";
+import { useSession } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 
 export function Sidebar({
   isMenuOpen,
@@ -9,6 +11,8 @@ export function Sidebar({
   onRemoveClick,
   currentProjectId,
 }) {
+  const { data: session } = useSession();
+
   return (
     <div className="h-full flex flex-col max-h-screen border rounded-lg" style={{ width: isMenuOpen ? "20%" : "50px" }}>
       {isMenuOpen && (
@@ -27,6 +31,21 @@ export function Sidebar({
         </div>
       )}
       <div className="bg-slate-200 mt-auto p-2 grid place-items-center">
+        {/* login/logout */}
+        {session ? (
+          <button
+            className="bg-slate-300 hover:bg-slate-400 text-white font-bold py-2 px-4 rounded"
+            onClick={() => signOut()}>
+            Sign out
+          </button>
+        ) : (
+          <button
+            className="bg-slate-300 hover:bg-slate-400 text-white font-bold py-2 px-4 rounded"
+            onClick={() => signIn()}>
+            Sign in
+          </button>
+        )}
+        {/* popout button */}
         <button onClick={() => toggleMenu()} className={isMenuOpen ? "mr-auto" : ""}>
           {<RxCaretRight className={`text-3xl transition-all ${isMenuOpen ? "rotate-180" : "rotate-0"}`} />}
         </button>
