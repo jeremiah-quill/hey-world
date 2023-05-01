@@ -12,6 +12,10 @@ export function Chat({ openaiKey }) {
   const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
   const [isKeySecret, setIsKeySecret] = useState(true);
 
+  useEffect(() => {
+    console.log("openaiKey", openaiKey);
+  }, []);
+
   const messagesEndRef = useRef(null);
 
   const toggleKeyView = () => {

@@ -4,13 +4,14 @@ import prettier from "prettier";
 import parserBabel from "prettier/parser-babel";
 import { useCallback, useEffect, useRef } from "react";
 
-export function Editor() {
+export function Editor({ children }) {
   const codemirrorInstance = useRef(); // use a ref to access codemirror instance so we can trigger code formatting with prettier
   return (
-    <>
+    <div className="rounded-lg overflow-hidden border editor relative flex-1">
+      {children}
       <SandpackCodeEditor ref={codemirrorInstance} showLineNumbers showInlineErrors style={{ height: "100%" }} />
       <ActivatePrettier codemirrorInstance={codemirrorInstance} />
-    </>
+    </div>
   );
 }
 

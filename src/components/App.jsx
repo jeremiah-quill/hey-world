@@ -9,7 +9,8 @@ import { Chat } from "@/components/Chat";
 import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
-import { GptKeyForm } from "@/components/GptKeyForm";
+import { AccessChat } from "@/components/AccessChat";
+import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 
 export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
@@ -133,22 +134,21 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       />
       {/* left column */}
       <div className="flex-1 flex flex-col gap-2 overflow-hidden">
-        <CurrentProjectBar
-          projectTitleInputValue={projectTitleInputValue}
-          setProjectTitleInputValue={setProjectTitleInputValue}
-          saveProject={saveProject}
-          currentProject={memoizedCurrentProject}
-          isTemplatePickerOpen={isTemplatePickerOpen}
-          toggleTemplatePicker={toggleTemplatePicker}
-          currentTemplate={currentTemplate}
-          setIsTemplatePickerOpen={setIsTemplatePickerOpen}
-          editorConfigObject={editorConfigObject}
-          setCurrentTemplate={setCurrentTemplate}
-          resetProject={resetProject}
-        />
-        <div className="rounded-lg overflow-hidden border editor relative flex-1">
-          <Editor />
-        </div>
+        <Editor>
+          <CurrentProjectBar
+            projectTitleInputValue={projectTitleInputValue}
+            setProjectTitleInputValue={setProjectTitleInputValue}
+            saveProject={saveProject}
+            currentProject={memoizedCurrentProject}
+            isTemplatePickerOpen={isTemplatePickerOpen}
+            toggleTemplatePicker={toggleTemplatePicker}
+            currentTemplate={currentTemplate}
+            setIsTemplatePickerOpen={setIsTemplatePickerOpen}
+            editorConfigObject={editorConfigObject}
+            setCurrentTemplate={setCurrentTemplate}
+            resetProject={resetProject}
+          />
+        </Editor>
       </div>
       {/* right column */}
       <div className="flex-1 h-full flex flex-col gap-2 ">
@@ -162,7 +162,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
             <Chat openaiKey={openaiKey} />
           ) : (
             <div className="grid place-items-center absolute inset-0">
-              <GptKeyForm setOpenaiKey={setOpenaiKey} />
+              <AccessChat setOpenaiKey={setOpenaiKey} />
             </div>
           )}
         </div>
@@ -170,88 +170,3 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     </div>
   );
 }
-
-const CurrentProjectBar = ({
-  projectTitleInputValue,
-  setProjectTitleInputValue,
-  saveProject,
-  isTemplatePickerOpen,
-  toggleTemplatePicker,
-  currentTemplate,
-  editorConfigObject,
-  setCurrentTemplate,
-  setIsTemplatePickerOpen,
-  currentProject,
-  resetProject,
-}) => {
-  // close template picker when clicking outside of it
-  const dropdownRef = useRef(null);
-  useEffect(() => {
-    const handleDocumentClick = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsTemplatePickerOpen(false);
-      }
-    };
-    document.addEventListener("click", handleDocumentClick);
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    saveProject(currentProject);
-  };
-
-  useEffect(() => {
-    if (currentProject) {
-      setProjectTitleInputValue(currentProject.name);
-    } else {
-      setProjectTitleInputValue("");
-    }
-  }, [currentProject]);
-
-  // TODO: bug in this input. sometimes it doesn't update when switching between projects
-  return (
-    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-lg">
-      <form onSubmit={handleSubmit}>
-        <input
-          required={true}
-          className="rounded p-1 border-slate-300 outline-none"
-          value={projectTitleInputValue || ""}
-          onChange={(e) => setProjectTitleInputValue(e.target.value)}
-          placeholder="hey world. landing page"
-        />
-        <input className="ml-2 hover:opacity-50 cursor-pointer" type="submit" value={currentProject ? "Save" : "Add"} />
-      </form>
-      <button className="hover:opacity-50" onClick={resetProject}>
-        Start fresh
-      </button>
-      <div className="relative z-[1000]" ref={dropdownRef}>
-        <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
-          <div className="flex gap-1 items-center">
-            {editorConfigObject[currentTemplate].icon}
-            {currentTemplate}
-          </div>
-          {<RxCaretDown className={`text-2xl transition-all ${isTemplatePickerOpen ? "rotate-180" : "rotate-0"}`} />}
-        </button>
-        {isTemplatePickerOpen && (
-          <ul className="border bg-white rounded absolute">
-            {Object.keys(editorConfigObject).map((key, idx) => (
-              <li
-                className="p-2 cursor-pointer hover:bg-slate-200 flex gap-1 items-center"
-                key={idx}
-                onClick={() => {
-                  setCurrentTemplate(key);
-                  setIsTemplatePickerOpen(false);
-                }}>
-                {editorConfigObject[key].icon}
-                {key}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
