@@ -17,8 +17,6 @@ export function Sidebar({
   const { data: session } = useSession();
   const { modalIsOpen, modalContent, modalTitle, modalOnSubmit, openModal, closeModal } = useModal();
 
-  console.log("session", session);
-
   return (
     <>
       <div
@@ -85,7 +83,8 @@ const UserModal = ({ user }) => {
         font-light
         
       ">
-        <li>gpt code editor context (pro account)</li>
+        <li className="font-bold">gpt code editor context (pro)</li>
+        <li className="font-bold">save code snippets to db instead of local storage (pro)</li>
         <li>dark mode</li>
         <li>VIM mode</li>
         <li>custom keybindings</li>

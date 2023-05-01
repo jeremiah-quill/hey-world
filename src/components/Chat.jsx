@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { FaKey } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import Link from "next/link";
 
 export function Chat({ openaiKey }) {
   const [error, setError] = useState(null);
@@ -71,7 +72,38 @@ export function Chat({ openaiKey }) {
     e.target.style.height = `${e.target.scrollHeight}px`; // Set the height to match the scroll height
   };
 
-  if (error) return "Error: " + error;
+  const resetChat = () => {
+    setMessages((prevMessages) => prevMessages.filter((msg, idx) => idx !== prevMessages.length - 1));
+    setIsLoading(false);
+    setError(null);
+  };
+
+  if (error) {
+    return (
+      <div className="bg-gray-100 absolute inset-0 grid place-items-center">
+        <div className="bg-white p-6 rounded-lg w-full max-w-md">
+          <h2 className="text-2xl font-semibold mb-4 text-slate-900">😢 It looks like something went wrong:</h2>
+          <p className="text-gray-600 mb-6">{error}</p>
+          <button
+            onClick={resetChat}
+            className="bg-blue-500 text-white font-semibold py-2 px-4 rounded mb-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+            Back
+          </button>
+          <div className="text-gray-600">
+            If you're still stuck, please contact{" "}
+            <a href="mailto:jcq5010@gmail.com" className="text-blue-500 hover:text-blue-700">
+              jcq5010@gmail.com
+            </a>{" "}
+            or{" "}
+            <Link href="/bug-report" className="text-blue-500 hover:text-blue-700">
+              file a bug report.
+            </Link>{" "}
+            Sorry again!
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col h-full bg-slate-100 p-4">
@@ -137,7 +169,7 @@ export function Chat({ openaiKey }) {
             )}
             <button
               className="p-2 bg-[#4CAF50] text-white font-bold rounded-r-lg"
-              onClick={isKeyViewOpen ? handleSendMessage : handleSubmitKey}>
+              onClick={isKeyViewOpen ? handleSubmitKey : handleSendMessage}>
               {isKeyViewOpen ? "Save" : "Send"}
             </button>
           </>
