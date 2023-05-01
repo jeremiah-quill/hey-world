@@ -100,7 +100,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     }
     const projects = JSON.parse(localStorage.getItem("projects"));
 
-    if (projects?.length === 0) return;
+    if (!projects) return;
 
     setSavedCreations(projects);
   }, []);
@@ -153,11 +153,11 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       {/* right column */}
       <div className="flex-1 h-full flex flex-col gap-2 ">
         {/* top right container */}
-        <div className="flex-1 h-full bg-[#292524] rounded-lg overflow-hidden preview border">
+        <div className="h-full bg-[#292524] rounded-lg overflow-hidden preview border flex-1">
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="flex-1 shadow-inner border rounded-lg overflow-hidden relative">
+        <div className="shadow-inner border rounded-lg overflow-hidden relative flex-1">
           {openaiKey ? (
             <Chat openaiKey={openaiKey} />
           ) : (

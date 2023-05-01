@@ -69,7 +69,7 @@ export const FeatureRoadmap = () => {
   };
 
   return (
-    <div className="w-full p-8">
+    <div className="w-full p-8 max-w-5xl mx-auto">
       <header className="mb-8">
         <h1 className="text-4xl font-bold mb-4">Our Feature Roadmap</h1>
         <p className="text-lg text-gray-600">

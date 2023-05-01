@@ -31,8 +31,8 @@ function Features() {
       <li>✅ save, update, & delete snippets</li>
       <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
-      <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
-      <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
+      <li>🚀 <a href="http://localhost:3001/feature-roadmap">feature roadmap</a></li>
+      <li>🐛 <a href="http://localhost:3001/bug-report">report a bug</a></li>
     </ul>
   );
 }
@@ -103,8 +103,8 @@ export const defaultHtml = `<html>
             <li>✅ save, update, & delete snippets</li>
             <li>✅ react + html templates</li>
             <li>✅ ai chatbot</li>
-            <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
-            <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
+            <li>🚀 <a href="https://localhost:3001/feature-roadmap">feature roadmap</a></li>
+            <li>🐛 <a href="https://localhost:3001/bug-report">report a bug</a></li>
           </ul>
         </div>
       </main>
