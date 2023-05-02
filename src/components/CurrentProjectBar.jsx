@@ -43,7 +43,7 @@ export const CurrentProjectBar = ({
 
   // TODO: bug in this input. sometimes it doesn't update when switching between projects
   return (
-    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-lg">
+    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-t-lg">
       <form onSubmit={handleSubmit}>
         <input
           required={true}

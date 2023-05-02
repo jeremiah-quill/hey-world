@@ -50,7 +50,11 @@ export function Chat({ openaiKey }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ conversation: newMessages, key: key, useUserKey: useUserKey }),
+      body: JSON.stringify({
+        conversation: newMessages,
+        key: key,
+        useUserKey: useUserKey,
+      }),
     });
 
     const data = await response.json();
@@ -60,7 +64,10 @@ export function Chat({ openaiKey }) {
       return;
     }
 
-    setMessages([...newMessages, { role: "assistant", content: data.choices[0].message.content }]);
+    setMessages([
+      ...newMessages,
+      { role: "assistant", content: data.choices[0].message.content },
+    ]);
     setIsLoading(false);
   };
 
@@ -77,7 +84,9 @@ export function Chat({ openaiKey }) {
   };
 
   const resetChat = () => {
-    setMessages((prevMessages) => prevMessages.filter((msg, idx) => idx !== prevMessages.length - 1));
+    setMessages((prevMessages) =>
+      prevMessages.filter((msg, idx) => idx !== prevMessages.length - 1)
+    );
     setIsLoading(false);
     setError(null);
   };
@@ -91,22 +100,31 @@ export function Chat({ openaiKey }) {
 
   if (error) {
     return (
-      <div className="bg-gray-100 absolute inset-0 grid place-items-center">
-        <div className="bg-white p-6 rounded-lg w-full max-w-md">
-          <h2 className="text-2xl font-semibold mb-4 text-slate-900">😢 It looks like something went wrong:</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+      <div className="absolute inset-0 grid place-items-center bg-gray-100">
+        <div className="w-full max-w-md rounded-lg bg-white p-6">
+          <h2 className="mb-4 text-2xl font-semibold text-slate-900">
+            😢 It looks like something went wrong:
+          </h2>
+          <p className="mb-6 text-gray-600">{error}</p>
           <button
             onClick={resetChat}
-            className="bg-blue-500 text-white font-semibold py-2 px-4 rounded mb-4 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50">
+            className="mb-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+          >
             Back
           </button>
           <div className="text-gray-600">
             If you're still stuck, please contact{" "}
-            <a href="mailto:jcq5010@gmail.com" className="text-blue-500 hover:text-blue-700">
+            <a
+              href="mailto:jcq5010@gmail.com"
+              className="text-blue-500 hover:text-blue-700"
+            >
               jcq5010@gmail.com
             </a>{" "}
             or{" "}
-            <Link href="/bug-report" className="text-blue-500 hover:text-blue-700">
+            <Link
+              href="/bug-report"
+              className="text-blue-500 hover:text-blue-700"
+            >
               file a bug report.
             </Link>{" "}
             Sorry again!
@@ -126,29 +144,32 @@ export function Chat({ openaiKey }) {
   };
 
   return (
-    <div className="flex flex-col h-full bg-slate-100 p-4">
+    <div className="flex h-full flex-col bg-slate-100 p-4">
       {session && (
-        <div className="flex items-center space-x-2 mb-4">
+        <div className="mb-4 flex items-center space-x-2">
           <input
             id="usePersonalApiKey"
             type="checkbox"
             value={useUserKey}
             onChange={handleUserKeyOptionChange}
-            className="form-checkbox text-blue-500 h-4 w-4 rounded focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+            className="form-checkbox h-4 w-4 rounded text-blue-500 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           />
           <label htmlFor="usePersonalApiKey" className="text-gray-600">
             Use personal API key instead of free rate limited key
           </label>
         </div>
       )}
-      <div className="relative flex-1 flex flex-col bg-white shadow-md rounded-lg p-4 max-h-full overflow-y-scroll">
+      <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white  p-4 shadow-md">
         <ul className="mt-auto grid gap-2 text-base">
           {messages.map((msg, index) => (
             <li
               key={index}
-              className={`flex items-center p-2 rounded-lg gap-2 ${
-                msg.role === "user" ? "bg-slate-200 ml-auto max-w-[75%]" : "bg-slate-800 text-white mr-auto max-w-[75%]"
-              }`}>
+              className={`flex items-center gap-2 rounded-lg p-2 ${
+                msg.role === "user"
+                  ? "ml-auto max-w-[75%] bg-slate-200"
+                  : "mr-auto max-w-[75%] bg-slate-800 text-white"
+              }`}
+            >
               <div className={` ${msg.role !== "user" && "bot"}`}>
                 <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
               </div>
@@ -157,30 +178,35 @@ export function Chat({ openaiKey }) {
           <div ref={messagesEndRef} />
         </ul>
       </div>
-      <div className="w-full flex mt-4 justify-center text-base">
+      <div className="mt-4 flex w-full justify-center text-base">
         {isLoading ? (
           <div
             className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status">
+            role="status"
+          >
             <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">
               Loading...
             </span>
           </div>
         ) : (
           <>
-            <button onClick={() => toggleKeyView()} className="p-2 bg-[#4CAF50] text-white font-bold rounded-l-lg">
+            <button
+              onClick={() => toggleKeyView()}
+              className="rounded-l-lg bg-[#4CAF50] p-2 font-bold text-white"
+            >
               <FaKey />
             </button>
             {isKeyViewOpen ? (
               <div className="flex w-full">
                 <button
-                  className="p-2 border border-slate-300 outline-none bg-white"
-                  onClick={() => setIsKeySecret(!isKeySecret)}>
+                  className="border border-slate-300 bg-white p-2 outline-none"
+                  onClick={() => setIsKeySecret(!isKeySecret)}
+                >
                   {isKeySecret ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
                 </button>
                 <input
                   type={isKeySecret ? "password" : "text"}
-                  className="flex-1 p-2 border border-x-0 border-slate-300 outline-none"
+                  className="flex-1 border border-x-0 border-slate-300 p-2 outline-none"
                   placeholder="Enter your key..."
                   value={keyInputValue}
                   onChange={(e) => setKeyInputValue(e.target.value)}
@@ -191,7 +217,7 @@ export function Chat({ openaiKey }) {
               <textarea
                 rows="1"
                 type="text"
-                className="flex-1 p-2 border border-slate-300 outline-none resize-none overflow-auto h-auto"
+                className="h-auto flex-1 resize-none overflow-auto border border-slate-300 p-2 outline-none"
                 placeholder="Type your message..."
                 value={inputValue}
                 onChange={(e) => {
@@ -202,8 +228,9 @@ export function Chat({ openaiKey }) {
               />
             )}
             <button
-              className="p-2 bg-[#4CAF50] text-white font-bold rounded-r-lg"
-              onClick={isKeyViewOpen ? handleSubmitKey : handleSendMessage}>
+              className="rounded-r-lg bg-[#4CAF50] p-2 font-bold text-white"
+              onClick={isKeyViewOpen ? handleSubmitKey : handleSendMessage}
+            >
               {isKeyViewOpen ? "Save" : "Send"}
             </button>
           </>

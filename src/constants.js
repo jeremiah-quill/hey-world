@@ -195,6 +195,11 @@ main {
 }
 .feature-container {
   flex: 1;
+  flex: 1;
+  background: #ffffff99;
+  padding: 1rem;
+  margin-right: 1rem;
+  border-radius: 8px;
 }
 
 .arrow-container {

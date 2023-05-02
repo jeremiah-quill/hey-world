@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
-import { RxCaretDown } from "react-icons/rx";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { v4 as uuid } from "uuid";
 
@@ -40,6 +39,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     sandpack.resetAllFiles();
   };
 
+  // project CRUD
   const saveProject = (currentProject = null) => {
     if (!currentProject) {
       const id = uuid();
@@ -58,7 +58,8 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       setCurrentProjectId(id);
 
       // sync with local storage
-      const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
+      const currentProjects =
+        JSON.parse(localStorage.getItem("projects")) || [];
       currentProjects.push(project);
       localStorage.setItem("projects", JSON.stringify(currentProjects));
     } else {
@@ -79,16 +80,22 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
 
   const removeProject = (id) => {
     // update state
-    setSavedCreations((prevCreations) => prevCreations.filter((creation) => creation.id !== id));
+    setSavedCreations((prevCreations) =>
+      prevCreations.filter((creation) => creation.id !== id)
+    );
 
     // sync with local storage
-    const updatedProjects = savedCreations.filter((creation) => creation.id !== id);
+    const updatedProjects = savedCreations.filter(
+      (creation) => creation.id !== id
+    );
     localStorage.setItem("projects", JSON.stringify(updatedProjects));
   };
 
   const loadProject = (projectId) => {
     // get project from state
-    const project = savedCreations.find((creation) => creation.id === projectId);
+    const project = savedCreations.find(
+      (creation) => creation.id === projectId
+    );
 
     // update sandpack
     if (!project) return;
@@ -126,7 +133,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   }, [currentProjectId, savedCreations]);
 
   return (
-    <div className="w-full h-screen flex gap-2 p-2">
+    <div className="flex h-screen w-full gap-2 p-2">
       <Sidebar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
@@ -136,7 +143,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         currentProjectId={currentProjectId}
       />
       {/* left column */}
-      <div className="flex-1 flex flex-col gap-2 overflow-hidden">
+      <div className="relative grid flex-1">
         <Editor>
           <CurrentProjectBar
             projectTitleInputValue={projectTitleInputValue}
@@ -154,17 +161,17 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         </Editor>
       </div>
       {/* right column */}
-      <div className="flex-1 h-full flex flex-col gap-2 ">
+      <div className="flex h-full flex-1 flex-col gap-2 ">
         {/* top right container */}
-        <div className="h-full bg-[#292524] rounded-lg overflow-hidden preview border flex-1">
+        <div className="preview h-full flex-1 overflow-hidden rounded-lg border bg-[#292524]">
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="shadow-inner border rounded-lg overflow-hidden relative flex-1">
+        <div className="relative flex-1 overflow-hidden rounded-lg border shadow-inner">
           {openaiKey || session ? (
             <Chat openaiKey={openaiKey} />
           ) : (
-            <div className="grid place-items-center absolute inset-0">
+            <div className="absolute inset-0 grid place-items-center">
               <AccessChat setOpenaiKey={setOpenaiKey} />
             </div>
           )}

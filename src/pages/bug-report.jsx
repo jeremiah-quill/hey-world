@@ -16,6 +16,11 @@ export default function BugReportPage() {
       title: "Prettier doesn't format CSS files",
       description: "We're on it.",
     },
+    {
+      title: "Pasting into editor can cause layout shift",
+      description:
+        "Sometimes if you paste a large amount of text into the bottom half of the editor container, the layout will shifta and the top project bar will disappear.",
+    },
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
