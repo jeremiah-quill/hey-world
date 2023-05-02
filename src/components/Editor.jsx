@@ -1,6 +1,7 @@
 import {
   SandpackCodeEditor,
   SandpackFileExplorer,
+  SandpackLayout,
 } from "@codesandbox/sandpack-react";
 import { useSandpack, useActiveCode } from "@codesandbox/sandpack-react";
 import prettier from "prettier";
@@ -23,8 +24,9 @@ export function Editor({ children }) {
   const defaultExtensions = [];
 
   return (
-    <div className="editor absolute inset-0 flex flex-col rounded-lg border">
+    <div className="editor absolute inset-0 flex flex-col overflow-hidden rounded-lg border dark:border-slate-500">
       {children}
+      {/* <SandpackLayout theme={"dark"}> */}
       <SandpackCodeEditor
         key={JSON.stringify(userSettings.isVimModeEnabled)}
         extensionsKeymap={[vimKeyMap]}
@@ -35,6 +37,7 @@ export function Editor({ children }) {
         extensions={[...defaultExtensions, ...extensions]}
       />
       <ActivatePrettier codemirrorInstance={codemirrorInstance} />
+      {/* </SandpackLayout> */}
     </div>
   );
 }

@@ -11,10 +11,10 @@ import { Sidebar } from "@/components/Sidebar";
 import { AccessChat } from "@/components/AccessChat";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 import { useSession } from "next-auth/react";
+import { useUserSettings } from "@/context/userSettingsContext";
 
-export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
+export function App({ currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
-  const [openaiKey, setOpenaiKey] = useState(null); // TODO: can I just pass in serverKey here?
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -24,6 +24,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   const [savedCreations, setSavedCreations] = useState([]);
 
   const { data: session } = useSession();
+  const { key } = useUserSettings();
 
   // UI/state handlers
   const toggleTemplatePicker = () => {
@@ -119,21 +120,21 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   // if a key was loaded from env, use it and clear key from local storage (as a precaution)
   // otherwise, check if a key was saved in local storage and use that
   // TODO: I feel like this sucks
-  useEffect(() => {
-    if (serverKey) {
-      localStorage.removeItem("openai-key");
-      return;
-    }
-    const userKey = localStorage.getItem("openai-key");
-    setOpenaiKey(userKey);
-  }, [serverKey]);
+  // useEffect(() => {
+  //   if (serverKey) {
+  //     localStorage.removeItem("openai-key");
+  //     return;
+  //   }
+  //   const userKey = localStorage.getItem("openai-key");
+  //   setOpenaiKey(userKey);
+  // }, [serverKey]);
 
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
 
   return (
-    <div className="flex h-screen w-full gap-2 p-2">
+    <div className="flex h-screen w-full gap-2 p-2 transition-all dark:bg-slate-800">
       <Sidebar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
@@ -163,16 +164,16 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       {/* right column */}
       <div className="flex h-full flex-1 flex-col gap-2 ">
         {/* top right container */}
-        <div className="preview h-full flex-1 overflow-hidden rounded-lg border bg-[#292524]">
+        <div className="preview h-full flex-1 overflow-hidden rounded-lg border dark:border-slate-500">
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="relative flex-1 overflow-hidden rounded-lg border shadow-inner">
-          {openaiKey || session ? (
-            <Chat openaiKey={openaiKey} />
+        <div className="relative flex-1 overflow-hidden rounded-lg border shadow-inner dark:border-slate-500">
+          {key || session ? (
+            <Chat />
           ) : (
             <div className="absolute inset-0 grid place-items-center">
-              <AccessChat setOpenaiKey={setOpenaiKey} />
+              <AccessChat />
             </div>
           )}
         </div>

@@ -43,38 +43,52 @@ export const CurrentProjectBar = ({
 
   // TODO: bug in this input. sometimes it doesn't update when switching between projects
   return (
-    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-t-lg">
+    <div className="flex justify-between gap-2 bg-slate-200 p-2 text-slate-800 dark:bg-slate-800 dark:text-slate-300">
       <form onSubmit={handleSubmit}>
         <input
           required={true}
-          className="rounded p-1 border-slate-300 outline-none"
+          className="rounded border-slate-300 p-1 outline-none dark:bg-slate-700"
           value={projectTitleInputValue || ""}
           onChange={(e) => setProjectTitleInputValue(e.target.value)}
-          placeholder="hey world. landing page"
+          placeholder="Landing page"
         />
-        <input className="ml-2 hover:opacity-50 cursor-pointer" type="submit" value={currentProject ? "Save" : "Add"} />
+        <input
+          className="ml-2 cursor-pointer hover:opacity-50"
+          type="submit"
+          value={currentProject ? "Save" : "Add"}
+        />
       </form>
       <button className="hover:opacity-50" onClick={resetProject}>
         Start fresh
       </button>
-      <div className="relative z-[1000]" ref={dropdownRef}>
-        <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
-          <div className="flex gap-1 items-center">
+      <div className="relative z-[500]" ref={dropdownRef}>
+        <button
+          onClick={toggleTemplatePicker}
+          className="flex items-center gap-2"
+        >
+          <div className="flex items-center gap-1">
             {editorConfigObject[currentTemplate].icon}
             {currentTemplate}
           </div>
-          {<RxCaretDown className={`text-2xl transition-all ${isTemplatePickerOpen ? "rotate-180" : "rotate-0"}`} />}
+          {
+            <RxCaretDown
+              className={`text-2xl transition-all ${
+                isTemplatePickerOpen ? "rotate-180" : "rotate-0"
+              }`}
+            />
+          }
         </button>
         {isTemplatePickerOpen && (
-          <ul className="border bg-white rounded absolute">
+          <ul className="absolute w-full rounded border bg-white dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
             {Object.keys(editorConfigObject).map((key, idx) => (
               <li
-                className="p-2 cursor-pointer hover:bg-slate-200 flex gap-1 items-center"
+                className="flex cursor-pointer items-center gap-1 p-2 hover:bg-slate-200 dark:hover:bg-slate-500"
                 key={idx}
                 onClick={() => {
                   setCurrentTemplate(key);
                   setIsTemplatePickerOpen(false);
-                }}>
+                }}
+              >
                 {editorConfigObject[key].icon}
                 {key}
               </li>

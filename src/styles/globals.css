@@ -107,6 +107,10 @@ div.sp-preview-actions {
 div.sp-loading {
 }
 
+.sp-preview-actions {
+  z-index: 0 !important;
+}
+
 /* Open in Sandbox button, appears while loading */
 button.sp-icon-standalone {
 }

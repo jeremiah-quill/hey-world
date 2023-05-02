@@ -31,7 +31,7 @@ export default async function handler(req, res) {
 function getErrorMessage(statusCode) {
   switch (statusCode) {
     case 401:
-      return "Unauthorized: please try again or enter a different OpenAI API key";
+      return "Unauthorized: please enter a valid OpenAI API key";
     case 403:
       return "Forbidden";
     case 404:

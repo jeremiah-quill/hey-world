@@ -16,6 +16,7 @@
     "@tailwindcss/typography": "^0.5.9",
     "@uiw/codemirror-extensions-color": "^4.19.16",
     "@upstash/ratelimit": "^0.4.2",
+    "framer-motion": "^10.12.7",
     "next": "13.3.1",
     "next-auth": "^4.22.1",
     "openai": "^3.2.1",

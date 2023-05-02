@@ -1,33 +1,38 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { FaKey } from "react-icons/fa";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
+import { ChatError } from "@/components/ChatError";
+import useModal from "@/hooks/useModal";
+import { Modal } from "@/components/Modal";
+import { useToast } from "@/context/toastContext";
 
-export function Chat({ openaiKey }) {
+export function Chat() {
   // UI states
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
-  const [isKeySecret, setIsKeySecret] = useState(true);
-  // input states
   const [inputValue, setInputValue] = useState("");
-  const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
-  // data states
-  const [key, setKey] = useState(openaiKey); // TODO: refactor this to use context
-  const [messages, setMessages] = useState([]);
-  // hooks
+  const {
+    modalIsOpen,
+    modalContent,
+    modalTitle,
+    modalOnSubmit,
+    openModal,
+    closeModal,
+  } = useModal();
+
+  // data
   const { data: session } = useSession();
-  const { userSettings, toggleSetting } = useUserSettings();
+  const { userSettings, toggleSetting, key, setKey } = useUserSettings();
+  const [messages, setMessages] = useState([]);
+
   // refs
   const messagesEndRef = useRef(null);
-  // handlers
-  const toggleKeyView = () => {
-    setIsKeyViewOpen(!isKeyViewOpen);
-  };
+  const formRef = useRef(null);
 
+  // handlers
   const handleKeyDown = (e, onKeyDown = () => {}) => {
     if (e.key === "Enter" && !e.shiftKey) {
       onKeyDown();
@@ -35,8 +40,9 @@ export function Chat({ openaiKey }) {
   };
 
   const handleSendMessage = async () => {
-    setIsLoading(true);
     if (inputValue.trim() === "") return;
+
+    setIsLoading(true);
 
     setInputValue("");
 
@@ -69,12 +75,6 @@ export function Chat({ openaiKey }) {
     setIsLoading(false);
   };
 
-  const handleSubmitKey = () => {
-    localStorage.setItem("openai-key", keyInputValue);
-    setKey(keyInputValue);
-    setIsKeyViewOpen(false);
-  };
-
   const handleInputHeight = (e) => {
     if (e.target.scrollHeight > 200) return;
     e.target.style.height = "auto"; // Reset the height to "auto" before calculating the new height
@@ -89,92 +89,62 @@ export function Chat({ openaiKey }) {
     setError(null);
   };
 
-  const handleUserKeyToggle = () => {
-    toggleSetting("isUseUserKeyEnabled");
-  };
-
   // effects
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (error) return <ChatError resetChat={resetChat} error={error} />;
+  if (error) return <ChatError onBack={resetChat} error={error} />;
 
   return (
-    <div className="flex h-full flex-col bg-slate-100 p-4">
-      {session && (
-        <div className="mb-4 flex items-center space-x-2">
-          <input
-            id="usePersonalApiKey"
-            type="checkbox"
-            checked={userSettings.isUseUserKeyEnabled}
-            onChange={handleUserKeyToggle}
-            className="form-checkbox h-4 w-4 rounded text-blue-500 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
-          />
-          <label htmlFor="usePersonalApiKey" className="text-gray-600">
-            Use personal API key instead of free rate limited key
-          </label>
+    <>
+      <div className="flex h-full flex-col bg-slate-100 p-4 text-slate-800 dark:bg-slate-800 dark:text-slate-300">
+        <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
+          <ul className="mt-auto grid gap-2 text-base">
+            {messages.map((msg, index) => (
+              <li
+                key={index}
+                className={`flex items-center gap-2 rounded-lg p-2 ${
+                  msg.role === "user"
+                    ? "ml-auto max-w-[75%] bg-slate-200"
+                    : "mr-auto max-w-[75%] bg-slate-800 text-white"
+                }`}
+              >
+                <div className={` ${msg.role !== "user" && "bot"}`}>
+                  <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
+                </div>
+              </li>
+            ))}
+            <div ref={messagesEndRef} />
+          </ul>
         </div>
-      )}
-      <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white  p-4 shadow-md">
-        <ul className="mt-auto grid gap-2 text-base">
-          {messages.map((msg, index) => (
-            <li
-              key={index}
-              className={`flex items-center gap-2 rounded-lg p-2 ${
-                msg.role === "user"
-                  ? "ml-auto max-w-[75%] bg-slate-200"
-                  : "mr-auto max-w-[75%] bg-slate-800 text-white"
-              }`}
+        <div className="mt-4 flex w-full justify-center text-base">
+          {isLoading ? (
+            <div
+              className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+              role="status"
             >
-              <div className={` ${msg.role !== "user" && "bot"}`}>
-                <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
-              </div>
-            </li>
-          ))}
-          <div ref={messagesEndRef} />
-        </ul>
-      </div>
-      <div className="mt-4 flex w-full justify-center text-base">
-        {isLoading ? (
-          <div
-            className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
-            role="status"
-          >
-            <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">
-              Loading...
-            </span>
-          </div>
-        ) : (
-          <>
-            <button
-              onClick={() => toggleKeyView()}
-              className="rounded-l-lg bg-[#4CAF50] p-2 font-bold text-white"
-            >
-              <FaKey />
-            </button>
-            {isKeyViewOpen ? (
-              <div className="flex w-full">
-                <button
-                  className="border border-slate-300 bg-white p-2 outline-none"
-                  onClick={() => setIsKeySecret(!isKeySecret)}
-                >
-                  {isKeySecret ? <AiOutlineEye /> : <AiOutlineEyeInvisible />}
-                </button>
-                <input
-                  type={isKeySecret ? "password" : "text"}
-                  className="flex-1 border border-x-0 border-slate-300 p-2 outline-none"
-                  placeholder="Enter your key..."
-                  value={keyInputValue}
-                  onChange={(e) => setKeyInputValue(e.target.value)}
-                  onKeyDown={(e) => handleKeyDown(e, handleSubmitKey)}
-                />
-              </div>
-            ) : (
+              <span className="absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0 [clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+          ) : (
+            <div className="flex w-full overflow-hidden rounded-lg border dark:border-slate-500">
+              <button
+                onClick={() =>
+                  openModal({
+                    title: "API Key",
+                    content: <ChatSettingsModal onClose={closeModal} />,
+                  })
+                }
+                className=" bg-slate-200 p-2 font-bold text-slate-800 dark:bg-slate-700 dark:text-slate-300"
+              >
+                <FaKey />
+              </button>
               <textarea
                 rows="1"
                 type="text"
-                className="h-auto flex-1 resize-none overflow-auto border border-slate-300 p-2 outline-none"
+                className="h-auto flex-1 resize-none overflow-auto  bg-white p-2 text-slate-800 outline-none dark:bg-slate-800 dark:text-slate-300"
                 placeholder="Type your message..."
                 value={inputValue}
                 onChange={(e) => {
@@ -183,52 +153,256 @@ export function Chat({ openaiKey }) {
                 }}
                 onKeyDown={(e) => handleKeyDown(e, handleSendMessage)}
               />
-            )}
-            <button
-              className="rounded-r-lg bg-[#4CAF50] p-2 font-bold text-white"
-              onClick={isKeyViewOpen ? handleSubmitKey : handleSendMessage}
-            >
-              {isKeyViewOpen ? "Save" : "Send"}
-            </button>
-          </>
-        )}
+              <button
+                className="bg-slate-200 p-2 text-slate-800 dark:bg-slate-700 dark:text-slate-300"
+                onClick={handleSendMessage}
+              >
+                Send
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        title={modalTitle}
+        onSubmit={modalOnSubmit}
+      >
+        {modalContent}
+      </Modal>
+    </>
   );
 }
 
-const ChatError = ({ resetChat, error }) => {
+const ChatSettingsModal = ({ onClose }) => {
+  // state
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const { userSettings, toggleSetting, key, syncKey } = useUserSettings();
+  const [inputValue, setInputValue] = useState(key || "");
+  const [selectedOption, setSelectedOption] = useState(
+    !session ? "user" : userSettings.isUseUserKeyEnabled ? "user" : "free"
+  );
+
+  const showToast = useToast();
+
+  // handlers
+  function handleChange(e) {
+    setInputValue(e.target.value);
+  }
+  const handleClick = (option) => {
+    setSelectedOption(option);
+  };
+  async function handleSubmit(e) {
+    setLoading(true);
+    e.preventDefault();
+
+    // submit free selection
+    if (selectedOption === "free") {
+      toggleSetting("isUseUserKeyEnabled", false);
+      setLoading(false);
+      showToast("Free API key selected", "bg-green");
+      onClose();
+      return;
+    }
+
+    // submit user selection
+    if (selectedOption === "user") {
+      if (inputValue === "") {
+        setLoading(false);
+        showToast("Please enter a key", "bg-red-500");
+        return;
+      }
+
+      const response = await fetch("/api/openai-test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ key: inputValue }),
+      });
+
+      const data = await response.json();
+
+      if (data.error) {
+        setLoading(false);
+        showToast("Please enter a valid key", "bg-red-500");
+        return;
+      }
+
+      syncKey(inputValue);
+      toggleSetting("isUseUserKeyEnabled", true);
+      setLoading(false);
+      showToast("Key entered successfully", "bg-green", "text-white");
+      onClose();
+    }
+  }
+
+  const handleRemoveKey = () => {
+    syncKey("");
+    setSelectedOption("free");
+    toggleSetting("isUseUserKeyEnabled", false);
+    showToast("Key removed successfully", "bg-green", "text-white");
+  };
+
   return (
-    <div className="dark:gray-text-300 absolute inset-0 grid place-items-center bg-gray-100 dark:bg-gray-900">
-      <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800 dark:text-gray-300">
-        <h2 className="dark:gray-text-300 mb-4 text-2xl font-semibold text-slate-900">
-          😢 It looks like something went wrong:
-        </h2>
-        <p className="mb-6">{error}</p>
-        <button
-          onClick={resetChat}
-          className="mb-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+    <div className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <div
+          className={`${
+            selectedOption === "free"
+              ? "border-2 border-blue-500"
+              : "border border-gray-300"
+          } cursor-pointer rounded p-4`}
+          onClick={() => session && handleClick("free")}
         >
-          Back
-        </button>
-        <div className="text-gray-600">
-          If you're still stuck, please contact{" "}
-          <a
-            href="mailto:jcq5010@gmail.com"
-            className="text-blue-500 hover:text-blue-700"
-          >
-            jcq5010@gmail.com
-          </a>{" "}
-          or{" "}
-          <Link
-            href="/bug-report"
-            className="text-blue-500 hover:text-blue-700"
-          >
-            file a bug report.
-          </Link>{" "}
-          Sorry again!
+          <div className={`${!session ? "opacity-50" : "opacity-100"}`}>
+            <div className="mb-4 flex items-center">
+              <input
+                type="radio"
+                id="free"
+                name="key"
+                checked={selectedOption === "free"}
+                onChange={() => handleClick("free")}
+                className="mr-2"
+                disabled={!session}
+              />
+              <label htmlFor="free" className="font-bold">
+                Use Free Key
+              </label>
+            </div>
+            <p className="text-sm">
+              The free key has a rate limit of 1 message per 10 seconds.
+            </p>
+          </div>
+          {!session && (
+            <button
+              className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
+              onClick={signIn}
+            >
+              Sign Up/Login
+            </button>
+          )}
         </div>
-      </div>
+
+        <div
+          className={`${
+            selectedOption === "user"
+              ? "border-2 border-blue-500"
+              : "border border-gray-300"
+          } cursor-pointer rounded p-4`}
+          onClick={() => handleClick("user")}
+        >
+          <div className="mb-4 flex items-center">
+            <input
+              required="true"
+              type="radio"
+              id="user"
+              name="key"
+              checked={selectedOption === "user"}
+              onChange={() => handleClick("user")}
+              className="mr-2"
+            />
+            <label htmlFor="user" className="font-bold">
+              Use your own key
+            </label>
+          </div>
+          <p className="mb-4 text-sm">
+            You can get an API key{" "}
+            <a
+              href="https://beta.openai.com/account/api-keys"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 underline"
+            >
+              here
+            </a>
+            .
+          </p>
+          <p className="text-sm">
+            <strong>NOTE:</strong>{" "}
+            {!session
+              ? "This key will expire when you close the browser. If you want to save your key or use ours for free, please sign up/login."
+              : "This key is stored in your browser and is only sent to OpenAI's API."}
+          </p>
+          {selectedOption === "user" && (
+            <div className="mt-4 flex flex-col gap-2">
+              <label htmlFor="key" className="text-sm">
+                API Key
+              </label>
+              <input
+                type="text"
+                className="w-full flex-1 rounded-lg border border-slate-300 p-2 font-normal outline-none dark:border-slate-500 dark:bg-slate-800"
+                placeholder="Enter your OpenAI API key"
+                value={inputValue}
+                onChange={handleChange}
+              />
+            </div>
+          )}
+        </div>
+        <div className="mt-4 flex justify-end gap-4">
+          {session && userSettings.isUseUserKeyEnabled && (
+            <button
+              className="mr-auto rounded bg-gray-300 px-4 py-2 text-black"
+              onClick={handleRemoveKey}
+            >
+              Remove key from local storage
+            </button>
+          )}
+          <button
+            className="rounded bg-gray-300 px-4 py-2 text-black"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="rounded bg-blue-500 px-4 py-2 text-white"
+          >
+            {loading ? "...loading" : "Save"}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
+
+{
+  /* <div
+className={`${
+  selectedOption === "free"
+    ? "border-2 border-blue-500"
+    : "border border-gray-300"
+} cursor-pointer rounded p-4 ${
+  !session ? "opacity-50" : "opacity-100"
+}`}
+onClick={() => session && handleClick("free")}
+>
+<div className="mb-4 flex">
+  <input
+    type="radio"
+    id="free"
+    name="key"
+    checked={selectedOption === "free"}
+    onChange={() => handleClick("free")}
+    className="mr-2"
+    disabled={!session}
+  />
+  <label htmlFor="free" className="font-bold">
+    Use free key
+  </label>
+</div>
+<p className="text-sm">
+  The free key has a rate limit of 1 message per 10 seconds.
+</p>
+{!session && (
+  <button
+    className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
+    onClick={signIn}
+  >
+    Sign Up/Login
+  </button>
+)}
+</div> */
+}
