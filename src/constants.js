@@ -5,16 +5,18 @@ export default function App() {
 
   return (
     <div className="App">
-    <header className="header">
-    <div className="hero">
-        <div className="title-container">
-          <h1>✌️ hey<br></br> world.</h1>
+      <header className="header">
+        <div className="hero">
+          <div className="title-container">
+            <h1>
+              ✌️ hey<br></br> world.
+            </h1>
+          </div>
+          <div className="feature-container">
+            <Features />
+          </div>
         </div>
-        <div className="feature-container">
-          <Features />
-        </div>
-    </div>
-  </header>
+      </header>
       <main>
         <div className="hands-container">
           <Hands />
@@ -35,8 +37,12 @@ function Features() {
       <li>✅ save, update, & delete snippets</li>
       <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
-      <li>🚀 <a href="http://localhost:3001/feature-roadmap">feature roadmap</a></li>
-      <li>🐛 <a href="http://localhost:3001/bug-report">report a bug</a></li>
+      <li>
+        🚀 <a href="http://localhost:3001/feature-roadmap">feature roadmap</a>
+      </li>
+      <li>
+        🐛 <a href="http://localhost:3001/bug-report">report a bug</a>
+      </li>
     </ul>
   );
 }

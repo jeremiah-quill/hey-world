@@ -26,6 +26,7 @@ export function Editor({ children }) {
     <div className="editor absolute inset-0 flex flex-col rounded-lg border">
       {children}
       <SandpackCodeEditor
+        key={JSON.stringify(userSettings.isVimModeEnabled)}
         extensionsKeymap={[vimKeyMap]}
         ref={codemirrorInstance}
         showLineNumbers

@@ -17,6 +17,7 @@ export function UserSettingsProvider({ children }) {
         isLivePreviewEnabled: false,
         isAutoCompleteEnabled: false,
         isLineWrappingEnabled: false,
+        isUseUserKeyEnabled: true,
       };
     }
 
@@ -30,6 +31,7 @@ export function UserSettingsProvider({ children }) {
           isLivePreviewEnabled: false,
           isAutoCompleteEnabled: false,
           isLineWrappingEnabled: false,
+          isUseUserKeyEnabled: true,
         };
   });
 
@@ -38,9 +40,8 @@ export function UserSettingsProvider({ children }) {
       // Do not update localStorage on the server-side
       return;
     }
-
     localStorage.setItem("userSettings", JSON.stringify(userSettings));
-  }, [userSettings]);
+  }, [userSettings, setUserSettings]);
 
   const toggleSetting = (settingKey) => {
     setUserSettings((prevState) => ({
@@ -54,5 +55,9 @@ export function UserSettingsProvider({ children }) {
     toggleSetting,
   };
 
-  return <UserSettingsContext.Provider value={value}>{children}</UserSettingsContext.Provider>;
+  return (
+    <UserSettingsContext.Provider value={value}>
+      {children}
+    </UserSettingsContext.Provider>
+  );
 }

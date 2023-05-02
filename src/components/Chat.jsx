@@ -4,31 +4,29 @@ import { FaKey } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useUserSettings } from "@/context/userSettingsContext";
 
 export function Chat({ openaiKey }) {
+  // UI states
   const [error, setError] = useState(null);
-  const [inputValue, setInputValue] = useState("");
-  const [key, setKey] = useState(openaiKey);
-  const [messages, setMessages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isKeyViewOpen, setIsKeyViewOpen] = useState(false);
-  const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
   const [isKeySecret, setIsKeySecret] = useState(true);
-  const [useUserKey, setUseUserKey] = useState(false);
-
+  // input states
+  const [inputValue, setInputValue] = useState("");
+  const [keyInputValue, setKeyInputValue] = useState(openaiKey || "");
+  // data states
+  const [key, setKey] = useState(openaiKey); // TODO: refactor this to use context
+  const [messages, setMessages] = useState([]);
+  // hooks
   const { data: session } = useSession();
-
+  const { userSettings, toggleSetting } = useUserSettings();
+  // refs
   const messagesEndRef = useRef(null);
-
+  // handlers
   const toggleKeyView = () => {
     setIsKeyViewOpen(!isKeyViewOpen);
   };
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  useEffect(scrollToBottom, [messages]);
 
   const handleKeyDown = (e, onKeyDown = () => {}) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -53,7 +51,7 @@ export function Chat({ openaiKey }) {
       body: JSON.stringify({
         conversation: newMessages,
         key: key,
-        useUserKey: useUserKey,
+        useUserKey: userSettings.isUseUserKeyEnabled,
       }),
     });
 
@@ -91,57 +89,16 @@ export function Chat({ openaiKey }) {
     setError(null);
   };
 
-  useEffect(() => {
-    const useUserKeyOptionTrue = localStorage.getItem("useUserKeyOptionTrue");
-    if (useUserKeyOptionTrue) {
-      setUseUserKey(true);
-    }
-  }, []);
-
-  if (error) {
-    return (
-      <div className="absolute inset-0 grid place-items-center bg-gray-100">
-        <div className="w-full max-w-md rounded-lg bg-white p-6">
-          <h2 className="mb-4 text-2xl font-semibold text-slate-900">
-            😢 It looks like something went wrong:
-          </h2>
-          <p className="mb-6 text-gray-600">{error}</p>
-          <button
-            onClick={resetChat}
-            className="mb-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
-          >
-            Back
-          </button>
-          <div className="text-gray-600">
-            If you're still stuck, please contact{" "}
-            <a
-              href="mailto:jcq5010@gmail.com"
-              className="text-blue-500 hover:text-blue-700"
-            >
-              jcq5010@gmail.com
-            </a>{" "}
-            or{" "}
-            <Link
-              href="/bug-report"
-              className="text-blue-500 hover:text-blue-700"
-            >
-              file a bug report.
-            </Link>{" "}
-            Sorry again!
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const handleUserKeyOptionChange = (e) => {
-    setUseUserKey(e.target.checked);
-    if (e.target.checked) {
-      localStorage.setItem("useUserKeyOptionTrue", true);
-    } else {
-      localStorage.removeItem("useUserKeyOptionTrue");
-    }
+  const handleUserKeyToggle = () => {
+    toggleSetting("isUseUserKeyEnabled");
   };
+
+  // effects
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  if (error) return <ChatError resetChat={resetChat} error={error} />;
 
   return (
     <div className="flex h-full flex-col bg-slate-100 p-4">
@@ -150,8 +107,8 @@ export function Chat({ openaiKey }) {
           <input
             id="usePersonalApiKey"
             type="checkbox"
-            value={useUserKey}
-            onChange={handleUserKeyOptionChange}
+            checked={userSettings.isUseUserKeyEnabled}
+            onChange={handleUserKeyToggle}
             className="form-checkbox h-4 w-4 rounded text-blue-500 focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
           />
           <label htmlFor="usePersonalApiKey" className="text-gray-600">
@@ -239,3 +196,39 @@ export function Chat({ openaiKey }) {
     </div>
   );
 }
+
+const ChatError = ({ resetChat, error }) => {
+  return (
+    <div className="dark:gray-text-300 absolute inset-0 grid place-items-center bg-gray-100 dark:bg-gray-900">
+      <div className="w-full max-w-md rounded-lg bg-white p-6 dark:bg-gray-800 dark:text-gray-300">
+        <h2 className="dark:gray-text-300 mb-4 text-2xl font-semibold text-slate-900">
+          😢 It looks like something went wrong:
+        </h2>
+        <p className="mb-6">{error}</p>
+        <button
+          onClick={resetChat}
+          className="mb-4 rounded bg-blue-500 px-4 py-2 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+        >
+          Back
+        </button>
+        <div className="text-gray-600">
+          If you're still stuck, please contact{" "}
+          <a
+            href="mailto:jcq5010@gmail.com"
+            className="text-blue-500 hover:text-blue-700"
+          >
+            jcq5010@gmail.com
+          </a>{" "}
+          or{" "}
+          <Link
+            href="/bug-report"
+            className="text-blue-500 hover:text-blue-700"
+          >
+            file a bug report.
+          </Link>{" "}
+          Sorry again!
+        </div>
+      </div>
+    </div>
+  );
+};
