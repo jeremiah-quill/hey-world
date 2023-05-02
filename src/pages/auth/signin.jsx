@@ -9,7 +9,7 @@ export default function Signin({ providers }) {
         <ul className="grid gap-4">
           {providers &&
             Object.values(providers).map((provider) => (
-              <li>
+              <li key={provider.id}>
                 <button
                   onClick={() => signIn(provider.id)}
                   className="flex items-center gap-4 rounded border p-2 px-4 shadow hover:bg-slate-100"
