@@ -45,7 +45,7 @@ export function UserSettingsProvider({ children }) {
           isLivePreviewEnabled: false,
           isAutoCompleteEnabled: false,
           isLineWrappingEnabled: false,
-          isUseUserKeyEnabled: false,
+          isUseUserKeyEnabled: session ? false : true,
         };
   });
 
@@ -99,10 +99,10 @@ export function UserSettingsProvider({ children }) {
     }));
   };
   const syncKey = (key) => {
-    if (!session) {
-      setKey(key);
-      return;
-    }
+    // if (!session) {
+    //   setKey(key);
+    //   return;
+    // }
 
     setKey(key);
     localStorage.setItem("openai-key", key);

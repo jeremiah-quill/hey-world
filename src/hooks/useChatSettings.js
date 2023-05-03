@@ -9,7 +9,7 @@ export const useChatSettings = ({ onClose }) => {
   // const [loading, setLoading] = useState(false);
   const { userSettings, toggleSetting, key, syncKey } = useUserSettings();
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState(userSettings.key || "");
+  const [inputValue, setInputValue] = useState(key || "");
   const [selectedOption, setSelectedOption] = useState(
     !session ? "user" : userSettings.isUseUserKeyEnabled ? "user" : "free"
   );
@@ -33,7 +33,7 @@ export const useChatSettings = ({ onClose }) => {
     if (selectedOption === "free") {
       toggleSetting("isUseUserKeyEnabled", false);
       setLoading(false);
-      showToast("Free API key selected", "bg-green");
+      showToast("Free API key selected", "bg-green", "text-white");
       onClose();
       return;
     }
@@ -42,7 +42,7 @@ export const useChatSettings = ({ onClose }) => {
     if (selectedOption === "user") {
       if (inputValue === "") {
         setLoading(false);
-        showToast("Please enter a key", "bg-red-500");
+        showToast("Please enter a key", "bg-red-500", "text-white");
         return;
       }
 
@@ -58,7 +58,7 @@ export const useChatSettings = ({ onClose }) => {
 
       if (data.error) {
         setLoading(false);
-        showToast("Please enter a valid key", "bg-red-500");
+        showToast("Please enter a valid key", "bg-red-500", "text-white");
         return;
       }
 
@@ -72,9 +72,18 @@ export const useChatSettings = ({ onClose }) => {
 
   const handleRemoveKey = () => {
     syncKey("");
+    setInputValue("");
+    showToast("Key removed successfully", "bg-green", "text-white");
+
+    // if user is not logged in, close the modal
+    if (!session) {
+      onClose();
+      return;
+    }
+
+    // if user is logged in, set the default to free and make sure the toggle is off
     setSelectedOption("free");
     toggleSetting("isUseUserKeyEnabled", false);
-    showToast("Key removed successfully", "bg-green", "text-white");
   };
 
   return {

@@ -127,7 +127,7 @@ export function Chat({ isChatOpen, messages, setMessages }) {
 const ChatSettingsModal = ({ onClose }) => {
   // state
   const { data: session } = useSession();
-  const { userSettings } = useUserSettings();
+  const { userSettings, key } = useUserSettings();
 
   const {
     loading,
@@ -138,6 +138,8 @@ const ChatSettingsModal = ({ onClose }) => {
     handleRemoveKey,
     selectedOption,
   } = useChatSettings({ onClose });
+
+  console.log("userSettings", userSettings);
 
   return (
     <div className="flex flex-col gap-4">
@@ -214,10 +216,8 @@ const ChatSettingsModal = ({ onClose }) => {
             .
           </p>
           <p className="text-sm">
-            <strong>NOTE:</strong>{" "}
-            {!session
-              ? "This key will expire when you close the browser. If you want to save your key or use ours for free, please sign up/login."
-              : "This key is stored in your browser and is only sent to OpenAI's API."}
+            <strong>NOTE:</strong>This key is stored in your browser and is only
+            sent to OpenAI's API.
           </p>
           {selectedOption === "user" && (
             <div className="mt-4 flex flex-col gap-2">
@@ -235,7 +235,8 @@ const ChatSettingsModal = ({ onClose }) => {
           )}
         </div>
         <div className="mt-4 flex justify-end gap-4">
-          {session && userSettings.isUseUserKeyEnabled && (
+          {/* TODO: only show this button if user has a key in local storage */}
+          {key && (
             <button
               className="mr-auto rounded bg-gray-300 px-4 py-2 text-black"
               onClick={handleRemoveKey}

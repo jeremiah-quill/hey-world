@@ -194,7 +194,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
             )}
 
             <button
-              className="absolute left-1/2 top-[-12px] z-[1000] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
+              className="absolute left-1/2 top-[-12px] z-[999] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
               onClick={toggleChat}
             >
               {isChatOpen ? "Close" : "Open"}
