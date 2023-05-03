@@ -9,7 +9,7 @@ import useModal from "@/hooks/useModal";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/context/toastContext";
 
-export function Chat() {
+export function Chat({ isChatOpen }) {
   // UI states
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -98,26 +98,31 @@ export function Chat() {
 
   return (
     <>
-      <div className="flex h-full flex-col bg-slate-100 p-4 text-slate-800 dark:bg-slate-800 dark:text-slate-300">
-        <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
-          <ul className="mt-auto grid gap-2 text-base">
-            {messages.map((msg, index) => (
-              <li
-                key={index}
-                className={`flex items-center gap-2 rounded-lg p-2 ${
-                  msg.role === "user"
-                    ? "ml-auto max-w-[75%] bg-slate-200"
-                    : "mr-auto max-w-[75%] bg-slate-800 text-white"
-                }`}
-              >
-                <div className={` ${msg.role !== "user" && "bot"}`}>
-                  <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
-                </div>
-              </li>
-            ))}
-            <div ref={messagesEndRef} />
-          </ul>
-        </div>
+      <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
+        {isChatOpen && (
+          <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
+            <ul className="mt-auto grid gap-2 text-base">
+              {messages.map((msg, index) => (
+                <li
+                  key={index}
+                  className={`flex items-center gap-2 rounded-lg p-2 ${
+                    msg.role === "user"
+                      ? "ml-auto max-w-[75%] bg-slate-200"
+                      : "mr-auto max-w-[75%] bg-slate-800 text-white"
+                  }`}
+                >
+                  <div className={` ${msg.role !== "user" && "bot"}`}>
+                    <ReactMarkdown className="prose">
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
+                </li>
+              ))}
+              <div ref={messagesEndRef} />
+            </ul>
+          </div>
+        )}
+
         <div className="mt-4 flex w-full justify-center text-base">
           {isLoading ? (
             <div

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { v4 as uuid } from "uuid";
@@ -18,6 +19,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false); // TODO: remove this, use [key, session instead] -> what does this mean???
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
 
   const [currentProjectId, setCurrentProjectId] = useState(null);
@@ -32,6 +34,14 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   };
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  const chatContainerVariants = {
+    open: { height: "50%" },
+    closed: { height: "100px" },
   };
 
   const resetProject = () => {
@@ -156,15 +166,27 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="relative flex-1 overflow-hidden rounded-lg border shadow-inner dark:border-slate-500">
+        <motion.div
+          className="relative shadow-inner dark:border-slate-500"
+          initial={false}
+          animate={isChatOpen ? "open" : "closed"}
+          variants={chatContainerVariants}
+          transition={{ duration: 0.35, ease: "backOut" }}
+        >
           {key || session ? (
-            <Chat />
+            <Chat isChatOpen={isChatOpen} />
           ) : (
             <div className="absolute inset-0 grid place-items-center">
               <AccessChat />
             </div>
           )}
-        </div>
+          <button
+            className="absolute left-1/2 top-[-12px] z-[1000] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
+            onClick={toggleChat}
+          >
+            {isChatOpen ? "Close" : "Open"}
+          </button>
+        </motion.div>
       </div>
     </div>
   );
