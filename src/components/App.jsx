@@ -18,6 +18,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
 
+  const [messages, setMessages] = useState([]);
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false); // TODO: remove this, use [key, session instead] -> what does this mean???
   const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
@@ -41,7 +43,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
 
   const chatContainerVariants = {
     open: { height: "50%" },
-    closed: { height: "100px" },
+    closed: { height: "50px" },
   };
 
   const resetProject = () => {
@@ -173,19 +175,30 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           variants={chatContainerVariants}
           transition={{ duration: 0.35, ease: "backOut" }}
         >
-          {key || session ? (
-            <Chat isChatOpen={isChatOpen} />
-          ) : (
-            <div className="absolute inset-0 grid place-items-center">
-              <AccessChat />
-            </div>
-          )}
-          <button
-            className="absolute left-1/2 top-[-12px] z-[1000] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
-            onClick={toggleChat}
-          >
-            {isChatOpen ? "Close" : "Open"}
-          </button>
+          <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
+            {isChatOpen && (
+              <>
+                {key || session ? (
+                  <Chat
+                    isChatOpen={isChatOpen}
+                    messages={messages}
+                    setMessages={setMessages}
+                  />
+                ) : (
+                  <div className="absolute inset-0 grid place-items-center">
+                    <AccessChat />
+                  </div>
+                )}
+              </>
+            )}
+
+            <button
+              className="absolute left-1/2 top-[-12px] z-[1000] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
+              onClick={toggleChat}
+            >
+              {isChatOpen ? "Close" : "Open"}
+            </button>
+          </div>
         </motion.div>
       </div>
     </div>

@@ -1,19 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { FaKey } from "react-icons/fa";
-import Link from "next/link";
 import { signIn, useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { ChatError } from "@/components/ChatError";
 import useModal from "@/hooks/useModal";
 import { Modal } from "@/components/Modal";
 import { useToast } from "@/context/toastContext";
+import { useChat } from "@/hooks/useChat";
 
-export function Chat({ isChatOpen }) {
-  // UI states
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+export function Chat({ isChatOpen, messages, setMessages }) {
+  //  modal state, handlers, and effects
   const {
     modalIsOpen,
     modalContent,
@@ -23,71 +20,19 @@ export function Chat({ isChatOpen }) {
     closeModal,
   } = useModal();
 
-  // data
-  const { data: session } = useSession();
-  const { userSettings, toggleSetting, key, setKey } = useUserSettings();
-  const [messages, setMessages] = useState([]);
+  // chat state, handlers, and effects
+  const {
+    inputValue,
+    handleChatInputChange,
+    handleKeyDown,
+    isLoading,
+    error,
+    sendMessage,
+    resetChat,
+  } = useChat(messages, setMessages);
 
   // refs
   const messagesEndRef = useRef(null);
-  const formRef = useRef(null);
-
-  // handlers
-  const handleKeyDown = (e, onKeyDown = () => {}) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      onKeyDown();
-    }
-  };
-
-  const handleSendMessage = async () => {
-    if (inputValue.trim() === "") return;
-
-    setIsLoading(true);
-
-    setInputValue("");
-
-    const newMessages = [...messages, { role: "user", content: inputValue }];
-    setMessages(newMessages);
-
-    const response = await fetch("/api/gpt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        conversation: newMessages,
-        key: key,
-        useUserKey: userSettings.isUseUserKeyEnabled,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (data.error) {
-      setError(data.error);
-      return;
-    }
-
-    setMessages([
-      ...newMessages,
-      { role: "assistant", content: data.choices[0].message.content },
-    ]);
-    setIsLoading(false);
-  };
-
-  const handleInputHeight = (e) => {
-    if (e.target.scrollHeight > 200) return;
-    e.target.style.height = "auto"; // Reset the height to "auto" before calculating the new height
-    e.target.style.height = `${e.target.scrollHeight}px`; // Set the height to match the scroll height
-  };
-
-  const resetChat = () => {
-    setMessages((prevMessages) =>
-      prevMessages.filter((msg, idx) => idx !== prevMessages.length - 1)
-    );
-    setIsLoading(false);
-    setError(null);
-  };
 
   // effects
   useEffect(() => {
@@ -98,7 +43,7 @@ export function Chat({ isChatOpen }) {
 
   return (
     <>
-      <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
+      <>
         {isChatOpen && (
           <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
             <ul className="mt-auto grid gap-2 text-base">
@@ -153,21 +98,20 @@ export function Chat({ isChatOpen }) {
                 placeholder="Type your message..."
                 value={inputValue}
                 onChange={(e) => {
-                  setInputValue(e.target.value);
-                  handleInputHeight(e);
+                  handleChatInputChange(e);
                 }}
-                onKeyDown={(e) => handleKeyDown(e, handleSendMessage)}
+                onKeyDown={(e) => handleKeyDown(e, sendMessage)}
               />
               <button
                 className="bg-slate-200 p-2 text-slate-800 dark:bg-slate-700 dark:text-slate-300"
-                onClick={handleSendMessage}
+                onClick={sendMessage}
               >
                 Send
               </button>
             </div>
           )}
         </div>
-      </div>
+      </>
       <Modal
         isOpen={modalIsOpen}
         onClose={closeModal}
@@ -180,7 +124,7 @@ export function Chat({ isChatOpen }) {
   );
 }
 
-const ChatSettingsModal = ({ onClose }) => {
+const ChatSettingsModal = ({ onClose, messages, setMessages }) => {
   // state
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
@@ -372,42 +316,3 @@ const ChatSettingsModal = ({ onClose }) => {
     </div>
   );
 };
-
-{
-  /* <div
-className={`${
-  selectedOption === "free"
-    ? "border-2 border-blue-500"
-    : "border border-gray-300"
-} cursor-pointer rounded p-4 ${
-  !session ? "opacity-50" : "opacity-100"
-}`}
-onClick={() => session && handleClick("free")}
->
-<div className="mb-4 flex">
-  <input
-    type="radio"
-    id="free"
-    name="key"
-    checked={selectedOption === "free"}
-    onChange={() => handleClick("free")}
-    className="mr-2"
-    disabled={!session}
-  />
-  <label htmlFor="free" className="font-bold">
-    Use free key
-  </label>
-</div>
-<p className="text-sm">
-  The free key has a rate limit of 1 message per 10 seconds.
-</p>
-{!session && (
-  <button
-    className="mt-2 rounded bg-blue-500 px-4 py-2 text-white"
-    onClick={signIn}
-  >
-    Sign Up/Login
-  </button>
-)}
-</div> */
-}
