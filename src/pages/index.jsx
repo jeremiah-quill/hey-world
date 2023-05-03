@@ -31,6 +31,12 @@ export default function Home() {
       key={currentTemplate}
       template={editorConfigObject[currentTemplate].templateName}
       files={editorConfigObject[currentTemplate].files}
+      customSetup={{
+        dependencies: {
+          "react-icons": "latest",
+          "framer-motion": "latest",
+        },
+      }}
     >
       <App
         currentTemplate={currentTemplate}

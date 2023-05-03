@@ -117,18 +117,6 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     setSavedCreations(projects);
   }, []);
 
-  // if a key was loaded from env, use it and clear key from local storage (as a precaution)
-  // otherwise, check if a key was saved in local storage and use that
-  // TODO: I feel like this sucks
-  // useEffect(() => {
-  //   if (serverKey) {
-  //     localStorage.removeItem("openai-key");
-  //     return;
-  //   }
-  //   const userKey = localStorage.getItem("openai-key");
-  //   setOpenaiKey(userKey);
-  // }, [serverKey]);
-
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);

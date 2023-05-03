@@ -26,7 +26,6 @@ export function Editor({ children }) {
   return (
     <div className="editor absolute inset-0 flex flex-col overflow-hidden rounded-lg border dark:border-slate-500">
       {children}
-      {/* <SandpackLayout theme={"dark"}> */}
       <SandpackCodeEditor
         key={JSON.stringify(userSettings.isVimModeEnabled)}
         extensionsKeymap={[vimKeyMap]}
@@ -37,7 +36,6 @@ export function Editor({ children }) {
         extensions={[...defaultExtensions, ...extensions]}
       />
       <ActivatePrettier codemirrorInstance={codemirrorInstance} />
-      {/* </SandpackLayout> */}
     </div>
   );
 }

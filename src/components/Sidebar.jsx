@@ -8,6 +8,7 @@ import useModal from "@/hooks/useModal";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export function Sidebar({
   isMenuOpen,
@@ -44,9 +45,11 @@ export function Sidebar({
 
   return (
     <>
-      <div
+      <motion.div
+        initial={{ width: "50px" }}
+        animate={{ width: isMenuOpen ? "20%" : "50px" }}
         className="flex h-full max-h-screen flex-col rounded-lg border text-slate-800 dark:border-slate-500 dark:text-slate-300"
-        style={{ width: isMenuOpen ? "20%" : "50px" }}
+        // style={{ width: isMenuOpen ? "20%" : "50px" }}
       >
         {isMenuOpen && (
           <div className="flex-1 overflow-y-auto">
@@ -108,7 +111,7 @@ export function Sidebar({
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
       <Modal
         isOpen={modalIsOpen}
         onClose={closeModal}
@@ -132,16 +135,16 @@ function UserSettings() {
   };
   const { data: session } = useSession();
   return (
-    <div className="dark:slate-text-300 flex items-center justify-center">
+    <motion.div className="dark:slate-text-300 flex items-center justify-center">
       <div className="shado w-full max-w-md space-y-4 rounded bg-white p-6 dark:bg-slate-800">
         <h2 className="text-2xl font-semibold">Settings</h2>
 
-        {!session && (
+        {/* {!session && (
           <div className="rounded border border-red-500 p-2 text-sm text-red-500">
             Warning: You must be logged in for changes to be saved to your
             browser
           </div>
-        )}
+        )} */}
 
         <div className="flex items-center space-x-2">
           <input
@@ -172,6 +175,6 @@ function UserSettings() {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

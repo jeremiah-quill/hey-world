@@ -54,8 +54,10 @@ export function UserSettingsProvider({ children }) {
       // Do not update localStorage on the server-side
       return;
     }
+
+    // TODO: do something like this when I have paid features
     // do not save user settings if user is not logged in
-    if (!session) return;
+    // if (!session) return;
 
     localStorage.setItem("userSettings", JSON.stringify(userSettings));
   }, [userSettings]);
