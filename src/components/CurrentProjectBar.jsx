@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { RxCaretDown } from "react-icons/rx";
 
+// TODO: extract logic to custom hook
 export const CurrentProjectBar = ({
   projectTitleInputValue,
   setProjectTitleInputValue,

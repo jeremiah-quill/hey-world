@@ -14,6 +14,7 @@ import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 import { useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
 
+// TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");

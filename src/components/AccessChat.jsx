@@ -6,6 +6,7 @@ import { ChatError } from "@/components/ChatError";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { useToast } from "@/context/toastContext";
 
+// TODO: extract logic to custom hook
 export function AccessChat() {
   // state
   const {

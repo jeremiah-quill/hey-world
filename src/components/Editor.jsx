@@ -1,17 +1,12 @@
-import {
-  SandpackCodeEditor,
-  SandpackFileExplorer,
-  SandpackLayout,
-} from "@codesandbox/sandpack-react";
+import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
 import { useSandpack, useActiveCode } from "@codesandbox/sandpack-react";
 import prettier from "prettier";
 import parserBabel from "prettier/parser-babel";
 import { useCallback, useEffect, useRef } from "react";
 import { vim, vimKeyMap } from "@replit/codemirror-vim";
 import { useUserSettings } from "@/context/userSettingsContext";
-import { linter, lintKeyMap } from "@codemirror/lint";
-import { dracula } from "@codesandbox/sandpack-themes";
 
+// TODO: extract logic to custom hook
 export function Editor({ children }) {
   const codemirrorInstance = useRef(); // use a ref to access codemirror instance so we can trigger code formatting with prettier
   const { userSettings, toggleSetting } = useUserSettings();

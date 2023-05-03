@@ -10,6 +10,7 @@ import { FiSun, FiMoon } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
+// TODO: extract logic to custom hook
 export function Sidebar({
   isMenuOpen,
   toggleMenu,
