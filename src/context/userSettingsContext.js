@@ -45,7 +45,7 @@ export function UserSettingsProvider({ children }) {
           isLivePreviewEnabled: false,
           isAutoCompleteEnabled: false,
           isLineWrappingEnabled: false,
-          isUseUserKeyEnabled: session ? false : true,
+          // isUseUserKeyEnabled: session ? false : true,
         };
   });
 

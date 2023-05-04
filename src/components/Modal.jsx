@@ -12,7 +12,6 @@ export const Modal = ({
   if (!isOpen) {
     return null;
   }
-  console.log("onSubmit", onSubmit);
 
   return (
     <div className={`fixed inset-0 z-[1000] overflow-y-auto ${className}`}>
@@ -20,7 +19,7 @@ export const Modal = ({
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative z-20 w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800 dark:text-slate-300"
+          className="relative z-20 w-full max-w-xl rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800 dark:text-slate-300"
         >
           {title && <h2 className="mb-4 text-2xl font-semibold">{title}</h2>}
           {modalContent}

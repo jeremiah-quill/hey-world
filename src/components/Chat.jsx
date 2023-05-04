@@ -187,7 +187,7 @@ const ChatSettingsModal = ({ onClose }) => {
           onClick={() => session && handleClick("free")}
         >
           <div className={`${!session ? "opacity-50" : "opacity-100"}`}>
-            <div className="mb-4 flex items-center">
+            <div className="flex items-center">
               <input
                 type="radio"
                 id="free"
@@ -201,8 +201,9 @@ const ChatSettingsModal = ({ onClose }) => {
                 Use Free Key
               </label>
             </div>
-            <p className="text-sm">
-              The free key has a rate limit of 1 message per 10 seconds.
+            <p className="my-4 text-sm">
+              Please note the free key is limited to a few messages at a time.
+              You may have to wait a few seconds between messages.
             </p>
           </div>
           {!session && (
