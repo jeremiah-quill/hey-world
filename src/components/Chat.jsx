@@ -7,8 +7,13 @@ import { ChatError } from "@/components/ChatError";
 import { useChat } from "@/hooks/useChat";
 import { useChatSettings } from "@/hooks/useChatSettings";
 import { useModal } from "@/context/modalContext";
+import Draggable from "react-draggable";
+import { motion } from "framer-motion";
+import { AccessChat } from "@/components/AccessChat";
 
 export function Chat({ messages, setMessages }) {
+  const { data: session } = useSession();
+  const { key } = useUserSettings();
   // chat state, handlers, and effects
   const {
     inputValue,
@@ -28,46 +33,74 @@ export function Chat({ messages, setMessages }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // if (error) return <ChatError onBack={resetChat} error={error} />;
+
+  return (
+    <Draggable>
+      <motion.div
+        // initial="closed"
+        // animate={{
+        //   height: isChatOpen ? 500 : 0,
+        //   width: isChatOpen ? 500 : 0,
+        // }}
+        className="absolute bottom-[65px] right-[20px] flex h-[500px]  w-[500px] transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300"
+      >
+        <>
+          {!key && !session ? (
+            <div className="absolute inset-0 grid place-items-center">
+              <AccessChat />
+            </div>
+          ) : (
+            <>
+              {/* chat container */}
+              <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
+                <ChatMessageList
+                  messages={messages}
+                  error={error}
+                  resetChat={resetChat}
+                />
+              </div>
+              {/* message bar */}
+              <div className="mt-4 flex w-full justify-center text-base">
+                <ChatInput
+                  isLoading={isLoading}
+                  sendMessage={sendMessage}
+                  inputValue={inputValue}
+                  handleKeyDown={handleKeyDown}
+                  handleChatInputChange={handleChatInputChange}
+                />
+              </div>
+            </>
+          )}
+        </>
+      </motion.div>
+    </Draggable>
+  );
+}
+
+const ChatMessageList = ({ messages, messagesEndRef, error, resetChat }) => {
   if (error) return <ChatError onBack={resetChat} error={error} />;
 
   return (
-    <>
-      {/* chat container */}
-      <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
-        <ul className="mt-auto grid gap-2 text-base">
-          {messages.map((msg, index) => (
-            <li
-              key={index}
-              className={`flex items-center gap-2 rounded-lg p-2 ${
-                msg.role === "user"
-                  ? "ml-auto max-w-[75%] bg-slate-200"
-                  : "mr-auto max-w-[75%] bg-slate-800 text-white"
-              }`}
-            >
-              <div className={` ${msg.role !== "user" && "bot"}`}>
-                <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
-              </div>
-            </li>
-          ))}
-          <div ref={messagesEndRef} />
-        </ul>
-      </div>
-      {/* message bar */}
-      <div className="mt-4 flex w-full justify-center text-base">
-        {isLoading ? (
-          <ChatLoader />
-        ) : (
-          <ChatInput
-            sendMessage={sendMessage}
-            inputValue={inputValue}
-            handleKeyDown={handleKeyDown}
-            handleChatInputChange={handleChatInputChange}
-          />
-        )}
-      </div>
-    </>
+    <ul className="mt-auto grid gap-2 text-base">
+      {messages.map((msg, index) => (
+        <li
+          key={index}
+          className={`flex items-center gap-2 rounded-lg p-2 ${
+            msg.role === "user"
+              ? "ml-auto max-w-[75%] bg-slate-200"
+              : "mr-auto max-w-[75%] bg-slate-800 text-white"
+          }`}
+        >
+          <div className={` ${msg.role !== "user" && "bot"}`}>
+            <ReactMarkdown className="prose">{msg.content}</ReactMarkdown>
+          </div>
+        </li>
+      ))}
+      <div ref={messagesEndRef} />
+    </ul>
   );
-}
+};
 
 const ChatLoader = () => {
   return (
@@ -87,8 +120,11 @@ const ChatInput = ({
   handleChatInputChange,
   sendMessage,
   handleKeyDown,
+  isLoading,
 }) => {
   const { openModal, closeModal } = useModal();
+
+  if (isLoading) return <ChatLoader />;
 
   return (
     <div className="flex w-full overflow-hidden rounded-lg border dark:border-slate-500">

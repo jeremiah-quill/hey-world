@@ -64,7 +64,6 @@ export function Sidebar({
             >
               {themeModeIcon}
             </button>
-            {/* <div className="grid gap-2"> */}
             <button
               onClick={() =>
                 openModal({
@@ -83,8 +82,7 @@ export function Sidebar({
                 <BiUser className="mx-auto rounded-full bg-slate-800 p-1 text-2xl text-slate-300 dark:bg-slate-300 dark:text-slate-800" />
               )}
             </button>
-            <button></button>
-            {/* </div> */}
+            {/* <button></button> */}
             {/* popout button */}
             <button
               onClick={() => toggleMenu()}

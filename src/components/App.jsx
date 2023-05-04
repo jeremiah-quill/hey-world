@@ -2,24 +2,17 @@ import React, { useState, useEffect, useMemo } from "react";
 
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { v4 as uuid } from "uuid";
-import { motion } from "framer-motion";
-import { useSession } from "next-auth/react";
-import Draggable from "react-draggable"; // The default
 
 import { editorConfigObject } from "@/constants";
 import { Chat } from "@/components/Chat";
 import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
-import { AccessChat } from "@/components/AccessChat";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
-import { useUserSettings } from "@/context/userSettingsContext";
 
 // TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
   // state
-  const { data: session } = useSession();
-  const { key } = useUserSettings();
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
 
   // project state
@@ -151,6 +144,27 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     };
   }, [isChatOpen]);
 
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    console.log("in here!");
+
+    const handleKeyDown = (event) => {
+      if ((event.altKey || event.metaKey) && event.key.toLowerCase() === "m") {
+        event.preventDefault();
+        setIsMenuOpen((prevState) => !prevState);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
@@ -190,43 +204,13 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           <Preview />
         </div>
         {/* bottom right container */}
-        {isChatOpen && (
-          <Draggable>
-            <motion.div
-              // initial="closed"
-              // animate={{
-              //   height: isChatOpen ? 500 : 0,
-              //   width: isChatOpen ? 500 : 0,
-              // }}
-              className="absolute bottom-[65px] right-[20px] h-[500px] w-[500px] transform  shadow-inner dark:border-slate-500"
-            >
-              <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
-                <>
-                  {key || session ? (
-                    <Chat
-                      isChatOpen={isChatOpen}
-                      messages={messages}
-                      setMessages={setMessages}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 grid place-items-center">
-                      <AccessChat />
-                    </div>
-                  )}
-                </>
-              </div>
-            </motion.div>
-          </Draggable>
-        )}
+        {isChatOpen && <Chat messages={messages} setMessages={setMessages} />}
+        {/* floating chat button */}
         <button
           className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
           onClick={toggleChat}
         >
-          <p className="text-muted-foreground text-lg">
-            <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100">
-              <span className="">⌘</span>+ b
-            </kbd>
-          </p>
+          <p className="text-muted-foreground text-lg">⌘ + b</p>
         </button>
       </div>
     </div>

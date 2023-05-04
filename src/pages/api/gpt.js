@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       if (!success) {
         res.status(429).json({
           error:
-            "Too many messages in a short amount of time. Please enter your OpenAI API key and choose 'Use personal key' option in settings.",
+            "Too many messages in a short amount of time. Please wait a few seconds and try again, or enter your own OpenAI API key and choose 'Use personal key' option in settings.",
         });
         return;
       }
