@@ -25,7 +25,7 @@ export default async function handler(req, res) {
       if (!success) {
         res.status(429).json({
           error:
-            "Too many messages. You are limited to 1 message per 10 seconds. If you want to bypass the rate limit, please enter a personal OpenAI API key and choose 'Use personal key' option in settings.",
+            "Too many messages in a short amount of time. Please enter your OpenAI API key and choose 'Use personal key' option in settings.",
         });
         return;
       }
