@@ -5,15 +5,21 @@ export default function App() {
 
   return (
     <div className="App">
-      <div className="header">
-        <h1>✌️ hey world.</h1>
-      </div>
+      <header className="header">
+        <div className="hero">
+          <div className="title-container">
+            <h1>
+              ✌️ hey<br></br> world.
+            </h1>
+          </div>
+          <div className="feature-container">
+            <Features />
+          </div>
+        </div>
+      </header>
       <main>
         <div className="hands-container">
           <Hands />
-        </div>
-        <div className="intro">
-          <Features />
         </div>
       </main>
     </div>
@@ -31,8 +37,12 @@ function Features() {
       <li>✅ save, update, & delete snippets</li>
       <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
-      <li>🚀 <a href="http://hey-world.dev/feature-roadmap">feature roadmap</a></li>
-      <li>🐛 <a href="http://hey-world.dev/bug-report">report a bug</a></li>
+      <li>
+        🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a>
+      </li>
+      <li>
+        🐛 <a href="https://hey-world.dev/bug-report">report a bug</a>
+      </li>
     </ul>
   );
 }
@@ -60,15 +70,15 @@ const ShortcutBadge = () => {
 
 function Hands() {
   return (
-    <div className="hands">
-      <div className="hand-line">
+    <>
+      <div className="hand-line hand-line-1">
         <div className="hand-1">👈</div>
         <h2>tinker</h2>
       </div>
-      <div className="hand-line">
-        <div className="hand-2">👇</div> <h2>ask</h2>
+      <div className="hand-line hand-line-2">
+        <div className="hand-2">👇</div> <h2>chat</h2>
       </div>
-    </div>
+    </>
   );
 }
 `;
@@ -79,22 +89,12 @@ export const defaultHtml = `<html>
   </head>
   <body>
     <div class="App">
-      <div class="header">
-        <h1>✌️ hey world.</h1>
-      </div>
-      <main>
-        <div class="hands-container">
-          <div class="hands">
-            <div class="hand-line">
-              <div class="hand-1">👈</div>
-              <h2>tinker</h2>
-            </div>
-            <div class="hand-line">
-              <div class="hand-2">👇</div> <h2>ask</h2>
-            </div>
-          </div>
+    <header class="header">
+    <div class="hero">
+        <div class="title-container">
+          <h1>✌️ hey<br> world.</h1>
         </div>
-        <div class="intro">
+        <div class="feature-container">
           <ul class="features">
             <li>✅ lightweight browser editor + preview</li>
             <li class="prettier-li">
@@ -103,9 +103,22 @@ export const defaultHtml = `<html>
             <li>✅ save, update, & delete snippets</li>
             <li>✅ react + html templates</li>
             <li>✅ ai chatbot</li>
-            <li>🚀 <a href="http://hey-world.dev/feature-roadmap">feature roadmap</a></li>
-            <li>🐛 <a href="http://hey-world.dev/bug-report">report a bug</a></li>
+            <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
+            <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
           </ul>
+        </div>
+    </div>
+    <div>test</div>
+  </header>
+      <main>
+        <div class="hands">
+          <div class="hand-line hand-line-1">
+            <div class="hand-1">👈</div>
+            <h2>tinker</h2>
+          </div>
+          <div class="hand-line hand-line-2">
+            <div class="hand-2">👇</div> <h2>chat</h2>
+          </div>
         </div>
       </main>
     </div>
@@ -153,25 +166,61 @@ main {
   padding: 0rem 1rem;
   flex: 1;
 }
-.hands-container {
-  position: absolute;
+.hand-line-1 {
+  position: fixed;
   width: 100%;
   bottom: 10px;
   left: 10px;
-  z-index: -1;
+  z-index: 100;
+}
+
+.hand-line-2 {
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
+  z-index: 100;
 }
 
 /* title */
 .header h1 {
-  background-color: #4CAF50; 
   color: white; 
   color: #fff; 
   margin: 0px;
   font-weight: 900;
   font-size: 100px;
   text-align: center;
-  width: 100%;
   padding: 1rem;
+  height: 100%;
+  text-align: end;
+}
+.hero {
+  height: 100vh;
+  place-items: center;
+  display: grid;
+  background-color: #4CAF50; 
+  display: flex;
+  gap: 1rem;
+}
+
+.title-container {
+  flex: 1;
+}
+.feature-container {
+  flex: 1;
+  flex: 1;
+  background: #ffffff99;
+  padding: 1rem;
+  margin-right: 1rem;
+  border-radius: 8px;
+}
+
+.arrow-container {
+  text-align: center;
+  position: absolute;
+  bottom: 25px;
+}
+.arrow-container span {
+  font-size: 25px;
 }
 
 /* intro */

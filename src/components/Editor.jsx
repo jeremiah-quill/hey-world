@@ -1,16 +1,37 @@
-import { SandpackCodeEditor, SandpackFileExplorer } from "@codesandbox/sandpack-react";
+import { SandpackCodeEditor } from "@codesandbox/sandpack-react";
 import { useSandpack, useActiveCode } from "@codesandbox/sandpack-react";
 import prettier from "prettier";
 import parserBabel from "prettier/parser-babel";
 import { useCallback, useEffect, useRef } from "react";
+import { vim, vimKeyMap } from "@replit/codemirror-vim";
+import { useUserSettings } from "@/context/userSettingsContext";
 
-export function Editor() {
+// TODO: extract logic to custom hook
+export function Editor({ children }) {
   const codemirrorInstance = useRef(); // use a ref to access codemirror instance so we can trigger code formatting with prettier
+  const { userSettings, toggleSetting } = useUserSettings();
+
+  // setup extensions based on user settings:
+  const extensions = [];
+  if (userSettings.isVimModeEnabled) {
+    extensions.push(vim());
+  }
+  const defaultExtensions = [];
+
   return (
-    <>
-      <SandpackCodeEditor ref={codemirrorInstance} showLineNumbers showInlineErrors style={{ height: "100%" }} />
+    <div className="editor absolute inset-0 flex flex-col overflow-hidden rounded-lg border dark:border-slate-500">
+      {children}
+      <SandpackCodeEditor
+        key={JSON.stringify(userSettings.isVimModeEnabled)}
+        // extensionsKeymap={[vimKeyMap]}
+        ref={codemirrorInstance}
+        showLineNumbers
+        showInlineErrors
+        style={{ flex: 1, overflow: "hidden" }}
+        // extensions={[...defaultExtensions, ...extensions]}
+      />
       <ActivatePrettier codemirrorInstance={codemirrorInstance} />
-    </>
+    </div>
   );
 }
 

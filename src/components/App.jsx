@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
-import { RxCaretDown } from "react-icons/rx";
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { v4 as uuid } from "uuid";
 
@@ -9,18 +8,25 @@ import { Chat } from "@/components/Chat";
 import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
-import { GptKeyForm } from "@/components/GptKeyForm";
+import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 
-export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
+// TODO: extract logic to custom hook
+export function App({ currentTemplate, setCurrentTemplate }) {
+  // state
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
-  const [openaiKey, setOpenaiKey] = useState(null); // TODO: can I just pass in serverKey here?
+
+  // project state
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
-
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [savedCreations, setSavedCreations] = useState([]);
+
+  // chat state
+  const [messages, setMessages] = useState([]);
+
+  // ui state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false); // TODO: remove this, use [key, session instead] -> what does this mean???
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
 
   // UI/state handlers
   const toggleTemplatePicker = () => {
@@ -29,6 +35,17 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+  const toggleChat = () => {
+    setIsChatOpen(!isChatOpen);
+  };
+
+  const chatContainerVariants = {
+    open: { height: "500px", width: "500px" },
+    closed: {
+      height: "0px",
+      width: "0px",
+    },
+  };
 
   const resetProject = () => {
     setCurrentProjectId(null);
@@ -36,6 +53,7 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     sandpack.resetAllFiles();
   };
 
+  // project CRUD
   const saveProject = (currentProject = null) => {
     if (!currentProject) {
       const id = uuid();
@@ -54,7 +72,8 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
       setCurrentProjectId(id);
 
       // sync with local storage
-      const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
+      const currentProjects =
+        JSON.parse(localStorage.getItem("projects")) || [];
       currentProjects.push(project);
       localStorage.setItem("projects", JSON.stringify(currentProjects));
     } else {
@@ -75,16 +94,22 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
 
   const removeProject = (id) => {
     // update state
-    setSavedCreations((prevCreations) => prevCreations.filter((creation) => creation.id !== id));
+    setSavedCreations((prevCreations) =>
+      prevCreations.filter((creation) => creation.id !== id)
+    );
 
     // sync with local storage
-    const updatedProjects = savedCreations.filter((creation) => creation.id !== id);
+    const updatedProjects = savedCreations.filter(
+      (creation) => creation.id !== id
+    );
     localStorage.setItem("projects", JSON.stringify(updatedProjects));
   };
 
   const loadProject = (projectId) => {
     // get project from state
-    const project = savedCreations.find((creation) => creation.id === projectId);
+    const project = savedCreations.find(
+      (creation) => creation.id === projectId
+    );
 
     // update sandpack
     if (!project) return;
@@ -105,24 +130,47 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
     setSavedCreations(projects);
   }, []);
 
-  // if a key was loaded from env, use it and clear key from local storage (as a precaution)
-  // otherwise, check if a key was saved in local storage and use that
-  // TODO: I feel like this sucks
   useEffect(() => {
-    if (serverKey) {
-      localStorage.removeItem("openai-key");
+    const handleChatbotShortcut = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "b") {
+        event.preventDefault();
+        setIsChatOpen(!isChatOpen);
+      }
+    };
+
+    document.addEventListener("keydown", handleChatbotShortcut);
+    return () => {
+      document.removeEventListener("keydown", handleChatbotShortcut);
+    };
+  }, [isChatOpen]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
       return;
     }
-    const userKey = localStorage.getItem("openai-key");
-    setOpenaiKey(userKey);
-  }, [serverKey]);
+
+    console.log("in here!");
+
+    const handleKeyDown = (event) => {
+      if ((event.altKey || event.metaKey) && event.key.toLowerCase() === "m") {
+        event.preventDefault();
+        setIsMenuOpen((prevState) => !prevState);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
 
   return (
-    <div className="w-full h-screen flex gap-2 p-2">
+    <div className="flex h-screen w-full gap-2 p-2 transition-all dark:bg-slate-800">
       <Sidebar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
@@ -132,126 +180,39 @@ export function App({ serverKey, currentTemplate, setCurrentTemplate }) {
         currentProjectId={currentProjectId}
       />
       {/* left column */}
-      <div className="flex-1 flex flex-col gap-2 overflow-hidden">
-        <CurrentProjectBar
-          projectTitleInputValue={projectTitleInputValue}
-          setProjectTitleInputValue={setProjectTitleInputValue}
-          saveProject={saveProject}
-          currentProject={memoizedCurrentProject}
-          isTemplatePickerOpen={isTemplatePickerOpen}
-          toggleTemplatePicker={toggleTemplatePicker}
-          currentTemplate={currentTemplate}
-          setIsTemplatePickerOpen={setIsTemplatePickerOpen}
-          editorConfigObject={editorConfigObject}
-          setCurrentTemplate={setCurrentTemplate}
-          resetProject={resetProject}
-        />
-        <div className="rounded-lg overflow-hidden border editor relative flex-1">
-          <Editor />
-        </div>
+      <div className="relative grid flex-1">
+        <Editor>
+          <CurrentProjectBar
+            projectTitleInputValue={projectTitleInputValue}
+            setProjectTitleInputValue={setProjectTitleInputValue}
+            saveProject={saveProject}
+            currentProject={memoizedCurrentProject}
+            isTemplatePickerOpen={isTemplatePickerOpen}
+            toggleTemplatePicker={toggleTemplatePicker}
+            currentTemplate={currentTemplate}
+            setIsTemplatePickerOpen={setIsTemplatePickerOpen}
+            editorConfigObject={editorConfigObject}
+            setCurrentTemplate={setCurrentTemplate}
+            resetProject={resetProject}
+          />
+        </Editor>
       </div>
       {/* right column */}
-      <div className="flex-1 h-full flex flex-col gap-2 ">
+      <div className="flex h-full flex-1 flex-col gap-2 ">
         {/* top right container */}
-        <div className="h-full bg-[#292524] rounded-lg overflow-hidden preview border flex-1">
+        <div className="preview h-full flex-1 overflow-hidden rounded-lg border dark:border-slate-500">
           <Preview />
         </div>
         {/* bottom right container */}
-        <div className="shadow-inner border rounded-lg overflow-hidden relative flex-1">
-          {openaiKey ? (
-            <Chat openaiKey={openaiKey} />
-          ) : (
-            <div className="grid place-items-center absolute inset-0">
-              <GptKeyForm setOpenaiKey={setOpenaiKey} />
-            </div>
-          )}
-        </div>
+        {isChatOpen && <Chat messages={messages} setMessages={setMessages} />}
+        {/* floating chat button */}
+        <button
+          className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
+          onClick={toggleChat}
+        >
+          <p className="text-muted-foreground text-lg">⌘ + b</p>
+        </button>
       </div>
     </div>
   );
 }
-
-const CurrentProjectBar = ({
-  projectTitleInputValue,
-  setProjectTitleInputValue,
-  saveProject,
-  isTemplatePickerOpen,
-  toggleTemplatePicker,
-  currentTemplate,
-  editorConfigObject,
-  setCurrentTemplate,
-  setIsTemplatePickerOpen,
-  currentProject,
-  resetProject,
-}) => {
-  // close template picker when clicking outside of it
-  const dropdownRef = useRef(null);
-  useEffect(() => {
-    const handleDocumentClick = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsTemplatePickerOpen(false);
-      }
-    };
-    document.addEventListener("click", handleDocumentClick);
-    return () => {
-      document.removeEventListener("click", handleDocumentClick);
-    };
-  }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    saveProject(currentProject);
-  };
-
-  useEffect(() => {
-    if (currentProject) {
-      setProjectTitleInputValue(currentProject.name);
-    } else {
-      setProjectTitleInputValue("");
-    }
-  }, [currentProject]);
-
-  // TODO: bug in this input. sometimes it doesn't update when switching between projects
-  return (
-    <div className="flex gap-2 p-2 bg-slate-200 justify-between rounded-lg">
-      <form onSubmit={handleSubmit}>
-        <input
-          required={true}
-          className="rounded p-1 border-slate-300 outline-none"
-          value={projectTitleInputValue || ""}
-          onChange={(e) => setProjectTitleInputValue(e.target.value)}
-          placeholder="hey world. landing page"
-        />
-        <input className="ml-2 hover:opacity-50 cursor-pointer" type="submit" value={currentProject ? "Save" : "Add"} />
-      </form>
-      <button className="hover:opacity-50" onClick={resetProject}>
-        Start fresh
-      </button>
-      <div className="relative z-[1000]" ref={dropdownRef}>
-        <button onClick={toggleTemplatePicker} className="flex gap-2 items-center">
-          <div className="flex gap-1 items-center">
-            {editorConfigObject[currentTemplate].icon}
-            {currentTemplate}
-          </div>
-          {<RxCaretDown className={`text-2xl transition-all ${isTemplatePickerOpen ? "rotate-180" : "rotate-0"}`} />}
-        </button>
-        {isTemplatePickerOpen && (
-          <ul className="border bg-white rounded absolute">
-            {Object.keys(editorConfigObject).map((key, idx) => (
-              <li
-                className="p-2 cursor-pointer hover:bg-slate-200 flex gap-1 items-center"
-                key={idx}
-                onClick={() => {
-                  setCurrentTemplate(key);
-                  setIsTemplatePickerOpen(false);
-                }}>
-                {editorConfigObject[key].icon}
-                {key}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-};
