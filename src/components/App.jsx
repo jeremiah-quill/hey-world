@@ -13,6 +13,7 @@ import { AccessChat } from "@/components/AccessChat";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 import { useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
+import Draggable from "react-draggable"; // The default
 
 // TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
@@ -169,38 +170,39 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           <Preview />
         </div>
         {/* bottom right container */}
-        <motion.div
-          className="relative shadow-inner dark:border-slate-500"
-          initial={false}
-          animate={isChatOpen ? "open" : "closed"}
-          variants={chatContainerVariants}
-          transition={{ duration: 0.35, ease: "backOut" }}
-        >
-          <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
-            {isChatOpen && (
-              <>
-                {key || session ? (
-                  <Chat
-                    isChatOpen={isChatOpen}
-                    messages={messages}
-                    setMessages={setMessages}
-                  />
-                ) : (
-                  <div className="absolute inset-0 grid place-items-center">
-                    <AccessChat />
-                  </div>
-                )}
-              </>
-            )}
-
-            <button
-              className="absolute left-1/2 top-[-12px] z-[999] -translate-x-1/2 transform rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-600"
-              onClick={toggleChat}
+        {isChatOpen && (
+          <Draggable>
+            <motion.div
+              className="absolute bottom-[50px] right-[50px]  h-[500px] w-[500px] shadow-inner dark:border-slate-500"
+              initial={false}
+              animate={isChatOpen ? "open" : "closed"}
+              variants={chatContainerVariants}
+              transition={{ duration: 0.35, ease: "backOut" }}
             >
-              {isChatOpen ? "Close" : "Open"}
-            </button>
-          </div>
-        </motion.div>
+              <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
+                <>
+                  {key || session ? (
+                    <Chat
+                      isChatOpen={isChatOpen}
+                      messages={messages}
+                      setMessages={setMessages}
+                    />
+                  ) : (
+                    <div className="absolute inset-0 grid place-items-center">
+                      <AccessChat />
+                    </div>
+                  )}
+                </>
+              </div>
+            </motion.div>
+          </Draggable>
+        )}
+        <button
+          className="absolute bottom-[20px] right-[20px] z-[999] h-[50px] w-[50px]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
+          onClick={toggleChat}
+        >
+          {/* {isChatOpen ? "Close" : "Open"} */}
+        </button>
       </div>
     </div>
   );
