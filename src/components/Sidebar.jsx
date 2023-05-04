@@ -48,16 +48,6 @@ export function Sidebar({
               <SavedList
                 savedCreations={savedCreations}
                 onProjectClick={onProjectClick}
-                // onRemoveClick={() =>
-                //   openModal({
-                //     content: (
-                //       <div>Are you sure you want to delete this project?</div>
-                //     ),
-                //     title: "Delete Project",
-                //     onSubmit: onRemoveClick,
-                //     // onSubmit: () => console.log("test"),
-                //   })
-                // }
                 onRemoveClick={onRemoveClick}
                 currentProjectId={currentProjectId}
               />
@@ -92,7 +82,6 @@ export function Sidebar({
                 <BiUser className="mx-auto rounded-full bg-slate-800 p-1 text-2xl text-slate-300 dark:bg-slate-300 dark:text-slate-800" />
               )}
             </button>
-            {/* <button></button> */}
             {/* popout button */}
             <button
               onClick={() => toggleMenu()}

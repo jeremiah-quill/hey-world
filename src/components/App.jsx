@@ -149,10 +149,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       return;
     }
 
-    console.log("in here!");
-
     const handleKeyDown = (event) => {
-      if ((event.altKey || event.metaKey) && event.key.toLowerCase() === "m") {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "m") {
         event.preventDefault();
         setIsMenuOpen((prevState) => !prevState);
       }
@@ -168,6 +166,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
+
+  const shortcutBage = () => {};
 
   return (
     <div className="flex h-screen w-full gap-2 p-2 transition-all dark:bg-slate-800">
@@ -210,9 +210,19 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
           onClick={toggleChat}
         >
-          <p className="text-muted-foreground text-lg">⌘ + b</p>
+          <p className="text-muted-foreground text-lg">
+            <ShortcutBadge /> + b
+          </p>
         </button>
       </div>
     </div>
   );
 }
+
+const ShortcutBadge = () => {
+  const isBrowser = typeof window !== "undefined";
+  const isMac =
+    isBrowser && window.navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+
+  return isMac ? "⌘" : "^";
+};
