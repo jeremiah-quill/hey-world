@@ -62,7 +62,7 @@ export const CurrentProjectBar = ({
       <button className="hover:opacity-50" onClick={resetProject}>
         Start fresh
       </button>
-      <div className="relative z-[500]" ref={dropdownRef}>
+      <div className="z-1 relative" ref={dropdownRef}>
         <button
           onClick={toggleTemplatePicker}
           className="flex items-center gap-2"

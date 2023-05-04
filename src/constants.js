@@ -70,15 +70,15 @@ const ShortcutBadge = () => {
 
 function Hands() {
   return (
-    <div className="hands">
-      <div className="hand-line">
+    <>
+      <div className="hand-line hand-line-1">
         <div className="hand-1">👈</div>
         <h2>tinker</h2>
       </div>
-      <div className="hand-line">
-        <div className="hand-2">👇</div> <h2>ask</h2>
+      <div className="hand-line hand-line-2">
+        <div className="hand-2">👇</div> <h2>chat</h2>
       </div>
-    </div>
+    </>
   );
 }
 `;
@@ -108,17 +108,16 @@ export const defaultHtml = `<html>
           </ul>
         </div>
     </div>
+    <div>test</div>
   </header>
       <main>
-        <div class="hands-container">
-          <div class="hands">
-            <div class="hand-line">
-              <div class="hand-1">👈</div>
-              <h2>tinker</h2>
-            </div>
-            <div class="hand-line">
-              <div class="hand-2">👇</div> <h2>ask</h2>
-            </div>
+        <div class="hands">
+          <div class="hand-line hand-line-1">
+            <div class="hand-1">👈</div>
+            <h2>tinker</h2>
+          </div>
+          <div class="hand-line hand-line-2">
+            <div class="hand-2">👇</div> <h2>chat</h2>
           </div>
         </div>
       </main>
@@ -167,11 +166,18 @@ main {
   padding: 0rem 1rem;
   flex: 1;
 }
-.hands-container {
+.hand-line-1 {
   position: fixed;
   width: 100%;
   bottom: 10px;
   left: 10px;
+  z-index: 100;
+}
+
+.hand-line-2 {
+  position: fixed;
+  bottom: 50px;
+  right: 15px;
   z-index: 100;
 }
 

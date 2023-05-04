@@ -23,12 +23,12 @@ export function Editor({ children }) {
       {children}
       <SandpackCodeEditor
         key={JSON.stringify(userSettings.isVimModeEnabled)}
-        extensionsKeymap={[vimKeyMap]}
+        // extensionsKeymap={[vimKeyMap]}
         ref={codemirrorInstance}
         showLineNumbers
         showInlineErrors
         style={{ flex: 1, overflow: "hidden" }}
-        extensions={[...defaultExtensions, ...extensions]}
+        // extensions={[...defaultExtensions, ...extensions]}
       />
       <ActivatePrettier codemirrorInstance={codemirrorInstance} />
     </div>
