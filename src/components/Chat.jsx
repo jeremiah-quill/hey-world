@@ -9,17 +9,13 @@ import { Modal } from "@/components/Modal";
 import { useChat } from "@/hooks/useChat";
 import { useChatSettings } from "@/hooks/useChatSettings";
 
-export function Chat({ isChatOpen, messages, setMessages }) {
-  //  modal state, handlers, and effects
-  const {
-    modalIsOpen,
-    modalContent,
-    modalTitle,
-    modalOnSubmit,
-    openModal,
-    closeModal,
-  } = useModal();
-
+export function Chat({
+  isChatOpen,
+  messages,
+  setMessages,
+  openModal,
+  closeModal,
+}) {
   // chat state, handlers, and effects
   const {
     inputValue,
@@ -112,14 +108,6 @@ export function Chat({ isChatOpen, messages, setMessages }) {
           )}
         </div>
       </>
-      <Modal
-        isOpen={modalIsOpen}
-        onClose={closeModal}
-        title={modalTitle}
-        onSubmit={modalOnSubmit}
-      >
-        {modalContent}
-      </Modal>
     </>
   );
 }

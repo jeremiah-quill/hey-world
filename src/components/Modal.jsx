@@ -6,17 +6,19 @@ export const Modal = ({
   onSubmit = null,
   title = null,
   children,
+  className = "",
+  modalContent = null,
 }) => {
   if (!isOpen) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-[1000] overflow-y-auto">
+    <div className={`fixed inset-0 z-[1000] overflow-y-auto ${className}`}>
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="relative z-20 w-full max-w-md rounded-lg bg-white p-6 shadow-lg dark:bg-slate-800 dark:text-slate-300">
           {title && <h2 className="mb-4 text-2xl font-semibold">{title}</h2>}
-          {children}
+          {modalContent}
           {onSubmit && (
             <div className="mt-6 flex justify-end">
               <button

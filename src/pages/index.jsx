@@ -19,11 +19,21 @@ import { useUserSettings } from "@/context/userSettingsContext";
 //     },
 //   };
 // }
+import useModal from "@/hooks/useModal";
+import { Modal } from "@/components/Modal";
 
 export default function Home() {
   const [currentTemplate, setCurrentTemplate] = useState("React"); // TODO: review this, but I think I like it
 
   const { userSettings } = useUserSettings();
+  const {
+    modalIsOpen,
+    modalContent,
+    modalTitle,
+    modalOnSubmit,
+    openModal,
+    closeModal,
+  } = useModal();
 
   return (
     <SandpackProvider
@@ -41,7 +51,19 @@ export default function Home() {
       <App
         currentTemplate={currentTemplate}
         setCurrentTemplate={setCurrentTemplate}
+        openModal={openModal}
+        closeModal={closeModal}
       />
+      <Modal
+        className="fixed"
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        title={modalTitle}
+        onSubmit={modalOnSubmit}
+        modalContent={modalContent}
+      >
+        {/* {modalContent} */}
+      </Modal>
     </SandpackProvider>
   );
 }

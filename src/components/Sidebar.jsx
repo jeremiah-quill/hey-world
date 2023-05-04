@@ -18,17 +18,11 @@ export function Sidebar({
   onProjectClick,
   onRemoveClick,
   currentProjectId,
+  openModal,
+  closeModal,
 }) {
   const { data: session } = useSession();
   const [themeModeIcon, setThemeModeIcon] = useState(<FiSun />);
-  const {
-    modalIsOpen,
-    modalContent,
-    modalTitle,
-    modalOnSubmit,
-    openModal,
-    closeModal,
-  } = useModal();
 
   const { userSettings, toggleSetting } = useUserSettings();
 
@@ -113,14 +107,6 @@ export function Sidebar({
           </div>
         </div>
       </motion.div>
-      <Modal
-        isOpen={modalIsOpen}
-        onClose={closeModal}
-        title={modalTitle}
-        onSubmit={modalOnSubmit}
-      >
-        {modalContent}
-      </Modal>
     </>
   );
 }

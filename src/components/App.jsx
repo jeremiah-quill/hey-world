@@ -16,7 +16,12 @@ import { useUserSettings } from "@/context/userSettingsContext";
 import Draggable from "react-draggable"; // The default
 
 // TODO: extract logic to custom hook
-export function App({ currentTemplate, setCurrentTemplate }) {
+export function App({
+  currentTemplate,
+  setCurrentTemplate,
+  openModal,
+  closeModal,
+}) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
 
@@ -131,6 +136,20 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     setSavedCreations(projects);
   }, []);
 
+  useEffect(() => {
+    const handleChatbotShortcut = (event) => {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "b") {
+        event.preventDefault();
+        setIsChatOpen(!isChatOpen);
+      }
+    };
+
+    document.addEventListener("keydown", handleChatbotShortcut);
+    return () => {
+      document.removeEventListener("keydown", handleChatbotShortcut);
+    };
+  }, [isChatOpen]);
+
   const memoizedCurrentProject = useMemo(() => {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
@@ -144,6 +163,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
         onProjectClick={loadProject}
         onRemoveClick={removeProject}
         currentProjectId={currentProjectId}
+        openModal={openModal}
+        closeModal={closeModal}
       />
       {/* left column */}
       <div className="relative grid flex-1">
@@ -172,13 +193,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
         {/* bottom right container */}
         {isChatOpen && (
           <Draggable>
-            <motion.div
-              className="absolute bottom-[50px] right-[50px]  h-[500px] w-[500px] shadow-inner dark:border-slate-500"
-              initial={false}
-              animate={isChatOpen ? "open" : "closed"}
-              variants={chatContainerVariants}
-              transition={{ duration: 0.35, ease: "backOut" }}
-            >
+            <motion.div className="absolute bottom-[65px] right-[20px] h-[500px] w-[500px] transform  shadow-inner dark:border-slate-500">
               <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
                 <>
                   {key || session ? (
@@ -186,6 +201,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
                       isChatOpen={isChatOpen}
                       messages={messages}
                       setMessages={setMessages}
+                      openModal={openModal}
+                      closeModal={closeModal}
                     />
                   ) : (
                     <div className="absolute inset-0 grid place-items-center">
@@ -198,9 +215,15 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           </Draggable>
         )}
         <button
-          className="absolute bottom-[20px] right-[20px] z-[999] h-[50px] w-[50px]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
+          className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
           onClick={toggleChat}
         >
+          <p className="text-muted-foreground text-lg">
+            {/* Press{" "} */}
+            <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100">
+              <span className="">⌘</span>+ b
+            </kbd>
+          </p>
           {/* {isChatOpen ? "Close" : "Open"} */}
         </button>
       </div>

@@ -7,7 +7,10 @@ import {
 export function Preview() {
   return (
     <SandpackLayout>
-      <SandpackPreview showRefreshButton={true} showOpenInCodeSandbox={false} />
+      <SandpackPreview
+        showRefreshButton={false}
+        showOpenInCodeSandbox={false}
+      />
     </SandpackLayout>
   );
 }
