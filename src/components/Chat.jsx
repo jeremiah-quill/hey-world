@@ -43,7 +43,7 @@ export function Chat({ messages, setMessages }) {
         //   height: isChatOpen ? 500 : 0,
         //   width: isChatOpen ? 500 : 0,
         // }}
-        className="absolute bottom-[65px] right-[20px] flex h-[500px]  w-[500px] transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300"
+        className="absolute bottom-[65px] right-[20px] z-[1000] flex h-[500px]  w-[500px] transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300"
       >
         <>
           {!key && !session ? (
