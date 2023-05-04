@@ -6,7 +6,6 @@ import { useSession } from "next-auth/react";
 export const useChatSettings = ({ onClose }) => {
   // state
   const { data: session } = useSession();
-  // const [loading, setLoading] = useState(false);
   const { userSettings, toggleSetting, key, syncKey } = useUserSettings();
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(key || "");

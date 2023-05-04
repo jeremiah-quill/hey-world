@@ -5,7 +5,6 @@ export const Modal = ({
   onClose,
   onSubmit = null,
   title = null,
-  children,
   className = "",
   modalContent = null,
 }) => {

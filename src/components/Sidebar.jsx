@@ -3,12 +3,11 @@ import { SavedList } from "./SavedList";
 import { useSession } from "next-auth/react";
 import { signIn, signOut } from "next-auth/react";
 import { BiUser } from "react-icons/bi";
-import { Modal } from "@/components/Modal";
-import useModal from "@/hooks/useModal";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useModal } from "@/context/modalContext";
 
 // TODO: extract logic to custom hook
 export function Sidebar({
@@ -18,9 +17,8 @@ export function Sidebar({
   onProjectClick,
   onRemoveClick,
   currentProjectId,
-  openModal,
-  closeModal,
 }) {
+  const { openModal } = useModal();
   const { data: session } = useSession();
   const [themeModeIcon, setThemeModeIcon] = useState(<FiSun />);
 
@@ -41,10 +39,8 @@ export function Sidebar({
   return (
     <>
       <motion.div
-        initial={{ width: "50px" }}
         animate={{ width: isMenuOpen ? "20%" : "50px" }}
         className="flex h-full max-h-screen flex-col rounded-lg border text-slate-800 dark:border-slate-500 dark:text-slate-300"
-        // style={{ width: isMenuOpen ? "20%" : "50px" }}
       >
         {isMenuOpen && (
           <div className="flex-1 overflow-y-auto">

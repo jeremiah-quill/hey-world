@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
 import { useSandpack } from "@codesandbox/sandpack-react";
 import { v4 as uuid } from "uuid";
+import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
+import Draggable from "react-draggable"; // The default
 
 import { editorConfigObject } from "@/constants";
 import { Chat } from "@/components/Chat";
@@ -11,31 +13,27 @@ import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { AccessChat } from "@/components/AccessChat";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
-import { useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
-import Draggable from "react-draggable"; // The default
 
 // TODO: extract logic to custom hook
-export function App({
-  currentTemplate,
-  setCurrentTemplate,
-  openModal,
-  closeModal,
-}) {
+export function App({ currentTemplate, setCurrentTemplate }) {
+  // state
+  const { data: session } = useSession();
+  const { key } = useUserSettings();
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
+
+  // project state
   const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
-
-  const [messages, setMessages] = useState([]);
-
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false); // TODO: remove this, use [key, session instead] -> what does this mean???
-  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
-
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [savedCreations, setSavedCreations] = useState([]);
 
-  const { data: session } = useSession();
-  const { key } = useUserSettings();
+  // chat state
+  const [messages, setMessages] = useState([]);
+
+  // ui state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isChatOpen, setIsChatOpen] = useState(false); // TODO: remove this, use [key, session instead] -> what does this mean???
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
 
   // UI/state handlers
   const toggleTemplatePicker = () => {
@@ -49,8 +47,11 @@ export function App({
   };
 
   const chatContainerVariants = {
-    open: { height: "50%" },
-    closed: { height: "50px" },
+    open: { height: "500px", width: "500px" },
+    closed: {
+      height: "0px",
+      width: "0px",
+    },
   };
 
   const resetProject = () => {
@@ -163,8 +164,6 @@ export function App({
         onProjectClick={loadProject}
         onRemoveClick={removeProject}
         currentProjectId={currentProjectId}
-        openModal={openModal}
-        closeModal={closeModal}
       />
       {/* left column */}
       <div className="relative grid flex-1">
@@ -193,7 +192,14 @@ export function App({
         {/* bottom right container */}
         {isChatOpen && (
           <Draggable>
-            <motion.div className="absolute bottom-[65px] right-[20px] h-[500px] w-[500px] transform  shadow-inner dark:border-slate-500">
+            <motion.div
+              // initial="closed"
+              // animate={{
+              //   height: isChatOpen ? 500 : 0,
+              //   width: isChatOpen ? 500 : 0,
+              // }}
+              className="absolute bottom-[65px] right-[20px] h-[500px] w-[500px] transform  shadow-inner dark:border-slate-500"
+            >
               <div className="flex h-full flex-col rounded-lg border bg-slate-100 p-4 text-slate-800  dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
                 <>
                   {key || session ? (
@@ -201,8 +207,6 @@ export function App({
                       isChatOpen={isChatOpen}
                       messages={messages}
                       setMessages={setMessages}
-                      openModal={openModal}
-                      closeModal={closeModal}
                     />
                   ) : (
                     <div className="absolute inset-0 grid place-items-center">
@@ -219,12 +223,10 @@ export function App({
           onClick={toggleChat}
         >
           <p className="text-muted-foreground text-lg">
-            {/* Press{" "} */}
             <kbd className="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono font-medium opacity-100">
               <span className="">⌘</span>+ b
             </kbd>
           </p>
-          {/* {isChatOpen ? "Close" : "Open"} */}
         </button>
       </div>
     </div>

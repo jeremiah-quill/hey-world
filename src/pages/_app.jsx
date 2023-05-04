@@ -3,6 +3,7 @@ import Head from "next/head";
 import { SessionProvider } from "next-auth/react";
 import { UserSettingsProvider } from "@/context/userSettingsContext";
 import { ToastProvider } from "@/context/toastContext";
+import { ModalProvider } from "@/context/modalContext";
 
 export default function App({
   Component,
@@ -20,7 +21,9 @@ export default function App({
       <SessionProvider session={session}>
         <UserSettingsProvider>
           <ToastProvider>
-            <Component {...pageProps} />
+            <ModalProvider>
+              <Component {...pageProps} />
+            </ModalProvider>
           </ToastProvider>
         </UserSettingsProvider>
       </SessionProvider>

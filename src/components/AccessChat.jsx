@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import useModal from "@/hooks/useModal";
-import { Modal } from "@/components/Modal";
+
+import { useModal } from "@/context/modalContext";
 import { signIn } from "next-auth/react";
 import { ChatError } from "@/components/ChatError";
 import { useUserSettings } from "@/context/userSettingsContext";
@@ -9,18 +9,10 @@ import { useToast } from "@/context/toastContext";
 // TODO: extract logic to custom hook
 export function AccessChat() {
   // state
-  const {
-    modalIsOpen,
-    modalContent,
-    modalTitle,
-    modalOnSubmit,
-    openModal,
-    closeModal,
-  } = useModal();
-  const [error, setError] = useState(null);
+  const { openModal, closeModal } = useModal();
   const showToast = useToast();
-
   const { syncKey } = useUserSettings();
+  const [error, setError] = useState(null);
 
   // refs
   const formRef = useRef(null);
@@ -98,14 +90,6 @@ export function AccessChat() {
           </div>
         </div>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onClose={closeModal}
-        title={modalTitle}
-        onSubmit={modalOnSubmit}
-      >
-        {modalContent}
-      </Modal>
     </>
   );
 }

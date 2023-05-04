@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 
 import { SandpackProvider } from "@codesandbox/sandpack-react";
-
-import { editorConfigObject } from "@/constants";
-import { App } from "@/components/App";
-import { dracula } from "@codesandbox/sandpack-themes";
-
 import { getSession } from "next-auth/react";
+
+import { App } from "@/components/App";
 import { useUserSettings } from "@/context/userSettingsContext";
+import { editorConfigObject } from "@/constants";
 
 // get the OpenAI API key from the environment variables or return null
 // export async function getServerSideProps({ context }) {
@@ -19,21 +17,10 @@ import { useUserSettings } from "@/context/userSettingsContext";
 //     },
 //   };
 // }
-import useModal from "@/hooks/useModal";
-import { Modal } from "@/components/Modal";
 
 export default function Home() {
-  const [currentTemplate, setCurrentTemplate] = useState("React"); // TODO: review this, but I think I like it
-
   const { userSettings } = useUserSettings();
-  const {
-    modalIsOpen,
-    modalContent,
-    modalTitle,
-    modalOnSubmit,
-    openModal,
-    closeModal,
-  } = useModal();
+  const [currentTemplate, setCurrentTemplate] = useState("React"); // TODO: review this, but I think I like it
 
   return (
     <SandpackProvider
@@ -51,19 +38,7 @@ export default function Home() {
       <App
         currentTemplate={currentTemplate}
         setCurrentTemplate={setCurrentTemplate}
-        openModal={openModal}
-        closeModal={closeModal}
       />
-      <Modal
-        className="fixed"
-        isOpen={modalIsOpen}
-        onClose={closeModal}
-        title={modalTitle}
-        onSubmit={modalOnSubmit}
-        modalContent={modalContent}
-      >
-        {/* {modalContent} */}
-      </Modal>
     </SandpackProvider>
   );
 }
