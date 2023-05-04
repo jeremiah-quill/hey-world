@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { useModal } from "@/context/modalContext";
 
 export function SavedList({
   className = "",
@@ -7,6 +8,8 @@ export function SavedList({
   onRemoveClick,
   currentProjectId,
 }) {
+  const { openModal, closeModal } = useModal();
+
   const listItemVariants = {
     hidden: { opacity: 0, x: -50 },
     visible: (i) => ({
@@ -39,7 +42,19 @@ export function SavedList({
             </button>
             <button
               className="ml-4 text-red-500 hover:opacity-50"
-              onClick={(e) => onRemoveClick(item.id, e)}
+              onClick={() =>
+                openModal({
+                  content: (
+                    <div>Are you sure you want to delete this project?</div>
+                  ),
+                  title: "Delete Project",
+                  onSubmit: (e) => {
+                    onRemoveClick(item.id, e);
+                    closeModal();
+                  },
+                  // onSubmit: () => console.log("test"),
+                })
+              }
             >
               Delete
             </button>

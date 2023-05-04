@@ -48,6 +48,16 @@ export function Sidebar({
               <SavedList
                 savedCreations={savedCreations}
                 onProjectClick={onProjectClick}
+                // onRemoveClick={() =>
+                //   openModal({
+                //     content: (
+                //       <div>Are you sure you want to delete this project?</div>
+                //     ),
+                //     title: "Delete Project",
+                //     onSubmit: onRemoveClick,
+                //     // onSubmit: () => console.log("test"),
+                //   })
+                // }
                 onRemoveClick={onRemoveClick}
                 currentProjectId={currentProjectId}
               />
