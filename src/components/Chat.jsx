@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import { FaKey } from "react-icons/fa";
 import { signIn, useSession } from "next-auth/react";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { ChatError } from "@/components/ChatError";
@@ -12,8 +11,9 @@ import { motion } from "framer-motion";
 import { AccessChat } from "@/components/AccessChat";
 import { BsArrowsAngleExpand, BsArrowsAngleContract } from "react-icons/bs";
 import { IoSettingsOutline } from "react-icons/io5";
+import { VscChromeClose } from "react-icons/vsc";
 
-export function Chat({ messages, setMessages }) {
+export function Chat({ messages, setMessages, setIsChatOpen, isChatOpen }) {
   // chat state, handlers, and effects
   const initialPosition = { x: 0, y: 0 };
   const [isPopped, setIsPopped] = React.useState(false);
@@ -45,7 +45,7 @@ export function Chat({ messages, setMessages }) {
           isPopped
             ? "absolute bottom-[65px] right-[20px] h-[500px] w-[500px]"
             : "relative h-[50%]"
-        } z-[1000] flex transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300`}
+        } z-[1000] flex transform flex-col rounded-lg border bg-slate-100 text-slate-800  dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300`}
       >
         <>
           {!key && !session ? (
@@ -54,9 +54,9 @@ export function Chat({ messages, setMessages }) {
             </div>
           ) : (
             <>
-              <div className="ml-auto flex gap-2">
+              <div className="flex w-full justify-end gap-4 border-b p-2 dark:border-slate-500">
                 <button
-                  className="pb-4 pr-2 transition-all hover:text-blue-500"
+                  className="transition-all hover:text-blue-500"
                   onClick={() => {
                     openModal({
                       title: "API Key",
@@ -67,7 +67,7 @@ export function Chat({ messages, setMessages }) {
                   <IoSettingsOutline className="text-2xl" />
                 </button>
                 <button
-                  className="pb-4 pr-2 transition-all hover:text-blue-500"
+                  className="transition-all hover:text-blue-500"
                   onClick={() => {
                     setIsPopped(!isPopped);
                   }}
@@ -78,9 +78,17 @@ export function Chat({ messages, setMessages }) {
                     <BsArrowsAngleExpand className="text-2xl" />
                   )}
                 </button>
+                <button
+                  className="transition-all hover:text-blue-500"
+                  onClick={() => {
+                    setIsChatOpen(!isChatOpen);
+                  }}
+                >
+                  <VscChromeClose className="text-2xl transition-all hover:text-blue-500" />
+                </button>
               </div>
               {/* chat container */}
-              <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
+              <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll bg-white p-4  dark:bg-slate-700">
                 <ChatMessageList
                   messages={messages}
                   error={error}
@@ -88,7 +96,7 @@ export function Chat({ messages, setMessages }) {
                 />
               </div>
               {/* message bar */}
-              <div className="mt-4 flex w-full justify-center text-base">
+              <div className="flex w-full justify-center text-base">
                 <ChatInput
                   isLoading={isLoading}
                   sendMessage={sendMessage}
@@ -154,11 +162,11 @@ const ChatInput = ({
   if (isLoading) return <ChatLoader />;
 
   return (
-    <div className="flex w-full overflow-hidden rounded-lg border dark:border-slate-500">
+    <div className="border-b-lg flex w-full overflow-hidden rounded-b-lg border-t dark:border-slate-500">
       <textarea
         rows="1"
         type="text"
-        className="h-auto flex-1 resize-none overflow-auto  bg-white p-2 text-slate-800 outline-none dark:bg-slate-800 dark:text-slate-300"
+        className="h-auto flex-1 resize-none overflow-auto bg-white p-2 text-slate-800 outline-none dark:bg-slate-800 dark:text-slate-300"
         placeholder="Type your message..."
         value={inputValue}
         onChange={(e) => {
@@ -270,20 +278,18 @@ const ChatSettingsModal = ({ onClose }) => {
             <strong>NOTE:</strong>This key is stored in your browser and is only
             sent to OpenAI's API.
           </p>
-          {selectedOption === "user" && (
-            <div className="mt-4 flex flex-col gap-2">
-              <label htmlFor="key" className="text-sm">
-                API Key
-              </label>
-              <input
-                type="text"
-                className="w-full flex-1 rounded-lg border border-slate-300 p-2 font-normal outline-none dark:border-slate-500 dark:bg-slate-800"
-                placeholder="Enter your OpenAI API key"
-                value={inputValue}
-                onChange={handleChange}
-              />
-            </div>
-          )}
+          <div className="mt-4 flex flex-col gap-2">
+            <label htmlFor="key" className="text-sm">
+              API Key
+            </label>
+            <input
+              type="text"
+              className="w-full flex-1 rounded-lg border border-slate-300 p-2 font-normal outline-none dark:border-slate-500 dark:bg-slate-800"
+              placeholder="Enter your OpenAI API key"
+              value={inputValue}
+              onChange={handleChange}
+            />
+          </div>
         </div>
         <div className="mt-4 flex justify-end gap-4">
           {key && (

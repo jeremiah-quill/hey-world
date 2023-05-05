@@ -9,6 +9,7 @@ import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
+import { ShortcutBadge } from "@/components/ShortcutBadge";
 
 // TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
@@ -204,25 +205,25 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           <Preview />
         </div>
         {/* bottom right container */}
-        {isChatOpen && <Chat messages={messages} setMessages={setMessages} />}
+        {isChatOpen && (
+          <Chat
+            setIsChatOpen={setIsChatOpen}
+            isChatOpen={isChatOpen}
+            messages={messages}
+            setMessages={setMessages}
+          />
+        )}
         {/* floating chat button */}
         <button
-          className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md focus:outline-none dark:bg-slate-800"
+          className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md hover:bg-slate-300 focus:outline-none dark:bg-slate-700 hover:dark:bg-slate-500"
           onClick={toggleChat}
         >
-          <p className="text-muted-foreground text-lg">
+          {/* <p className="text-muted-foreground flex gap-1 text-lg">
             <ShortcutBadge /> + b
-          </p>
+          </p> */}
+          <div className="text-3xl">🤖</div>
         </button>
       </div>
     </div>
   );
 }
-
-const ShortcutBadge = () => {
-  const isBrowser = typeof window !== "undefined";
-  const isMac =
-    isBrowser && window.navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-
-  return isMac ? "⌘" : "^";
-};
