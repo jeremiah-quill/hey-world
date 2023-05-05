@@ -6,7 +6,7 @@ export const ShortcutBadge = ({ children }) => {
   // return <p className="text-muted-foreground text-lg"></p>;
 
   return (
-    <p className="text-muted-foreground flex flex gap-1 gap-1 text-lg">
+    <p className="text-muted-foreground flex gap-1 text-lg">
       {isMac ? "⌘" : "^"}
       {children}
     </p>
