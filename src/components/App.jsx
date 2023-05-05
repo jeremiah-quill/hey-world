@@ -200,7 +200,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       {/* right column */}
       <div className="flex h-full flex-1 flex-col gap-2 ">
         {/* top right container */}
-        <div className="preview h-full flex-1 overflow-hidden rounded-lg border dark:border-slate-500">
+        <div className="preview flex-1 overflow-hidden rounded-lg border dark:border-slate-500">
           <Preview />
         </div>
         {/* bottom right container */}

@@ -10,11 +10,16 @@ import { useModal } from "@/context/modalContext";
 import Draggable from "react-draggable";
 import { motion } from "framer-motion";
 import { AccessChat } from "@/components/AccessChat";
+import { BsArrowsAngleExpand, BsArrowsAngleContract } from "react-icons/bs";
+import { IoSettingsOutline } from "react-icons/io5";
 
 export function Chat({ messages, setMessages }) {
+  // chat state, handlers, and effects
+  const initialPosition = { x: 0, y: 0 };
+  const [isPopped, setIsPopped] = React.useState(false);
   const { data: session } = useSession();
   const { key } = useUserSettings();
-  // chat state, handlers, and effects
+  const { openModal, closeModal } = useModal();
   const {
     inputValue,
     handleChatInputChange,
@@ -33,17 +38,14 @@ export function Chat({ messages, setMessages }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // if (error) return <ChatError onBack={resetChat} error={error} />;
-
   return (
-    <Draggable>
+    <Draggable disabled={!isPopped} position={!isPopped && initialPosition}>
       <motion.div
-        // initial="closed"
-        // animate={{
-        //   height: isChatOpen ? 500 : 0,
-        //   width: isChatOpen ? 500 : 0,
-        // }}
-        className="absolute bottom-[65px] right-[20px] z-[1000] flex h-[500px]  w-[500px] transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300"
+        className={`${
+          isPopped
+            ? "absolute bottom-[65px] right-[20px] h-[500px] w-[500px]"
+            : "relative h-[50%]"
+        } z-[1000] flex transform flex-col rounded-lg border bg-slate-100 p-4 text-slate-800 shadow-inner dark:border-slate-500  dark:bg-slate-800 dark:text-slate-300`}
       >
         <>
           {!key && !session ? (
@@ -52,6 +54,31 @@ export function Chat({ messages, setMessages }) {
             </div>
           ) : (
             <>
+              <div className="ml-auto flex gap-2">
+                <button
+                  className="pb-4 pr-2 transition-all hover:text-blue-500"
+                  onClick={() => {
+                    openModal({
+                      title: "API Key",
+                      content: <ChatSettingsModal onClose={closeModal} />,
+                    });
+                  }}
+                >
+                  <IoSettingsOutline className="text-2xl" />
+                </button>
+                <button
+                  className="pb-4 pr-2 transition-all hover:text-blue-500"
+                  onClick={() => {
+                    setIsPopped(!isPopped);
+                  }}
+                >
+                  {isPopped ? (
+                    <BsArrowsAngleContract className="text-2xl" />
+                  ) : (
+                    <BsArrowsAngleExpand className="text-2xl" />
+                  )}
+                </button>
+              </div>
               {/* chat container */}
               <div className="relative flex max-h-full flex-1 flex-col overflow-y-scroll rounded-lg bg-white p-4 shadow-md dark:bg-slate-700">
                 <ChatMessageList
@@ -128,17 +155,6 @@ const ChatInput = ({
 
   return (
     <div className="flex w-full overflow-hidden rounded-lg border dark:border-slate-500">
-      <button
-        onClick={() =>
-          openModal({
-            title: "API Key",
-            content: <ChatSettingsModal onClose={closeModal} />,
-          })
-        }
-        className=" bg-slate-200 p-2 font-bold text-slate-800 dark:bg-slate-700 dark:text-slate-300"
-      >
-        <FaKey />
-      </button>
       <textarea
         rows="1"
         type="text"
