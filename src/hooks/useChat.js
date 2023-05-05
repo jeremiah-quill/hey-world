@@ -19,7 +19,7 @@ export const useChat = (messages, setMessages) => {
     const newMessages = [...messages, { role: "user", content: inputValue }];
     setMessages(newMessages);
 
-    const response = await fetch("/api/gpt", {
+    const response = await fetch("/api/gpt-edge", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
