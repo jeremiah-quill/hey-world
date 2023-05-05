@@ -27,6 +27,13 @@ export default function Home() {
       key={currentTemplate}
       template={editorConfigObject[currentTemplate].templateName}
       files={editorConfigObject[currentTemplate].files}
+      options={
+        currentTemplate === "HTML"
+          ? {}
+          : {
+              externalResources: ["https://cdn.tailwindcss.com"],
+            }
+      }
       customSetup={{
         dependencies: {
           "react-icons": "latest",

@@ -4,51 +4,91 @@ export default function App() {
   console.log("hey world from react");
 
   return (
-    <div className="App">
-      <header className="header">
-        <div className="hero">
-          <div className="hero-content">
-            <div className="hero-flex">
-              <div className="title-container grid-center">
-                <h1>
-                  ✌️ hey<br></br> world.
-                </h1>
-              </div>
-              <div className="feature-container grid-center">
-                <Features />
-              </div>
+    <div className="h-screen flex flex-col">
+      <header className="h-screen flex flex-col items-center justify-center bg-green-500">
+        <div className="w-full p-4">
+          <div className="flex">
+            <div className="flex-1 flex items-end justify-center">
+              <h1 className="text-white text-8xl font-black">
+                ✌️ hey
+                <br></br> world.
+              </h1>
             </div>
-            <div className="tagline">prototype UI with the help of AI</div>
+            <div className="flex-1 grid place-items-center bg-white bg-opacity-60 p-4 rounded-lg">
+              <Features />
+            </div>
+          </div>
+          <div className="text-center text-3xl font-bold mb-16 mt-8">
+            prototype UI with the help of AI
+          </div>
+          <div className="grid place-items-center">
+            <ul className="grid gap-2">
+              <li className="flex items-center justify-end gap-2">
+                <div>chatbot</div>
+                <ShortcutBadge> + b</ShortcutBadge>{" "}
+              </li>
+              <li className="flex items-center justify-end gap-2">
+                <div>menu</div>
+                <ShortcutBadge> + m</ShortcutBadge>
+              </li>
+              <li className="flex items-center justify-end gap-2">
+                <div>save</div>
+                <ShortcutBadge> + s</ShortcutBadge>
+              </li>
+            </ul>
           </div>
         </div>
       </header>
-          <Hands />
+      <Hands />
     </div>
   );
 }
 
 function Features() {
   return (
-    <ul className="features">
+    <ul className="grid gap-2 text-lg font-bold">
       <li>✅ lightweight browser editor + preview</li>
-      <li className="prettier-li">
+      <li className="flex items-center space-x-2">
         <div>✅ prettier formatting</div>
-        <ShortcutBadge />
       </li>
       <li>✅ save, update, & delete snippets</li>
       <li>✅ react + html templates</li>
       <li>✅ ai chatbot</li>
       <li>
-        🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a>
+        🚀{" "}
+        <a
+          href="https://hey-world.dev/feature-roadmap"
+          className="hover:opacity-50"
+        >
+          feature roadmap
+        </a>
       </li>
       <li>
-        🐛 <a href="https://hey-world.dev/bug-report">report a bug</a>
+        🐛{" "}
+        <a href="https://hey-world.dev/bug-report" className="hover:opacity-50">
+          report a bug
+        </a>
       </li>
     </ul>
   );
 }
 
-const ShortcutBadge = () => {
+function Hands() {
+  return (
+    <>
+      <div className="text-3xl font-bold fixed bottom-4 left-2 flex items-center space-x-2">
+        <div className="hand">👈</div>
+        <h2>tinker</h2>
+      </div>
+      <div className="text-3xl font-bold fixed bottom-4 right-[75px] flex items-center space-x-2">
+        <h2>chat</h2>
+        <div className="hand">👉</div>
+      </div>
+    </>
+  );
+}
+
+function ShortcutBadge({ children }) {
   const isBrowser = typeof window !== "undefined";
   const isMac = isBrowser
     ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
@@ -56,252 +96,88 @@ const ShortcutBadge = () => {
 
   const cmdEmoji = "⌘";
   const ctrlEmoji = "⌃";
-  const sEmoji = "🇸";
 
   const shortcut = isMac ? cmdEmoji : ctrlEmoji;
 
   return (
-    <>
-      (<span className="shortcut-style">{shortcut}</span>
-      <span>+</span>
-      <span className="shortcut-style">s</span>)
-    </>
-  );
-};
-
-function Hands() {
-  return (
-    <>
-      <div className="hand-line hand-line-1">
-        <div className="hand-1">👈</div>
-        <h2>tinker</h2>
-      </div>
-      <div className="hand-line hand-line-2">
-      <h2>chat</h2> <div className="hand-2">👉</div> 
-      </div>
-    </>
+    <div className="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center">
+      {shortcut}
+      {children}
+    </div>
   );
 }
 `;
 
 export const defaultHtml = `
+<html>
   <head>
     <link rel="stylesheet" href="/styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="App">
-      <header class="header">
-        <div class="hero">
-          <div class="hero-content">
-            <div class="hero-flex">
-              <div class="title-container grid-center">
-                <h1>
-                  ✌️ hey
-                  <br /> world.
-                </h1>
-              </div>
-              <div class="feature-container grid-center">
-                <ul class="features">
-                  <li>✅ lightweight browser editor + preview</li>
-                  <li class="prettier-li">
-                    ✅ prettier formatting <span id="format-shortcut"></span>
-                  </li>
-                  <li>✅ save, update, & delete snippets</li>
-                  <li>✅ react + html templates</li>
-                  <li>✅ ai chatbot</li>
-                  <li>
-                    🚀
-                    <a href="https://hey-world.dev/feature-roadmap">
-                      feature roadmap
-                    </a>
-                  </li>
-                  <li>
-                    🐛
-                    <a href="https://hey-world.dev/bug-report">report a bug</a>
-                  </li>
-                </ul>
-              </div>
+  <body class="w-full">
+    <div class="h-full w-full flex flex-col">
+      <header class="h-screen flex flex-col items-center justify-center bg-green-500">
+        <div class="space-y-8 w-full p-4">
+          <div class="flex">
+            <div class="flex-1 grid place-items-center">
+              <h1 class="text-white text-8xl font-black">
+                ✌️ hey
+                <br /> world.
+              </h1>
             </div>
-            <div class="tagline">prototype UI with the help of AI</div>
+            <div class="flex-1 grid place-items-center bg-white bg-opacity-60 p-4 rounded-lg">
+              <ul class="grid gap-2 text-lg font-bold">
+                <li>✅ lightweight browser editor + preview</li>
+                <li class="flex items-center space-x-2">
+                  <div>✅ prettier formatting</div>
+                </li>
+                <li>✅ save, update, & delete snippets</li>
+                <li>✅ react + html templates</li>
+                <li>✅ ai chatbot</li>
+                <li>
+                  🚀
+                  <a
+                    href="https://hey-world.dev/feature-roadmap"
+                    class="hover:opacity-50"
+                  >
+                    feature roadmap
+                  </a>
+                </li>
+                <li>
+                  🐛
+                  <a
+                    href="https://hey-world.dev/bug-report"
+                    class="hover:opacity-50"
+                  >
+                    report a bug
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="text-center text-3xl font-bold">
+            prototype UI with the help of AI
           </div>
         </div>
       </header>
-        <div class="hand-line hand-line-1">
-          <div class="hand-1">👈</div>
-          <h2>tinker</h2>
-        </div>
-        <div class="hand-line hand-line-2">
-        <h2>chat</h2> <div class="hand-2">👉</div> 
-        </div>
+      <div class="text-3xl font-bold fixed bottom-4 left-2 flex items-center space-x-2">
+        <div class="text-4xl hand">👈</div>
+        <h2 class="font-bold">tinker</h2>
+      </div>
+      <div class="text-3xl font-bold fixed bottom-4 right-[75px] flex items-center space-x-2">
+        <h2 class="font-bold">chat</h2>
+        <div class="text-4xl hand">👉</div>
+      </div>
     </div>
     <script src="./app.js"></script>
   </body>
+</html>;
 `;
-export const defaultCss = `/* globals */
-* {
-  box-sizing: border-box;
-}
-#root {
-  position: absolute;
-  inset: 0;
-}
-html, body {
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-}
-li, ul {
-  margin: 0px;
-  padding: 0px;
-  list-style: none;
-  font-weight: inherit;
-}
-
-/* layout */
-body {
-  display: flex;
-  flex-direction: column;
-  font-family: system-ui;
-  align-items: center;
-  justify-content: center;
-}
-.App {
-  height : 100vh;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-main {
-  display: flex;
-  width: 100%;
-  padding: 0rem 1rem;
-  flex: 1;
-}
-.hand-line-1 {
-  position: fixed;
-  bottom: 0px;
-  left: 10px;
-  z-index: 100;
-}
-
-.hand-line-2 {
-  position: fixed;
-  bottom: 0px;
-  right: 70px;
-  z-index: 100;
-}
-
-/* title */
-.header h1 {
-  color: white; 
-  color: #fff; 
-  margin: 0px;
-  font-weight: 900;
-  font-size: 100px;
-  text-align: center;
-  padding: 1rem;
-  height: 100%;
-  text-align: end;
-}
-.hero {
-  height: 100vh;
-  place-items: center;
-  display: grid;
-  background-color: #4CAF50; 
-  gap: 1rem;
-}
-.hero-content {
-  width: 100%;
-  display: grid;
-  gap: 2rem;
-}
-.hero-flex {
-  display: flex;
-}
-.grid-center {
-  display: grid;
-  place-items: center;
-}
-.tagline {
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: bold;
-}
-
-.title-container {
-  flex: 1;
-}
-.feature-container {
-  flex: 1;
-  flex: 1;
-  background: #ffffff99;
-  padding: 1rem;
-  margin-right: 1rem;
-  border-radius: 8px;
-}
-
-.arrow-container {
-  text-align: center;
-  position: absolute;
-  bottom: 25px;
-}
-.arrow-container span {
-  font-size: 25px;
-}
-
-/* intro */
-.intro {
-  display: grid;
-  place-items: center;
-  flex: 1;
-  border-radius: 4px;
-  padding: 1rem
-}
-
-/* github */
-.github-icon img {
-  width: 40px;
-}
-.github-container {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-}
-
-/* features */
-.features {
-  display: grid;
-  gap: .5rem;
-  font-size: 1rem;
-}
-.features p {
-  font-weight: bold;
-  margin: 0px;
-  text-align: left;
-}
-
-/* hands */
-.hand-line {
-  display: flex; 
-  gap: .5rem;
-  align-items: center;
-}
-.hands h2 {
-  display: flex;
-  gap: .5rem;
-  margin: 0px;
-  font-weight: bold;
-}
-.hand-1 { 
+export const defaultCss = `
+.hand { 
   animation: horizontal 1s ease-in-out infinite; 
-  font-size: 2rem;
-}
-.hand-2 { 
-  animation: horizontal 1s ease-in-out infinite; 
-  font-size: 2rem;
 }
 
-/* animations */
 @keyframes horizontal { 
   0% { 
     transform: translateX(0); 
@@ -313,85 +189,9 @@ main {
     transform: translateX(0); 
   } 
 }
-@keyframes vertical { 
-  0% { 
-    transform: translateY(0); 
-  } 
-  50% { 
-    transform: translateY(5px); 
-  } 
-  100% { 
-    transform: translateY(0); 
-  } 
-}
-
-.features li {
-  font-weight: bold;
-}
-
-.features a {
-  color: inherit;
-}
-.features a:hover {
-  opacity: 50%;
-}
-
-.prettier-li {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  font-weight: bold;
-}
-
-.shortcut-container {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  gap: .5rem;
-}
-
-.shortcut-style {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 21px;
-  width: 21px;
-  border-radius: 4px;
-  background-color: #eee;
-  font-size: 1rem;
-}
-
-#format-shortcut {
-  display: flex;
-  align-items: center;
-  gap: .5rem;
-  font-weight: bold;
-}
 `;
 
 export const defaultJs = `console.log("hey world from vanilla js.");
-
-function setFormatShortcut() {
-  const isBrowser = typeof window !== "undefined";
-  const isMac = isBrowser
-    ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
-    : false;
-
-  const cmdEmoji = "⌘";
-  const ctrlEmoji = "⌃";
-
-  const shortcut = isMac ? cmdEmoji : ctrlEmoji;
-  const shortcutElement = document.getElementById("format-shortcut");
-
-  shortcutElement.innerHTML =
-    '(<span class="shortcut-style">' +
-    shortcut +
-    "</span>" +
-    "<span>+</span>" +
-    '<span class="shortcut-style">s</span>)';
-}
-
-setFormatShortcut();
 `;
 
 import { FaReact, FaHtml5 } from "react-icons/fa";
