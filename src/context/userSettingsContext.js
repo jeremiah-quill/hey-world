@@ -9,8 +9,6 @@ export function useUserSettings() {
 }
 
 export function UserSettingsProvider({ children }) {
-  const { data: session } = useSession();
-
   const [key, setKey] = useState(() => {
     if (typeof window === "undefined") {
       // Return default settings if running on the server-side

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 import { SandpackProvider } from "@codesandbox/sandpack-react";
-import { getSession } from "next-auth/react";
 
 import { App } from "@/components/App";
 import { useUserSettings } from "@/context/userSettingsContext";

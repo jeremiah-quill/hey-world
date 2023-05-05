@@ -7,21 +7,22 @@ export default function App() {
     <div className="App">
       <header className="header">
         <div className="hero">
-          <div className="title-container">
-            <h1>
-              ✌️ hey<br></br> world.
-            </h1>
-          </div>
-          <div className="feature-container">
-            <Features />
+          <div className="hero-content">
+            <div className="hero-flex">
+              <div className="title-container grid-center">
+                <h1>
+                  ✌️ hey<br></br> world.
+                </h1>
+              </div>
+              <div className="feature-container grid-center">
+                <Features />
+              </div>
+            </div>
+            <div className="tagline">prototype UI with the help of AI</div>
           </div>
         </div>
       </header>
-      <main>
-        <div className="hands-container">
           <Hands />
-        </div>
-      </main>
     </div>
   );
 }
@@ -76,55 +77,65 @@ function Hands() {
         <h2>tinker</h2>
       </div>
       <div className="hand-line hand-line-2">
-        <div className="hand-2">👇</div> <h2>chat</h2>
+      <h2>chat</h2> <div className="hand-2">👉</div> 
       </div>
     </>
   );
 }
 `;
 
-export const defaultHtml = `<html>
+export const defaultHtml = `
   <head>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <div class="App">
-    <header class="header">
-    <div class="hero">
-        <div class="title-container">
-          <h1>✌️ hey<br> world.</h1>
-        </div>
-        <div class="feature-container">
-          <ul class="features">
-            <li>✅ lightweight browser editor + preview</li>
-            <li class="prettier-li">
-              ✅ prettier formatting <span id="format-shortcut"></span>
-            </li>
-            <li>✅ save, update, & delete snippets</li>
-            <li>✅ react + html templates</li>
-            <li>✅ ai chatbot</li>
-            <li>🚀 <a href="https://hey-world.dev/feature-roadmap">feature roadmap</a></li>
-            <li>🐛 <a href="https://hey-world.dev/bug-report">report a bug</a></li>
-          </ul>
-        </div>
-    </div>
-    <div>test</div>
-  </header>
-      <main>
-        <div class="hands">
-          <div class="hand-line hand-line-1">
-            <div class="hand-1">👈</div>
-            <h2>tinker</h2>
+      <header class="header">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="hero-flex">
+              <div class="title-container grid-center">
+                <h1>
+                  ✌️ hey
+                  <br /> world.
+                </h1>
+              </div>
+              <div class="feature-container grid-center">
+                <ul class="features">
+                  <li>✅ lightweight browser editor + preview</li>
+                  <li class="prettier-li">
+                    ✅ prettier formatting <span id="format-shortcut"></span>
+                  </li>
+                  <li>✅ save, update, & delete snippets</li>
+                  <li>✅ react + html templates</li>
+                  <li>✅ ai chatbot</li>
+                  <li>
+                    🚀
+                    <a href="https://hey-world.dev/feature-roadmap">
+                      feature roadmap
+                    </a>
+                  </li>
+                  <li>
+                    🐛
+                    <a href="https://hey-world.dev/bug-report">report a bug</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="tagline">prototype UI with the help of AI</div>
           </div>
-          <div class="hand-line hand-line-2">
-            <div class="hand-2">👇</div> <h2>chat</h2>
-          </div>
         </div>
-      </main>
+      </header>
+        <div class="hand-line hand-line-1">
+          <div class="hand-1">👈</div>
+          <h2>tinker</h2>
+        </div>
+        <div class="hand-line hand-line-2">
+        <h2>chat</h2> <div class="hand-2">👉</div> 
+        </div>
     </div>
     <script src="./app.js"></script>
   </body>
-</html>
 `;
 export const defaultCss = `/* globals */
 * {
@@ -168,16 +179,15 @@ main {
 }
 .hand-line-1 {
   position: fixed;
-  width: 100%;
-  bottom: 10px;
+  bottom: 0px;
   left: 10px;
   z-index: 100;
 }
 
 .hand-line-2 {
   position: fixed;
-  bottom: 50px;
-  right: 15px;
+  bottom: 0px;
+  right: 70px;
   z-index: 100;
 }
 
@@ -198,8 +208,24 @@ main {
   place-items: center;
   display: grid;
   background-color: #4CAF50; 
-  display: flex;
   gap: 1rem;
+}
+.hero-content {
+  width: 100%;
+  display: grid;
+  gap: 2rem;
+}
+.hero-flex {
+  display: flex;
+}
+.grid-center {
+  display: grid;
+  place-items: center;
+}
+.tagline {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .title-container {
@@ -271,7 +297,7 @@ main {
   font-size: 2rem;
 }
 .hand-2 { 
-  animation: vertical 1s ease-in-out infinite; 
+  animation: horizontal 1s ease-in-out infinite; 
   font-size: 2rem;
 }
 
