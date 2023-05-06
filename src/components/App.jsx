@@ -10,6 +10,7 @@ import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { CurrentProjectBar } from "@/components/CurrentProjectBar";
 import { ShortcutBadge } from "@/components/ShortcutBadge";
+import { FileMenuBar } from "@/components/FileMenuBar";
 
 // TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
@@ -183,7 +184,20 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       {/* left column */}
       <div className="relative grid flex-1">
         <Editor>
-          <CurrentProjectBar
+          {/* <CurrentProjectBar
+            projectTitleInputValue={projectTitleInputValue}
+            setProjectTitleInputValue={setProjectTitleInputValue}
+            saveProject={saveProject}
+            currentProject={memoizedCurrentProject}
+            isTemplatePickerOpen={isTemplatePickerOpen}
+            toggleTemplatePicker={toggleTemplatePicker}
+            currentTemplate={currentTemplate}
+            setIsTemplatePickerOpen={setIsTemplatePickerOpen}
+            editorConfigObject={editorConfigObject}
+            setCurrentTemplate={setCurrentTemplate}
+            resetProject={resetProject}
+          /> */}
+          <FileMenuBar
             projectTitleInputValue={projectTitleInputValue}
             setProjectTitleInputValue={setProjectTitleInputValue}
             saveProject={saveProject}
