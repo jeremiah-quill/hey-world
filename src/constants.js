@@ -19,9 +19,9 @@ export default function App() {
             </div>
           </div>
           <div className="text-center text-3xl font-bold mb-16 mt-8">
-            prototype UI with the help of AI
+          build <span className="bg-white bg-opacity-60 p-1 rounded">UI</span> with the help of <span className="bg-white bg-opacity-60 p-1 rounded">AI</span>
           </div>
-          <div className="grid place-items-center">
+          <div className="grid place-items-center opacity-60 absolute right-3 bottom-20">
             <ul className="grid gap-2">
               <li className="flex items-center justify-end gap-2">
                 <div>chatbot</div>
@@ -156,9 +156,9 @@ export const defaultHtml = `
             </div>
           </div>
           <div class="text-center text-3xl font-bold  mb-16 mt-8">
-            prototype UI with the help of AI
+          build <span class="bg-white bg-opacity-60 p-1 rounded">UI</span> with the help of <span class="bg-white bg-opacity-60 p-1 rounded">AI</span>
           </div>
-          <div class="grid place-items-center">
+          <div class="grid place-items-center opacity-60 absolute right-3 bottom-20">
           <ul class="grid gap-2">
             <li class="flex items-center justify-end gap-2">
               <div>chatbot</div>
