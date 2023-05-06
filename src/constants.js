@@ -109,14 +109,14 @@ function ShortcutBadge({ children }) {
 `;
 
 export const defaultHtml = `
-<html>
+<html style="height: 100%">
   <head>
     <link rel="stylesheet" href="/styles.css" />
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body class="w-full">
-    <div class="h-screen flex flex-col">
-      <header class="h-screen flex flex-col items-center justify-center bg-green-500">
+  <body class="w-full h-full">
+    <div class="h-full">
+      <header class="h-full flex flex-col items-center justify-center bg-green-500">
         <div class="w-full p-4">
           <div class="flex">
             <div class="flex-1 flex items-end justify-center">
@@ -187,7 +187,7 @@ export const defaultHtml = `
     </div>
     <script src="./app.js"></script>
   </body>
-</html>;
+</html>
 `;
 export const defaultCss = `
 .hand { 
