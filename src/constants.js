@@ -115,11 +115,11 @@ export const defaultHtml = `
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="w-full">
-    <div class="h-full w-full flex flex-col">
+    <div class="h-screen flex flex-col">
       <header class="h-screen flex flex-col items-center justify-center bg-green-500">
-        <div class="space-y-8 w-full p-4">
+        <div class="w-full p-4">
           <div class="flex">
-            <div class="flex-1 grid place-items-center">
+            <div class="flex-1 flex items-end justify-center">
               <h1 class="text-white text-8xl font-black">
                 ✌️ hey
                 <br /> world.
@@ -155,9 +155,25 @@ export const defaultHtml = `
               </ul>
             </div>
           </div>
-          <div class="text-center text-3xl font-bold">
+          <div class="text-center text-3xl font-bold  mb-16 mt-8">
             prototype UI with the help of AI
           </div>
+          <div class="grid place-items-center">
+          <ul class="grid gap-2">
+            <li class="flex items-center justify-end gap-2">
+              <div>chatbot</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + b</span></div>
+            </li>
+            <li class="flex items-center justify-end gap-2">
+              <div>menu</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + m</span></div>
+            </li>
+            <li class="flex items-center justify-end gap-2">
+              <div>format/save</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + s</span></div>
+            </li>
+          </ul>
+        </div>
         </div>
       </header>
       <div class="text-3xl font-bold fixed bottom-4 left-2 flex items-center space-x-2">
@@ -192,6 +208,25 @@ export const defaultCss = `
 `;
 
 export const defaultJs = `console.log("hey world from vanilla js.");
+function getShortcuts() {
+  const isBrowser = typeof window !== "undefined";
+  const isMac = isBrowser
+    ? navigator.platform.toUpperCase().indexOf("MAC") >= 0
+    : false;
+
+  const cmdEmoji = "⌘";
+  const ctrlEmoji = "⌃";
+
+  const userShortcut = isMac ? cmdEmoji : ctrlEmoji;
+  const shortcutElement = document.getElementById("format-shortcut");
+  const shortcuts = Array.from(document.querySelectorAll(".shortcut"))
+  
+  shortcuts.forEach(shortcut => shortcut.innerHTML = userShortcut)
+}
+
+
+getShortcuts();
+
 `;
 
 import { FaReact, FaHtml5 } from "react-icons/fa";
