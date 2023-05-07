@@ -169,7 +169,28 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
 
-  const shortcutBage = () => {};
+  const menuItems = [
+    {
+      title: "File",
+      options: [
+        {
+          name: "New",
+          shortcut: "Cmd+N",
+          onClick: () => saveProject(memoizedCurrentProject),
+        },
+        {
+          name: "Save",
+          shortcut: "Cmd+S",
+          onClick: () => saveProject(memoizedCurrentProject),
+        },
+        {
+          name: "Save As",
+          shortcut: "Cmd+Shift+S",
+          onClick: () => console.log("save as"),
+        },
+      ],
+    },
+  ];
 
   return (
     <div className="flex h-screen w-full gap-2 p-2 transition-all dark:bg-slate-800">
@@ -209,6 +230,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
             editorConfigObject={editorConfigObject}
             setCurrentTemplate={setCurrentTemplate}
             resetProject={resetProject}
+            menuItems={menuItems}
           />
         </Editor>
       </div>

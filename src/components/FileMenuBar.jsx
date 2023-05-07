@@ -2,22 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { RxCaretDown } from "react-icons/rx";
 
-const menuItems = [
-  {
-    title: "File",
-    options: [
-      { name: "New", shortcut: "Cmd+N", onClick: () => console.log("new") },
-      { name: "Save", shortcut: "Cmd+S", onClick: () => console.log("save") },
-      {
-        name: "Save As",
-        shortcut: "Cmd+Shift+S",
-        onClick: () => console.log("save as"),
-      },
-    ],
-  },
-];
-
 export function FileMenuBar({
+  menuItems,
   projectTitleInputValue,
   setProjectTitleInputValue,
   saveProject,
