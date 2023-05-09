@@ -8,8 +8,6 @@ import { Chat } from "@/components/Chat";
 import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
-import { CurrentProjectBar } from "@/components/CurrentProjectBar";
-import { ShortcutBadge } from "@/components/ShortcutBadge";
 import { FileMenuBar } from "@/components/FileMenuBar";
 
 // TODO: extract logic to custom hook
@@ -18,7 +16,8 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
 
   // project state
-  const [projectTitleInputValue, setProjectTitleInputValue] = useState("");
+  const [projectTitleInputValue, setProjectTitleInputValue] =
+    useState("untitled");
   const [currentProjectId, setCurrentProjectId] = useState(null);
   const [savedCreations, setSavedCreations] = useState([]);
 
@@ -41,23 +40,61 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     setIsChatOpen(!isChatOpen);
   };
 
-  const chatContainerVariants = {
-    open: { height: "500px", width: "500px" },
-    closed: {
-      height: "0px",
-      width: "0px",
-    },
+  const saveAs = () => {
+    // create new project
+    const id = uuid();
+    const project = {
+      templateName: currentTemplate,
+      id: id,
+      code: sandpack.files,
+      name: projectTitleInputValue,
+    };
+
+    // update state
+    setSavedCreations((prevCreations) => {
+      return [...prevCreations, project];
+    });
+
+    setCurrentProjectId(id);
+
+    // sync with local storage
+    const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
+    currentProjects.push(project);
+    localStorage.setItem("projects", JSON.stringify(currentProjects));
   };
 
-  const resetProject = () => {
-    setCurrentProjectId(null);
-    setProjectTitleInputValue("");
-    sandpack.resetAllFiles();
+  const newProject = () => {
+    setProjectTitleInputValue("untitled");
+    // save existing project
+    if (currentProjectId) {
+      saveProject();
+    }
+
+    // create new project
+    const id = uuid();
+    const project = {
+      templateName: currentTemplate,
+      id: id,
+      code: sandpack.files,
+      name: projectTitleInputValue, // TODO: add name input
+    };
+
+    // update state
+    setSavedCreations((prevCreations) => {
+      return [...prevCreations, project];
+    });
+
+    setCurrentProjectId(id);
+
+    // sync with local storage
+    const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
+    currentProjects.push(project);
+    localStorage.setItem("projects", JSON.stringify(currentProjects));
   };
 
   // project CRUD
-  const saveProject = (currentProject = null) => {
-    if (!currentProject) {
+  const saveProject = () => {
+    if (!currentProjectId) {
       const id = uuid();
       const project = {
         templateName: currentTemplate,
@@ -80,14 +117,16 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       localStorage.setItem("projects", JSON.stringify(currentProjects));
     } else {
       const updatedProjects = savedCreations.map((creation) => {
-        if (creation.id === currentProject.id) {
-          return {
+        if (creation.id === currentProjectId) {
+          const updatedCreation = {
             ...creation,
             code: sandpack.files,
             name: projectTitleInputValue,
           };
+          return updatedCreation;
+        } else {
+          return creation;
         }
-        return creation;
       });
       setSavedCreations(updatedProjects);
       localStorage.setItem("projects", JSON.stringify(updatedProjects));
@@ -117,6 +156,7 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     if (!project) return;
     setCurrentTemplate(project.templateName);
     setCurrentProjectId(project.id);
+    setProjectTitleInputValue(project.name);
     sandpack.updateFile(project.code);
   };
 
@@ -169,6 +209,43 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     return savedCreations.find((creation) => creation.id === currentProjectId);
   }, [currentProjectId, savedCreations]);
 
+  // SAVE
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+        // console.log("in save regular");
+        e.preventDefault();
+
+        if (e.shiftKey) {
+          // console.log("in save as");
+          saveAs();
+        } else {
+          saveProject();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [currentProjectId, projectTitleInputValue, saveProject]);
+
+  // NEW
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "n") {
+        e.preventDefault();
+        newProject();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [currentProjectId, projectTitleInputValue, saveProject]);
+
   const menuItems = [
     {
       title: "File",
@@ -181,12 +258,12 @@ export function App({ currentTemplate, setCurrentTemplate }) {
         {
           name: "Save",
           shortcut: "Cmd+S",
-          onClick: () => saveProject(memoizedCurrentProject),
+          onClick: () => saveProject(currentProjectId),
         },
         {
           name: "Save As",
           shortcut: "Cmd+Shift+S",
-          onClick: () => console.log("save as"),
+          onClick: () => saveProject(),
         },
       ],
     },
@@ -205,19 +282,6 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       {/* left column */}
       <div className="relative grid flex-1">
         <Editor>
-          {/* <CurrentProjectBar
-            projectTitleInputValue={projectTitleInputValue}
-            setProjectTitleInputValue={setProjectTitleInputValue}
-            saveProject={saveProject}
-            currentProject={memoizedCurrentProject}
-            isTemplatePickerOpen={isTemplatePickerOpen}
-            toggleTemplatePicker={toggleTemplatePicker}
-            currentTemplate={currentTemplate}
-            setIsTemplatePickerOpen={setIsTemplatePickerOpen}
-            editorConfigObject={editorConfigObject}
-            setCurrentTemplate={setCurrentTemplate}
-            resetProject={resetProject}
-          /> */}
           <FileMenuBar
             projectTitleInputValue={projectTitleInputValue}
             setProjectTitleInputValue={setProjectTitleInputValue}
@@ -229,7 +293,6 @@ export function App({ currentTemplate, setCurrentTemplate }) {
             setIsTemplatePickerOpen={setIsTemplatePickerOpen}
             editorConfigObject={editorConfigObject}
             setCurrentTemplate={setCurrentTemplate}
-            resetProject={resetProject}
             menuItems={menuItems}
           />
         </Editor>
@@ -254,9 +317,6 @@ export function App({ currentTemplate, setCurrentTemplate }) {
           className="absolute bottom-[20px] right-[20px] z-[999]  rounded-full bg-white px-3 py-1 shadow-md hover:bg-slate-300 focus:outline-none dark:bg-slate-700 hover:dark:bg-slate-500"
           onClick={toggleChat}
         >
-          {/* <p className="text-muted-foreground flex gap-1 text-lg">
-            <ShortcutBadge /> + b
-          </p> */}
           <div className="text-3xl">🤖</div>
         </button>
       </div>

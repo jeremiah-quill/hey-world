@@ -14,7 +14,7 @@ export function FileMenuBar({
   setCurrentTemplate,
   setIsTemplatePickerOpen,
   currentProject,
-  resetProject,
+  // resetProject,
 }) {
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -64,19 +64,20 @@ export function FileMenuBar({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    saveProject(currentProject);
+    saveProject(currentProject.id);
   };
 
-  useEffect(() => {
-    if (currentProject) {
-      setProjectTitleInputValue(currentProject.name);
-    } else {
-      setProjectTitleInputValue("");
-    }
-  }, [currentProject]);
+  // useEffect(() => {
+  //   console.log("currentProject", currentProject);
+  //   if (currentProject) {
+  //     setProjectTitleInputValue(currentProject.name);
+  //   } else {
+  //     setProjectTitleInputValue("untitled");
+  //   }
+  // }, [currentProject]);
 
   return (
-    <div className="flex items-stretch justify-start border-b bg-gray-100 text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
+    <div className="flex items-stretch justify-between border-b bg-gray-100 text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
       {menuItems.map((menu, index) => (
         <div key={index} className="relative">
           <div
@@ -118,7 +119,21 @@ export function FileMenuBar({
           </div>
         </div>
       ))}
-      <div className="relative z-10 ml-auto h-full" ref={dropdownRef}>
+      <form className="h-full">
+        <input
+          required={true}
+          className="h-full border-slate-300 p-2 outline-none dark:bg-slate-700"
+          value={projectTitleInputValue}
+          onChange={(e) => setProjectTitleInputValue(e.target.value)}
+          placeholder="Name your snippet"
+        />
+        {/* <input
+          className="ml-2 cursor-pointer hover:opacity-50"
+          type="submit"
+          value={currentProject ? "Save" : "Add"}
+        /> */}
+      </form>
+      <div className="relative z-10 h-full" ref={dropdownRef}>
         <button
           onClick={toggleTemplatePicker}
           className="flex h-full items-center gap-2 px-4 text-slate-800 hover:bg-slate-300 focus:outline-none dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
@@ -162,24 +177,4 @@ export function FileMenuBar({
       </div>
     </div>
   );
-}
-
-{
-  /* <form onSubmit={handleSubmit}>
-<input
-  required={true}
-  className="rounded border-slate-300 p-1 outline-none dark:bg-slate-700"
-  value={projectTitleInputValue || ""}
-  onChange={(e) => setProjectTitleInputValue(e.target.value)}
-  placeholder="Landing page"
-/>
-<input
-  className="ml-2 cursor-pointer hover:opacity-50"
-  type="submit"
-  value={currentProject ? "Save" : "Add"}
-/>
-</form>
-<button className="hover:opacity-50" onClick={resetProject}>
-Start fresh
-</button> */
 }

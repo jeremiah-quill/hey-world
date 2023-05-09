@@ -19,7 +19,9 @@ export default function App() {
             </div>
           </div>
           <div className="text-center text-3xl font-bold mb-16 mt-8">
-          build <span className="bg-white bg-opacity-60 p-1 rounded">UI</span> with the help of <span className="bg-white bg-opacity-60 p-1 rounded">AI</span>
+            build <span className="bg-white bg-opacity-60 p-1 rounded">UI</span>{" "}
+            with the help of{" "}
+            <span className="bg-white bg-opacity-60 p-1 rounded">AI</span>
           </div>
           <div className="grid place-items-center opacity-60 absolute right-3 bottom-20">
             <ul className="grid gap-2">
@@ -34,6 +36,18 @@ export default function App() {
               <li className="flex items-center justify-end gap-2">
                 <div>save</div>
                 <ShortcutBadge> + s</ShortcutBadge>
+              </li>
+              <li className="flex items-center justify-end gap-2">
+                <div>save as</div>
+                <ShortcutBadge> + ^ + s</ShortcutBadge>
+              </li>
+              <li className="flex items-center justify-end gap-2">
+                <div>new</div>
+                <ShortcutBadge> + n</ShortcutBadge>
+              </li>
+              <li className="flex items-center justify-end gap-2">
+                <div>format</div>
+                <ShortcutBadge> + p</ShortcutBadge>
               </li>
             </ul>
           </div>
@@ -100,7 +114,7 @@ function ShortcutBadge({ children }) {
   const shortcut = isMac ? cmdEmoji : ctrlEmoji;
 
   return (
-    <div className="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center">
+    <div className="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center">
       {shortcut}
       {children}
     </div>
@@ -162,15 +176,27 @@ export const defaultHtml = `
           <ul class="grid gap-2">
             <li class="flex items-center justify-end gap-2">
               <div>chatbot</div>
-              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + b</span></div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + b</span></div>
             </li>
             <li class="flex items-center justify-end gap-2">
               <div>menu</div>
-              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + m</span></div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + m</span></div>
             </li>
             <li class="flex items-center justify-end gap-2">
-              <div>format/save</div>
-              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[75px] flex justify-center"><span class="shortcut"></span> + s</span></div>
+              <div>save</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + s</span></div>
+            </li>
+            <li class="flex items-center justify-end gap-2">
+              <div>save as</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + ^ + s</span></div>
+            </li>
+            <li class="flex items-center justify-end gap-2">
+              <div>new</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + n</span></div>
+            </li>
+            <li class="flex items-center justify-end gap-2">
+              <div>format</div>
+              <div class="rounded-full bg-white px-3 py-1 shadow-md w-[100px] flex justify-center"><span class="shortcut"></span> + p</span></div>
             </li>
           </ul>
         </div>

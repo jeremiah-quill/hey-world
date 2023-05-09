@@ -70,7 +70,7 @@ const ActivatePrettier = ({ codemirrorInstance }) => {
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+      if ((e.metaKey || e.ctrlKey) && e.key === "p") {
         e.preventDefault();
         formatCode();
       }
