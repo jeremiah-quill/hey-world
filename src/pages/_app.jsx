@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { UserSettingsProvider } from "@/context/userSettingsContext";
 import { ToastProvider } from "@/context/toastContext";
 import { ModalProvider } from "@/context/modalContext";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App({
   Component,
@@ -27,6 +28,7 @@ export default function App({
           </ToastProvider>
         </UserSettingsProvider>
       </SessionProvider>
+      <Analytics />
     </>
   );
 }
