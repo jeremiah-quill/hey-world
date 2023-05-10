@@ -6,17 +6,6 @@ import { App } from "@/components/App";
 import { useUserSettings } from "@/context/userSettingsContext";
 import { editorConfigObject } from "@/constants";
 
-// get the OpenAI API key from the environment variables or return null
-// export async function getServerSideProps({ context }) {
-//   const session = await getSession(context);
-
-//   return {
-//     props: {
-//       serverKey: session ? process.env.OPENAI_API_KEY : null,
-//     },
-//   };
-// }
-
 export default function Home() {
   const { userSettings } = useUserSettings();
   const [currentTemplate, setCurrentTemplate] = useState("React"); // TODO: review this, but I think I like it

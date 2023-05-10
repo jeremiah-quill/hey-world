@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useUserSettings } from "@/context/userSettingsContext";
 
-export const useChat = (messages, setMessages) => {
+export const useChat = ({ messages, setMessages }) => {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
 
   const { userSettings, key } = useUserSettings();

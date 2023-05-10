@@ -28,7 +28,7 @@ export function Chat({ messages, setMessages, setIsChatOpen, isChatOpen }) {
     error,
     sendMessage,
     resetChat,
-  } = useChat(messages, setMessages);
+  } = useChat({ messages, setMessages });
 
   // refs
   const messagesEndRef = useRef(null);
