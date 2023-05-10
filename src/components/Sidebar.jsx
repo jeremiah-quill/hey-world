@@ -13,10 +13,10 @@ import { useModal } from "@/context/modalContext";
 export function Sidebar({
   isMenuOpen,
   toggleMenu,
-  savedCreations = [],
-  onProjectClick,
+  savedSnippets = [],
+  onSnippetClick,
   onRemoveClick,
-  currentProjectId,
+  currentSnippetId,
 }) {
   const { openModal } = useModal();
   const { data: session } = useSession();
@@ -44,15 +44,15 @@ export function Sidebar({
       >
         {isMenuOpen && (
           <div className="flex-1 overflow-y-auto">
-            {savedCreations?.length > 0 ? (
+            {savedSnippets?.length > 0 ? (
               <SavedList
-                savedCreations={savedCreations}
-                onProjectClick={onProjectClick}
+                savedSnippets={savedSnippets}
+                onSnippetClick={onSnippetClick}
                 onRemoveClick={onRemoveClick}
-                currentProjectId={currentProjectId}
+                currentSnippetId={currentSnippetId}
               />
             ) : (
-              <div className="p-4 font-extrabold">No saved creations.</div>
+              <div className="p-4 font-extrabold">No saved snippets.</div>
             )}
           </div>
         )}

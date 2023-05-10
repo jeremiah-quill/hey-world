@@ -4,17 +4,14 @@ import { RxCaretDown } from "react-icons/rx";
 
 export function FileMenuBar({
   menuItems,
-  projectTitleInputValue,
-  setProjectTitleInputValue,
-  saveProject,
+  snippetTitleInputValue,
+  setSnippetTitleInputValue,
   isTemplatePickerOpen,
   toggleTemplatePicker,
   currentTemplate,
   editorConfigObject,
   setCurrentTemplate,
   setIsTemplatePickerOpen,
-  currentProject,
-  // resetProject,
 }) {
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -61,20 +58,6 @@ export function FileMenuBar({
       document.removeEventListener("click", handleDocumentClick);
     };
   }, []);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    saveProject(currentProject.id);
-  };
-
-  // useEffect(() => {
-  //   console.log("currentProject", currentProject);
-  //   if (currentProject) {
-  //     setProjectTitleInputValue(currentProject.name);
-  //   } else {
-  //     setProjectTitleInputValue("untitled");
-  //   }
-  // }, [currentProject]);
 
   return (
     <div className="flex items-stretch justify-between border-b bg-gray-100 text-slate-800 dark:border-slate-500 dark:bg-slate-800 dark:text-slate-300">
@@ -123,14 +106,14 @@ export function FileMenuBar({
         <input
           required={true}
           className="h-full border-slate-300 p-2 outline-none dark:bg-slate-700"
-          value={projectTitleInputValue}
-          onChange={(e) => setProjectTitleInputValue(e.target.value)}
+          value={snippetTitleInputValue}
+          onChange={(e) => setSnippetTitleInputValue(e.target.value)}
           placeholder="Name your snippet"
         />
         {/* <input
           className="ml-2 cursor-pointer hover:opacity-50"
           type="submit"
-          value={currentProject ? "Save" : "Add"}
+          value={currentSnippet ? "Save" : "Add"}
         /> */}
       </form>
       <div className="relative z-10 h-full" ref={dropdownRef}>
