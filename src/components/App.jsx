@@ -9,17 +9,18 @@ import { Preview } from "@/components/Preview";
 import { Editor } from "@/components/Editor";
 import { Sidebar } from "@/components/Sidebar";
 import { FileMenuBar } from "@/components/FileMenuBar";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 // TODO: extract logic to custom hook
 export function App({ currentTemplate, setCurrentTemplate }) {
   // state
-  const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a project
+  const { sandpack } = useSandpack(); // used to get current files, and switch view when loading a snippet
 
-  // project state
-  const [projectTitleInputValue, setProjectTitleInputValue] =
+  // snippet state
+  const [snippetTitleInputValue, setSnippetTitleInputValue] =
     useState("untitled");
-  const [currentProjectId, setCurrentProjectId] = useState(null);
-  const [savedCreations, setSavedCreations] = useState([]);
+  const [currentSnippetId, setCurrentSnippetId] = useState(null);
+  const [savedSnippets, setSavedSnippets] = useState([]);
 
   // chat state
   const [messages, setMessages] = useState([]);
@@ -41,211 +42,147 @@ export function App({ currentTemplate, setCurrentTemplate }) {
   };
 
   const saveAs = () => {
-    // create new project
+    // create new snippet
     const id = uuid();
-    const project = {
+    const snippet = {
       templateName: currentTemplate,
       id: id,
       code: sandpack.files,
-      name: projectTitleInputValue,
+      name: snippetTitleInputValue,
     };
 
     // update state
-    setSavedCreations((prevCreations) => {
-      return [...prevCreations, project];
+    setSavedSnippets((prevSnippets) => {
+      return [...prevSnippets, snippet];
     });
 
-    setCurrentProjectId(id);
+    setCurrentSnippetId(id);
 
     // sync with local storage
-    const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
-    currentProjects.push(project);
-    localStorage.setItem("projects", JSON.stringify(currentProjects));
+    const currentSnippets = JSON.parse(localStorage.getItem("snippets")) || [];
+    currentSnippets.push(snippet);
+    localStorage.setItem("snippets", JSON.stringify(currentSnippets));
   };
 
-  const newProject = () => {
-    setProjectTitleInputValue("untitled");
-    // save existing project
-    if (currentProjectId) {
-      saveProject();
+  const newSnippet = () => {
+    setSnippetTitleInputValue("untitled");
+    // save existing snippet
+    if (currentSnippetId) {
+      saveSnippet();
     }
 
-    // create new project
+    // create new snippet
     const id = uuid();
-    const project = {
+    const snippet = {
       templateName: currentTemplate,
       id: id,
       code: sandpack.files,
-      name: projectTitleInputValue, // TODO: add name input
+      name: snippetTitleInputValue, // TODO: add name input
     };
 
     // update state
-    setSavedCreations((prevCreations) => {
-      return [...prevCreations, project];
+    setSavedSnippets((prevSnippets) => {
+      return [...prevSnippets, snippet];
     });
 
-    setCurrentProjectId(id);
+    setCurrentSnippetId(id);
 
     // sync with local storage
-    const currentProjects = JSON.parse(localStorage.getItem("projects")) || [];
-    currentProjects.push(project);
-    localStorage.setItem("projects", JSON.stringify(currentProjects));
+    const currentSnippets = JSON.parse(localStorage.getItem("snippets")) || [];
+    currentSnippets.push(snippet);
+    localStorage.setItem("snippets", JSON.stringify(currentSnippets));
   };
 
-  // project CRUD
-  const saveProject = () => {
-    if (!currentProjectId) {
+  // snippet CRUD
+  const saveSnippet = () => {
+    if (!currentSnippetId) {
       const id = uuid();
-      const project = {
+      const snippet = {
         templateName: currentTemplate,
         id: id,
         code: sandpack.files,
-        name: projectTitleInputValue, // TODO: add name input
+        name: snippetTitleInputValue, // TODO: add name input
       };
 
       // update state
-      setSavedCreations((prevCreations) => {
-        return [...prevCreations, project];
+      setSavedSnippets((prevSnippets) => {
+        return [...prevSnippets, snippet];
       });
 
-      setCurrentProjectId(id);
+      setCurrentSnippetId(id);
 
       // sync with local storage
-      const currentProjects =
-        JSON.parse(localStorage.getItem("projects")) || [];
-      currentProjects.push(project);
-      localStorage.setItem("projects", JSON.stringify(currentProjects));
+      const currentSnippets =
+        JSON.parse(localStorage.getItem("snippets")) || [];
+      currentSnippets.push(snippet);
+      localStorage.setItem("snippets", JSON.stringify(currentSnippets));
     } else {
-      const updatedProjects = savedCreations.map((creation) => {
-        if (creation.id === currentProjectId) {
-          const updatedCreation = {
-            ...creation,
+      const updatedSnippets = savedSnippets.map((savedSnippet) => {
+        if (savedSnippet.id === currentSnippetId) {
+          const updatedSnippet = {
+            ...savedSnippet,
             code: sandpack.files,
-            name: projectTitleInputValue,
+            name: snippetTitleInputValue,
           };
-          return updatedCreation;
+          return updatedSnippet;
         } else {
-          return creation;
+          return savedSnippet;
         }
       });
-      setSavedCreations(updatedProjects);
-      localStorage.setItem("projects", JSON.stringify(updatedProjects));
+      setSavedSnippets(updatedSnippets);
+      localStorage.setItem("snippets", JSON.stringify(updatedSnippets));
     }
   };
 
-  const removeProject = (id) => {
+  const removeSnippet = (id) => {
     // update state
-    setSavedCreations((prevCreations) =>
-      prevCreations.filter((creation) => creation.id !== id)
+    setSavedSnippets((prevSnippets) =>
+      prevSnippets.filter((snippet) => snippet.id !== id)
     );
 
     // sync with local storage
-    const updatedProjects = savedCreations.filter(
-      (creation) => creation.id !== id
+    const updatedSnippets = savedSnippets.filter(
+      (snippet) => snippet.id !== id
     );
-    localStorage.setItem("projects", JSON.stringify(updatedProjects));
+    localStorage.setItem("snippets", JSON.stringify(updatedSnippets));
   };
 
-  const loadProject = (projectId) => {
-    // get project from state
-    const project = savedCreations.find(
-      (creation) => creation.id === projectId
+  const loadSnippet = (snippetId) => {
+    // get snippet from state
+    const snippet = savedSnippets.find(
+      (savedSnippet) => savedSnippet.id === snippetId
     );
 
     // update sandpack
-    if (!project) return;
-    setCurrentTemplate(project.templateName);
-    setCurrentProjectId(project.id);
-    setProjectTitleInputValue(project.name);
-    sandpack.updateFile(project.code);
+    if (!snippet) return;
+    setCurrentTemplate(snippet.templateName);
+    setCurrentSnippetId(snippet.id);
+    setSnippetTitleInputValue(snippet.name);
+    sandpack.updateFile(snippet.code);
   };
 
-  // effects
+  // initial snippet load
   useEffect(() => {
     if (typeof window === "undefined" || !window.localStorage) {
       return [];
     }
-    const projects = JSON.parse(localStorage.getItem("projects"));
+    const snippets = JSON.parse(localStorage.getItem("snippets"));
 
-    if (!projects) return;
+    if (!snippets) return;
 
-    setSavedCreations(projects);
+    setSavedSnippets(snippets);
   }, []);
 
-  useEffect(() => {
-    const handleChatbotShortcut = (event) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "b") {
-        event.preventDefault();
-        setIsChatOpen(!isChatOpen);
-      }
-    };
+  // keyboard shortcuts
+  useKeyboardShortcuts({
+    toggleChat,
+    toggleMenu,
+    saveSnippet,
+    saveAs,
+    newSnippet,
+  });
 
-    document.addEventListener("keydown", handleChatbotShortcut);
-    return () => {
-      document.removeEventListener("keydown", handleChatbotShortcut);
-    };
-  }, [isChatOpen]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const handleKeyDown = (event) => {
-      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "m") {
-        event.preventDefault();
-        setIsMenuOpen((prevState) => !prevState);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  const memoizedCurrentProject = useMemo(() => {
-    return savedCreations.find((creation) => creation.id === currentProjectId);
-  }, [currentProjectId, savedCreations]);
-
-  // SAVE
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "s") {
-        // console.log("in save regular");
-        e.preventDefault();
-
-        if (e.shiftKey) {
-          // console.log("in save as");
-          saveAs();
-        } else {
-          saveProject();
-        }
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [currentProjectId, projectTitleInputValue, saveProject]);
-
-  // NEW
-  useEffect(() => {
-    const onKeyDown = (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "n") {
-        e.preventDefault();
-        newProject();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [currentProjectId, projectTitleInputValue, saveProject]);
-
+  // file menu bar items
   const menuItems = [
     {
       title: "File",
@@ -253,17 +190,17 @@ export function App({ currentTemplate, setCurrentTemplate }) {
         {
           name: "New",
           shortcut: "Cmd+N",
-          onClick: () => saveProject(memoizedCurrentProject),
+          onClick: () => newSnippet(),
         },
         {
           name: "Save",
           shortcut: "Cmd+S",
-          onClick: () => saveProject(currentProjectId),
+          onClick: () => saveSnippet(),
         },
         {
           name: "Save As",
           shortcut: "Cmd+Shift+S",
-          onClick: () => saveProject(),
+          onClick: () => saveAs(),
         },
       ],
     },
@@ -274,19 +211,18 @@ export function App({ currentTemplate, setCurrentTemplate }) {
       <Sidebar
         isMenuOpen={isMenuOpen}
         toggleMenu={toggleMenu}
-        savedCreations={savedCreations}
-        onProjectClick={loadProject}
-        onRemoveClick={removeProject}
-        currentProjectId={currentProjectId}
+        savedSnippets={savedSnippets}
+        onSnippetClick={loadSnippet}
+        onRemoveClick={removeSnippet}
+        currentSnippetId={currentSnippetId}
       />
       {/* left column */}
       <div className="relative grid flex-1">
         <Editor>
           <FileMenuBar
-            projectTitleInputValue={projectTitleInputValue}
-            setProjectTitleInputValue={setProjectTitleInputValue}
-            saveProject={saveProject}
-            currentProject={memoizedCurrentProject}
+            snippetTitleInputValue={snippetTitleInputValue}
+            setSnippetTitleInputValue={setSnippetTitleInputValue}
+            saveSnippet={saveSnippet}
             isTemplatePickerOpen={isTemplatePickerOpen}
             toggleTemplatePicker={toggleTemplatePicker}
             currentTemplate={currentTemplate}

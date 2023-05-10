@@ -3,10 +3,10 @@ import { useModal } from "@/context/modalContext";
 
 export function SavedList({
   className = "",
-  savedCreations = [],
-  onProjectClick,
+  savedSnippets = [],
+  onSnippetClick,
   onRemoveClick,
-  currentProjectId,
+  currentSnippetId,
 }) {
   const { openModal, closeModal } = useModal();
 
@@ -22,10 +22,10 @@ export function SavedList({
   return (
     <AnimatePresence>
       <ul className={`${className}`}>
-        {savedCreations.map((item, idx) => (
+        {savedSnippets.map((item, idx) => (
           <motion.li
             className={`flex min-h-[40px] items-center justify-between p-2 ${
-              currentProjectId === item.id && "bg-slate-200 dark:bg-slate-600"
+              currentSnippetId === item.id && "bg-slate-200 dark:bg-slate-600"
             }`}
             key={idx}
             custom={idx}
@@ -36,7 +36,7 @@ export function SavedList({
           >
             <button
               className="truncate underline hover:opacity-50"
-              onClick={() => onProjectClick(item.id)}
+              onClick={() => onSnippetClick(item.id)}
             >
               {item.name}
             </button>
@@ -45,9 +45,9 @@ export function SavedList({
               onClick={() =>
                 openModal({
                   content: (
-                    <div>Are you sure you want to delete this project?</div>
+                    <div>Are you sure you want to delete this snippet?</div>
                   ),
-                  title: "Delete Project",
+                  title: "Delete Snippet",
                   onSubmit: (e) => {
                     onRemoveClick(item.id, e);
                     closeModal();
