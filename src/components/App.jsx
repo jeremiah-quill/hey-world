@@ -60,11 +60,11 @@ export function App({ currentTemplate, setCurrentTemplate }) {
     {
       title: "File",
       options: [
-        {
-          name: "New",
-          shortcut: "Cmd+N",
-          onClick: () => newSnippet(),
-        },
+        // {
+        //   name: "New",
+        //   shortcut: "Cmd+N",
+        //   onClick: () => newSnippet(),
+        // },
         {
           name: "Save",
           shortcut: "Cmd+S",

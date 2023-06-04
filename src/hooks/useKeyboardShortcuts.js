@@ -11,25 +11,27 @@ export function useKeyboardShortcuts({
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.metaKey || event.ctrlKey) {
-        event.preventDefault();
-
         switch (event.key.toLowerCase()) {
           case "b":
+            event.preventDefault();
             toggleChat();
             break;
           case "m":
+            event.preventDefault();
             toggleMenu();
             break;
           case "s":
             if (event.shiftKey) {
+              event.preventDefault();
               saveAs();
             } else {
+              event.preventDefault();
               saveSnippet();
             }
             break;
-          case "n":
-            newSnippet();
-            break;
+          // case "n":
+          //   newSnippet();
+          //   break;
           default:
             break;
         }

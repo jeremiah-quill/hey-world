@@ -2,6 +2,7 @@ import { getToken } from "next-auth/jwt";
 import { Redis } from "@upstash/redis";
 import { Ratelimit } from "@upstash/ratelimit";
 
+// ** OPTIONAL **: If you want to use rate limiting, you will need to add Redis env variables. See README for more info.
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   analytics: true,
@@ -18,14 +19,7 @@ const handler = async (req) => {
       req,
     });
 
-    const {
-      prompt,
-      conversation: messages,
-      key,
-      useUserKey,
-    } = await req.json();
-
-    // const useKey = getKey(session, key, useUserKey);
+    const { conversation: messages, key, useUserKey } = await req.json();
 
     const model = { id: "gpt-3.5-turbo" };
 
@@ -41,28 +35,8 @@ const handler = async (req) => {
               "Too many messages in a short amount of time. Please wait a few seconds and try again, or enter your own OpenAI API key and choose 'Use personal key' option in settings.",
           })
         );
-
-        // res.status(429).json({
-        //   error:
-        //     "Too many messages in a short amount of time. Please wait a few seconds and try again, or enter your own OpenAI API key and choose 'Use personal key' option in settings.",
-        // });
-        // return;
       }
     }
-
-    // let promptToSend = prompt;
-    // if (!promptToSend) {
-    //   promptToSend =
-    //     "Forget all previous instructions. You are a world class web interface designer and developer tasked with helping users build with HTML and CSS. Users will ask you questions about a feature, component, web technology, layout, etc. You will answer their questions and help them build what they want. If the user asks specifically for code, please only respond wth the minimal explanation.  Please only respond using markdown.";
-    // }
-
-    // let messagesToSend = [];
-
-    // for (let i = messages.length - 1; i >= 0; i--) {
-    //   const message = messages[i];
-
-    //   messagesToSend = [message, ...messagesToSend];
-    // }
 
     let url = `https://api.openai.com/v1/chat/completions`;
 
